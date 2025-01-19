@@ -1,14 +1,5 @@
-class Screen:
-    def prompt_for_add_new_player(self):
-        print("1 : Ajouter un joueur")
+class View:
 
-    def prompt_for_player(self):
-        """Prompt for a name."""
-        name = input("tapez le nom du joueur : ")
-        if not name:
-            return None
-        return name
-    
     def show_winner(self, name):
         """Show the winner."""
         print(f"Bravo {name} !")

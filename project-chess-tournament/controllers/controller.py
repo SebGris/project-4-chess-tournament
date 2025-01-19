@@ -1,4 +1,3 @@
-# from view import Screen
 from models.player import Player
 
 
