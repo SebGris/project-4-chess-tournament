@@ -6,16 +6,17 @@ class ControllerPlayer:
     def __init__(self, view):
         self.players = Players()
         self.view = view
-    
+
     def get_players(self):
         """Get some players."""
         counter = 1
         while True:
-            (last_name, first_name, date_of_birth) = self.view.prompt_for_player(counter)
+            (last_name, first_name, birth_date) = \
+                self.view.prompt_for_player(counter)
             if not last_name:
                 return
-            self.players.append(Player(last_name, first_name, date_of_birth))
-            counter = counter +1
+            self.players.append(Player(last_name, first_name, birth_date))
+            counter = counter + 1
 
     def display_players(self):
         """Display players."""
@@ -31,6 +32,4 @@ class ControllerPlayer:
         self.display_players()
         if self.view.save_players() is True:
             if self.save_players() is True:
-                 self.view.show_saving_success()
-
-    
+                self.view.show_saving_success()

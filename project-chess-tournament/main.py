@@ -5,6 +5,7 @@ from controllers.controller import Controller
 
 menu_item = ["1) Ajouter un joueur", "2) Nouveau Tournoi", "3) Quitter"]
 
+
 def display_menu():
     while True:
         print("\n".join(menu_item))
@@ -21,10 +22,12 @@ def display_menu():
         else:
             print("Option non valide. Veuillez réessayer.")
 
+
 def add_players():
     screen = ViewPlayer()
     controller = ControllerPlayer(screen)
     controller.add_players()
+
 
 def new_tournament():
     view = View()
