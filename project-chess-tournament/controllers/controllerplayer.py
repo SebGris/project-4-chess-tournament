@@ -1,10 +1,9 @@
 from models.player import Player
-from models.players import Players
 
 
 class ControllerPlayer:
     def __init__(self, view):
-        self.players = Players()
+        self.players = []
         self.view = view
 
     def get_players(self):
@@ -15,21 +14,21 @@ class ControllerPlayer:
                 self.view.prompt_for_player(counter)
             if not last_name:
                 return
-            self.players.append(Player(last_name, first_name, birth_date))
+            player = Player(last_name, first_name, birth_date)
+            self.players.append(player)
+            self.save_player(player)
             counter = counter + 1
 
     def display_players(self):
         """Display players."""
-        self.view.display_players(self.players.get_data())
+        self.view.display_players(self.players)
 
-    def save_players(self):
+    def save_player(self, player):
         """Save players in JSON."""
+        self.view.show_saving_success()
         pass
 
     def add_players(self):
-        """Run."""
+        """Add players."""
         self.get_players()
         self.display_players()
-        if self.view.save_players() is True:
-            if self.save_players() is True:
-                self.view.show_saving_success()

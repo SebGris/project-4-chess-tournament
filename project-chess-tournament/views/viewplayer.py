@@ -11,22 +11,12 @@ class ViewPlayer:
 
         return (last_name, first_name, date_of_birth)
 
-    def save_players(self):
-        """Save player(s)."""
-        print("Souhaitez vous enregistrer les joueurs dans la base ?")
-        while True:
-            choice = input("O/n: ")
-            if choice == "O":
-                return True
-            elif choice == "n":
-                return False
-
-    def display_one_player(self, tuple):
-        last_name, first_name, date_of_birth = tuple
-        return f"Nom : {last_name} {first_name} né(e) le {date_of_birth}"
+    def display_one_player(self, player):
+        print(f"Nom : {player.last_name} {player.first_name} né(e) le {player.date_of_birth}")
 
     def display_players(self, players):
-        [print(self.display_one_player(player)) for player in players]
+        for player in players:
+            self.display_one_player(player)
 
     def show_saving_success(self):
         """Message for saving success."""
