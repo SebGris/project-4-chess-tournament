@@ -1,12 +1,14 @@
-class ScreenPlayer:
+class ViewPlayer:
 
-    def prompt_for_player(self):
+    def prompt_for_player(self, counter):
         """Prompt for last name, first name and date of birth."""
+        print(f"\nJoueur n° {counter}")
         last_name = input("Entrez le nom du joueur (ou Entrée pour quitter) : ")
         if not last_name:
             return (None, None, None)
         first_name = input("Entrez le prénom du joueur : ")
         date_of_birth = input("Entrez la date date de naissance du joueur : ")
+
         return (last_name, first_name, date_of_birth)
     
     def save_players(self):

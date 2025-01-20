@@ -1,4 +1,4 @@
-from views.screenplayer import ScreenPlayer
+from views.viewplayer import ViewPlayer
 from views.view import View
 from controllers.controllerplayer import ControllerPlayer
 from controllers.controller import Controller
@@ -22,7 +22,7 @@ def display_menu():
             print("Option non valide. Veuillez réessayer.")
 
 def add_players():
-    screen = ScreenPlayer()
+    screen = ViewPlayer()
     controller = ControllerPlayer(screen)
     controller.add_players()
 

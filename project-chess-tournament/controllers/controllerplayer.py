@@ -9,11 +9,13 @@ class ControllerPlayer:
     
     def get_players(self):
         """Get some players."""
+        counter = 1
         while True:
-            (last_name, first_name, date_of_birth) = self.view.prompt_for_player()
+            (last_name, first_name, date_of_birth) = self.view.prompt_for_player(counter)
             if not last_name:
                 return
             self.players.append(Player(last_name, first_name, date_of_birth))
+            counter = counter +1
 
     def display_players(self):
         """Display players."""

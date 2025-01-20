@@ -1,4 +1,5 @@
 from typing import Optional
+import random
 from models.player import Player
 
 class Players(list):
@@ -12,3 +13,7 @@ class Players(list):
     
     def get_data(self):
         return [player.get_data() for player in self]
+    
+    def shuffle(self):
+        """Shuffle players."""
+        random.shuffle(self)
