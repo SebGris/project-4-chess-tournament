@@ -3,25 +3,6 @@ from views.view import View
 from controllers.controllerplayer import ControllerPlayer
 from controllers.controller import Controller
 
-menu_item = ["1) Ajouter un joueur", "2) Nouveau Tournoi", "3) Quitter"]
-
-
-def display_menu():
-    while True:
-        print("\n".join(menu_item))
-        choice = input("Entrer le choix : ")
-        choice = choice.strip()
-        if (choice == "1"):
-            add_players()
-        elif (choice == "2"):
-            new_tournament()
-        elif (choice == "3"):
-            break
-        elif (choice == ""):
-            break
-        else:
-            print("Option non valide. Veuillez réessayer.")
-
 
 def add_players():
     screen = ViewPlayer()
@@ -33,6 +14,28 @@ def new_tournament():
     view = View()
     game = Controller(view)
     game.run()
+
+
+def exit_menu():
+    exit()
+
+
+MENU_ITEM = {1: (add_players, "Ajouter un joueur"),
+             2: (new_tournament, "Nouveau Tournoi"),
+             3: (exit_menu, "Quitter")}
+
+
+def display_menu():
+    while True:
+        print("\n".join([f"{k}) {v[1]}" for (k, v) in MENU_ITEM.items()]))
+        try:
+            choice = int(input("Entrer le choix : "))
+            if choice in MENU_ITEM:
+                MENU_ITEM[choice][0]()
+            else:
+                print("Option non valide. Veuillez réessayer.")
+        except ValueError:
+            print("Oups ! Ce n'était pas un numéro valide. Réessayez...")
 
 
 if __name__ == "__main__":
