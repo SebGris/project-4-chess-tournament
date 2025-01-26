@@ -18,9 +18,7 @@ class ViewPlayer:
             return None, None, None, None
         first_name = self._get_input("Entrez son prénom : ")
         date_of_birth = self._prompt_for_date_of_birth()
-        id_chess = self._get_input(
-            "Entrez son identifiant national d'échecs : "
-            )
+        id_chess = self._prompt_for_id_chess()
         return last_name, first_name, date_of_birth, id_chess
 
     def _prompt_for_date_of_birth(self):
