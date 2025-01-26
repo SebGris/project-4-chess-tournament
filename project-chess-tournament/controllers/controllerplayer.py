@@ -10,11 +10,11 @@ class ControllerPlayer:
         """Get some players."""
         counter = 1
         while True:
-            (last_name, first_name, birth_date) = \
+            (last_name, first_name, birth_date, id_chess) = \
                 self.view.prompt_for_player(counter)
             if not last_name:
                 return
-            player = Player(last_name, first_name, birth_date)
+            player = Player(last_name, first_name, birth_date, id_chess)
             self.players.append(player)
             self.save_player(player)
             counter = counter + 1
