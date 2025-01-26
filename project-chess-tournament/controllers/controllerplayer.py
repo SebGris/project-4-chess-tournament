@@ -10,7 +10,7 @@ class ControllerPlayer:
         """Get some players."""
         counter = 1
         while True:
-            (last_name, first_name, birth_date, id_chess) = \
+            last_name, first_name, birth_date, id_chess = \
                 self.view.prompt_for_player(counter)
             if not last_name:
                 return
@@ -23,12 +23,12 @@ class ControllerPlayer:
         """Display players."""
         self.view.display_players(self.players)
 
-    def save_player(self, player):
+    def save_player(self, players):
         """Save players in JSON."""
         self.view.show_saving_success()
         pass
 
-    def add_players(self):
+    def add_players_to_json(self):
         """Add players."""
         self.get_players()
         self.display_players()
