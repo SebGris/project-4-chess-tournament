@@ -91,8 +91,8 @@ class ViewPlayer:
         result = input(
             "Entrez le résultat ("
             "1 pour la victoire du 1er joueur, "
-            "0 pour la victoire du 2ème joueur, "
-            "0.5 pour match nul) : "
+            "2 pour la victoire du 2ème joueur, "
+            "3 pour match nul) : "
             )
         match.set_result(result)
         print(f"Résultat du match : {match.result}")

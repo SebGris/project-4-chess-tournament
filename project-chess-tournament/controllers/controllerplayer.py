@@ -19,10 +19,6 @@ class ControllerPlayer:
             self.save_player(player)
             counter = counter + 1
 
-    def display_players(self):
-        """Display players."""
-        self.view.display_players(self.players)
-
     def save_player(self, players):
         """Save players in JSON."""
         self.view.show_saving_success()
@@ -31,4 +27,4 @@ class ControllerPlayer:
     def add_players_to_json(self):
         """Add players."""
         self.get_players()
-        self.display_players()
+        self.view.display_players(self.players)
