@@ -1,36 +1,87 @@
+import re
 from views.view import View
 
 
 class ViewTournament(View):
-    """View representing the tournament interface."""
+    """View to display tournament information."""
 
     def prompt_for_tournament(self):
         """Requests information from a tournament and returns it."""
-        name = self.prompt_input("Entrez le nom du tournoi :")
-        location = self.prompt_input("Entrez le lieu du tournoi :")
-        start_date = self.prompt_date("Entrez la date de début (JJ/MM/AAAA) :")
-        end_date = self.prompt_date("Entrez la date de fin (JJ/MM/AAAA) :")
-        description = self.prompt_input("Ajoutez une description :")
+        # self.clear_console()
+        self.display_message("Nouveau tournoi.")
+        name = self.get_input("Entrez le nom du tournoi :")
+        location = self.get_input("Entrez le lieu du tournoi :")
+        start_date = self.get_input_date(
+            "Entrez la date de début (JJ/MM/AAAA) :"
+        )
+        end_date = self.get_input_date("Entrez la date de fin (JJ/MM/AAAA) :")
+        return name, location, start_date, end_date
 
-        return name, location, start_date, end_date, description
+    def prompt_for_description(self):
+        """Request a description for the tournament."""
+        return self.get_input("Ajoutez une description :")
+
+    def prompt_for_add_player(self):
+        """Request to add a player to the tournament."""
+        return self.get_input("Ajouter un joueur ? (o/n) :").lower()
+
+    def prompt_for_player(self):
+        """Prompt for player details"""
+        first_name = self.get_input("Entrez le prénom du joueur :")
+        last_name = self.get_input("Entrez son nom :")
+        birth_date = self.get_input_date(
+            "Entrez sa date de naissance (format JJ/MM/AAAA):"
+        )
+        id_chess = self._prompt_for_id_chess()
+        return {
+            "first_name": first_name,
+            "last_name": last_name,
+            "birth_date": birth_date,
+            "id_chess": id_chess
+        }
+
+    def _prompt_for_id_chess(self):
+        """
+        Requests and validates the national chess identifier (format XX#####).
+        """
+        while True:
+            id_chess = self.get_input(
+                "Entrez son identifiant national d'échecs (format AB12345) : "
+                )
+            if re.match(r'^[A-Z]{2}\d{5}$', id_chess):
+                return id_chess
+            else:
+                self.display_message(
+                    "Identifiant invalide. "
+                    "Le format doit être composé de deux lettres "
+                    "suivies de cinq chiffres."
+                    )
+
+    def display_players(self, players):
+        """Displays a list of players."""
+        if not players:
+            self.display_message("Aucun joueur dans le tournoi.")
+        else:
+            self.display_message("Liste des joueurs :")
+            for player in players:
+                self.display_message(player)
 
     def display_tournament(self, tournament):
         """Displays the details of a tournament."""
         self.display_message(str(tournament))
 
-    def prompt_for_match_result(self, match):
-        """Request the result of a match."""
-        self.display_message(f"Match entre {match.player1.first_name} "
-                             f"{match.player1.last_name} et "
-                             f"{match.player2.first_name} "
-                             f"{match.player2.last_name}")
-        return self.prompt_input(
-            "Entrez le résultat ("
-            "1 pour la victoire du 1er joueur, "
-            "2 pour la victoire du 2ème joueur, "
-            "3 pour match nul) : "
+    def get_match_result(self):
+        """Asks the user to enter the result of a match."""
+        while True:
+            result = self.get_input(
+                "Résultat (1: Joueur 1 gagne, 2: Joueur 2 gagne, 0: Nul) : "
             )
+            if result in {"1", "2", "0"}:
+                return result
+            else:
+                print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
-    def display_match_result(self, match):
-        """Display the result of a match."""
-        self.display_message(f"Résultat du match : {match.result}")
+    def display_result(self, players):
+        """Display the result of a tournament."""
+        self.display_message("Tournoi terminé !")
+        self.display_players(players)

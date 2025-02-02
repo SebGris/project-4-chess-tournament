@@ -16,19 +16,19 @@ class View:
         print(message)
 
     @staticmethod
-    def prompt_input(prompt):
+    def get_input(prompt):
         """Requests a user input with a specific message."""
         prompt = prompt.rstrip() + " "
         return input(prompt).strip()
 
     @staticmethod
-    def prompt_date(prompt):
+    def get_input_date(prompt):
         """
         Requests and validates a date in DD/MM/YYYY format.
         Returns a date formatted as text.
         """
         while True:
-            date_input = input(prompt).strip()
+            date_input = View.get_input(prompt)
             try:
                 date_object = datetime.strptime(date_input, "%d/%m/%Y")
                 return date_object.strftime("%d/%m/%Y")

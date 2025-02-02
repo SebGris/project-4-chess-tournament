@@ -1,5 +1,5 @@
 class Match:
-    """Class representing a match between two players."""
+    """Represents a match between two players in a chess tournament."""
 
     MATCH_RESULT = {
         '1': "victoire du premier joueur",
@@ -8,25 +8,26 @@ class Match:
         }
 
     def __init__(self, player1, player2):
-        self.player1 = player1
-        self.player2 = player2
-        self.result = None
+        """
+        Initialises a match with two players and default scores of 0.
+        :param player1: Player object representing the first player.
+        :param player2: Player object representing the second player.
+        """
+        self.player1 = [player1, 0]  # Joueur 1 et son score
+        self.player2 = [player2, 0]  # Joueur 2 et son score
 
-    def assign_points(self, result):
-        """Attribue les points aux joueurs selon le résultat du match."""
-        self.result = result
-        if self.result == '1':
-            self.player1.points += 1
-            self.player2.points += 0
-        elif self.result == '2':
-            self.player1.points += 0
-            self.player2.points += 1
-        elif self.result == '3':
-            self.player1.points += 0.5
-            self.player2.points += 0.5
+    def set_score(self, score1, score2):
+        """
+        Scores the players after a match.
+        """
+        self.player1[1] = score1
+        self.player2[1] = score2
+
+    def get_players(self):
+        """Returns the players who took part in the match."""
+        return self.player1[0], self.player2[0]
 
     def __str__(self):
-        """Retourne une représentation du match et de son résultat."""
-        return (f"{self.player1.first_name} {self.player1.last_name} vs "
-                f"{self.player2.first_name} {self.player2.last_name} | "
-                f"Résultat : {self.result}")
+        """Returns a text representation of the match."""
+        return (f"{self.player1[0]} vs {self.player2[0]} | "
+                f"Scores: {self.player1[1]} - {self.player2[1]}")

@@ -8,15 +8,10 @@ class ViewPlayer(View):
     def prompt_for_player(self, counter):
         """Prompt for last name, first name and date of birth."""
         self.display_message(f"\nJoueur n° {counter}")
-        last_name = self.prompt_input(
-            "Entrez le nom du joueur (ou appuyez sur Entrée pour quitter) : "
-            )
-        if not last_name:
-            return None, None, None, None
-        first_name = self.prompt_input("Entrez son prénom : ")
-        date_of_birth = self.prompt_date(
-                "Entrez la date de naissance du joueur (format JJ/MM/AAAA): "
-        )
+        first_name = self.get_input("Entrez le prénom du joueur :")
+        last_name = self.get_input("Entrez son nom :")
+        date_of_birth = self.get_input_date("Entrez sa date de naissance"
+                                         " (format JJ/MM/AAAA):")
         id_chess = self._prompt_for_id_chess()
         return last_name, first_name, date_of_birth, id_chess
 
@@ -25,7 +20,7 @@ class ViewPlayer(View):
         Requests and validates the national chess identifier (format XX#####).
         """
         while True:
-            id_chess = self.prompt_input(
+            id_chess = self.get_input(
                 "Entrez son identifiant national d'échecs (format AB12345) : "
                 )
             if re.match(r'^[A-Z]{2}\d{5}$', id_chess):
