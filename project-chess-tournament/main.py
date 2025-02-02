@@ -1,8 +1,8 @@
-from controllers.controllerplayer import ControllerPlayer
-from controllers.controllertournament import ControllerTournament
+from controllers.controller_player import ControllerPlayer
+from controllers.controller_tournament import ControllerTournament
 from models.player import Player
 from models.tournament import Tournament
-from views.viewplayer import ViewPlayer
+from views.view_player import ViewPlayer
 
 
 def add_players():

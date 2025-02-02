@@ -1,12 +1,16 @@
 from models.player import Player
+from models.round import Round
+from models.match import Match
 
 
 class ControllerTournament:
-    """Controller for adding players,
-    running the tournament and managing results."""
-    def __init__(self, view, tournament):
+    """Controller for running the tournament and managing results."""
+    def __init__(self, view, tournament, current_round=1):
         self.view = view
         self.tournament = tournament
+        self.current_round = current_round
+        self.rounds = []  # Liste des tours
+        self.players = []  # Liste des joueurs enregistrés
 
     def add_player(self, player):
         """Add a player to the tournament."""
@@ -34,6 +38,20 @@ class ControllerTournament:
             else:
                 self.view.show_message("Aucun joueur ajouté.")
 
+    def start_round(self):
+        """Commence un nouveau tour avec les matchs."""
+        if self.current_round > self.number_of_rounds:
+            print("Le tournoi est terminé.")
+            return
+        round_ = Round(self.current_round)
+        self.rounds.append(round_)
+        # Générer les matchs pour ce tour (matchs pairs de joueurs)
+        for i in range(0, len(self.players), 2):
+            if i + 1 < len(self.players):  # Assurer qu'il y a deux joueurs
+                match = Match(self.players[i], self.players[i+1])
+                round_.add_match(match)
+        self.current_round += 1
+
     def start_next_round(self):
         """Starts the next round of the tournament."""
         self.tournament.start_round()
@@ -45,7 +63,15 @@ class ControllerTournament:
             return
         current_round = self.tournament.rounds[self.tournament.current_round - 2]  # Le tour courant
         for match in current_round.matches:
-            self.view.prompt_for_match_result(match)
+            match.set_result(self.view.prompt_for_match_result(match))
+
+    def set_result(self, result):
+        """Assigns a result to the match."""
+        # '1' pour la victoire du premier joueur,
+        # '2' pour la victoire du deuxième joueur,
+        # '3' pour un match nul.
+        if result not in ['1', '2', '3']:
+            raise ValueError("Le résultat doit être '1', '2' ou '3'.")
 
     def show_results(self):
         """Affiche les résultats du tournoi."""
