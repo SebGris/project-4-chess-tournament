@@ -1,12 +1,6 @@
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    MATCH_RESULT = {
-        '1': "victoire du premier joueur",
-        '2': "victoire du deuxième joueur",
-        '3': "match nul"
-        }
-
     def __init__(self, player1, player2):
         """
         Initialises a match with two players and default scores of 0.
@@ -29,5 +23,7 @@ class Match:
 
     def __str__(self):
         """Returns a text representation of the match."""
-        return (f"{self.player1[0]} vs {self.player2[0]} | "
-                f"Scores: {self.player1[1]} - {self.player2[1]}")
+        return (
+            f"{self.player1[0]} vs {self.player2[0]} | "
+            f"Scores: {self.player1[1]} - {self.player2[1]}"
+        )

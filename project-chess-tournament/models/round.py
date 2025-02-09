@@ -12,7 +12,7 @@ class Round:
         :param round_number: Round number (e.g. 1 for "Round 1").
         """
         self.name = f"Round {round_number}"
-        self.matches = []  # Liste des matchs sous forme de tuples
+        self.matches = []
         self.start_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.end_time = None  # Sera rempli lorsque le tour se termine
         # Générer les paires selon le tour

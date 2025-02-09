@@ -5,6 +5,7 @@ from models.player import Player
 from models.tournament import Tournament
 from views.view_player import ViewPlayer
 from views.view_tournament import ViewTournament
+from models.pairing_perso import PairingPerso
 
 
 # Tournament creation
@@ -31,6 +32,11 @@ def new_tournament_test():
     controller.entering_a_tournament(tournament)
 
 
+def new_tournament_and_add_players_test():
+    new_tournament_test()
+    add_players_test()
+
+
 def add_players():
     """Adding players to the tournament"""
     controller.add_players()
@@ -39,12 +45,21 @@ def add_players():
 def add_players_test():
     """Ajouter des joueurs pour tester"""
     """Ne marche pas avec nombre impair de joueurs"""
-    players = [Player("A", "Jean", "15/08/1990", "AB12345"),
+    players = [Player("A", "Jean", "12/11/1985", "AB12345"),
                Player("B", "Alain", "12/11/1985", "CD67890"),
                Player("C", "Richard", "28/10/1955", "EF54321"),
                Player("D", "Marc", "23/06/1942", "GH98765"),
-               Player("E", "Antoine", "22/06/1999", "II98765"),
+               Player("E", "Antoine", "23/06/1942", "II98765"),
                Player("F", "Christophe", "20/07/1990", "ZZ98765")]
+    first = [
+        (players[0], players[1]), 
+        (players[2], players[3]), 
+        (players[4], players[5]), 
+        (players[0], players[2])
+    ]
+    pairs = PairingPerso.generate_next_round_pairs(players, first)
+    print(first)
+    print(pairs)
     for player in players:
         controller.add_player(player)
 
@@ -88,7 +103,9 @@ MENU_ITEM = {
 
 TEST = {
     80: ("Test : Nouveau tournoi", new_tournament_test),
-    81: ("Test : Ajouter des joueurs au tournoi", add_players_test)
+    81: ("Test : Ajouter des joueurs au tournoi", add_players_test),
+    82: ("Test : Nouveau tournoi + Ajouter des joueurs",
+         new_tournament_and_add_players_test)
     }
 
 
