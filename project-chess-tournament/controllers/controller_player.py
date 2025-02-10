@@ -1,3 +1,4 @@
+import json
 from models.player import Player
 
 
@@ -22,9 +23,11 @@ class ControllerPlayer:
             # self.save_player(player)
             counter = counter + 1
 
-    # def save_player(self, player):
-    #     """Save players in JSON."""
-    #     self.view.show_saving_success()
+    def save_players_to_json(self, players, filename="players.json"):
+        """Save players to a JSON file."""
+        with open(filename, 'w') as file:
+            json.dump([player.to_dict() for player in players], file, indent=4)
+        self.view.show_saving_success()
 
     def add_players_to_json(self):
         """Add players."""

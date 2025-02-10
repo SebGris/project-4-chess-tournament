@@ -30,6 +30,15 @@ class Player:
                 f"Né(e) le {self.birth_date} | "
                 f"ID échecs {self.id_chess} | "
                 f"Score {self.score} points")
+    
+    def to_dict(self):
+        """Convert Player object to dictionary."""
+        return {
+            "last_name": self.last_name,
+            "first_name": self.first_name,
+            "birth_date": self.birth_date,
+            "id_chess": self.id_chess
+        }
 
     def get_full_name(self):
         """Returns the full name of the player."""

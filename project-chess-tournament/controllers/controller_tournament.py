@@ -77,6 +77,11 @@ class ControllerTournament:
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
             return
+        if (self.tournament.players % 2) != 0:
+            self.view.display_message(
+                "Le nombre de joueurs doit être pair."
+                )
+            return
         while not self.tournament.is_complete():
             print(f"Début du Round {self.tournament.current_round}")
             round_instance = Round(
