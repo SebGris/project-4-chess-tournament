@@ -1,3 +1,6 @@
+import uuid
+
+
 class Tournament:
     """Class representing a chess tournament."""
     description = ""
@@ -5,6 +8,7 @@ class Tournament:
     players = []  # Liste des joueurs enregistrés
 
     def __init__(self, name, location, start_date, end_date):
+        self.id = str(uuid.uuid4())  # Generate a unique ID for the tournament
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -26,10 +30,11 @@ class Tournament:
     def is_complete(self):
         """Checks if the tournament is over."""
         return self.current_round > self.total_rounds
-    
+
     def to_dict(self):
         """Convert Tournament object to dictionary."""
         return {
+            'id': self.id,
             'name': self.name,
             'location': self.location,
             'start_date': self.start_date,

@@ -10,7 +10,6 @@ class ControllerTournament:
     def __init__(self, view):
         self.view = view
         self.tournament = None
-        self.rounds = []  # Liste des tours
         self.previous_matches = []
 
     def entering_a_tournament(self, tournament=None):
@@ -80,13 +79,12 @@ class ControllerTournament:
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
             return
-        if (self.tournament.players % 2) != 0:
+        if (len(self.tournament.players) % 2) != 0:
             self.view.display_message(
                 "Le nombre de joueurs doit être pair."
                 )
             return
         while not self.tournament.is_complete():
-            print(f"Début du Round {self.tournament.current_round}")
             round_instance = Round(
                 self.tournament.current_round,
                 self.tournament.players,
@@ -102,7 +100,7 @@ class ControllerTournament:
 
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
-        print(f"\n Enregistrement des résultats du {round_instance.name}:")
+        print(f"\nEnregistrement des résultats du {round_instance.name}:")
 
         for match in round_instance.matches:
             player1_name = match.player1[0].get_full_name()
@@ -119,6 +117,8 @@ class ControllerTournament:
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
+            # Save the tournament state after each match result is recorded
+            # self.save_tournament_to_json()
 
     def add_description(self):
         """Add a description to the tournament."""

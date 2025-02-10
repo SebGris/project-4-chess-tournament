@@ -60,20 +60,23 @@ MENU_ITEM = {
 
 # début menu test
 
+
 def new_tournament_test():
     """Tournament variable for testing"""
     tournament = Tournament("Championnat de Paris", "Paris",
                             "01/06/2025", "07/06/2025")
     controller.entering_a_tournament(tournament)
 
+
 def get_players_test():
     """Ajouter des joueurs pour tester"""
     return [Player("A", "Jean", "12/11/1985", "AB12345"),
-               Player("B", "Alain", "12/11/1985", "CD67890"),
-               Player("C", "Richard", "28/10/1955", "EF54321"),
-               Player("D", "Marc", "23/06/1942", "GH98765"),
-               Player("E", "Antoine", "23/06/1942", "II98765"),
-               Player("F", "Christophe", "20/07/1990", "ZZ98765")]
+            Player("B", "Alain", "12/11/1985", "CD67890"),
+            Player("C", "Richard", "28/10/1955", "EF54321"),
+            Player("D", "Marc", "23/06/1942", "GH98765"),
+            Player("E", "Antoine", "23/06/1942", "II98765"),
+            Player("F", "Christophe", "20/07/1990", "ZZ98765")]
+
 
 def add_players_test():
     """Ajouter des joueurs pour tester"""
@@ -81,17 +84,19 @@ def add_players_test():
     for player in players:
         controller.add_player(player)
 
+
 def pairing_test():
     players = get_players_test()
     first = [
-        (players[0], players[1]), 
-        (players[2], players[3]), 
-        (players[4], players[5]), 
+        (players[0], players[1]),
+        (players[2], players[3]),
+        (players[4], players[5]),
         (players[0], players[2])
     ]
     pairs = PairingPerso.generate_next_round_pairs(players, first)
     print(first)
     print(pairs)
+
 
 def save_players_test():
     """Save players to JSON for testing."""
@@ -101,9 +106,11 @@ def save_players_test():
     new_tournament_test()
     controller.save_tournament_to_json()
 
+
 def new_tournament_and_add_players_test():
     new_tournament_test()
     add_players_test()
+
 
 TEST = {
     81: ("Nouveau tournoi", new_tournament_test),
@@ -113,6 +120,7 @@ TEST = {
     84: ("Pairing", pairing_test),
     85: ("Sauvegarder les joueurs et tournoi en JSON", save_players_test)
     }
+
 
 def display_menu():
     """Displays the main menu and manages user choices."""

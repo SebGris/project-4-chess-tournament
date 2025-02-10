@@ -10,8 +10,8 @@ class ViewPlayer(View):
         self.display_message(f"\nJoueur n° {counter}")
         first_name = self.get_input("Entrez le prénom du joueur :")
         last_name = self.get_input("Entrez son nom :")
-        date_of_birth = self.get_input_date("Entrez sa date de naissance"
-                                         " (format JJ/MM/AAAA):")
+        date_of_birth = self.get_input_date("Entrez sa date de naissance "
+                                            "(format JJ/MM/AAAA):")
         id_chess = self._prompt_for_id_chess()
         return last_name, first_name, date_of_birth, id_chess
 

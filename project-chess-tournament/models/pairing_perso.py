@@ -24,10 +24,18 @@ class PairingPerso:
         previous_matches_sorted = [
             (min(match), max(match)) for match in previous_matches
         ]
+        used_player = set()
         for index, player in enumerate(players):
+            if player in used_player:
+                continue
             for x in range(index + 1, len(players)):
+                if players[x] in used_player:
+                    continue
                 tpl = (player, players[x])
                 if tpl not in previous_matches_sorted:
                     pairs.append(tpl)
+                    used_player.add(player)
+                    used_player.add(players[x])
                     break
+        
         return pairs
