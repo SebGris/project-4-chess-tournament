@@ -47,3 +47,7 @@ class ViewPlayer(View):
             return
         for player in players:
             self.display_one_player(player)
+
+    def show_saving_success(self):
+        """Displays a message confirming the saving of the players."""
+        self.display_message("Les joueurs ont bien été enregistrés.")

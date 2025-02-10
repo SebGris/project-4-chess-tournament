@@ -1,3 +1,5 @@
+import json
+import os
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
@@ -66,6 +68,7 @@ class ControllerTournament:
                 player_details["id_chess"]
                 )
         self.tournament.add_player(player)
+        self.save_players_to_json()
         self.view.display_message(
             f"Joueur {player.get_full_name()} ajouté avec succès !"
             )
@@ -149,3 +152,25 @@ class ControllerTournament:
                 )
             return
         self.view.display_tournament(self.tournament)
+
+    def save_tournament_to_json(self, filename="tournament.json"):
+        """Save tournament to a JSON file."""
+        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
+        os.makedirs(data_folder, exist_ok=True)
+        file_path = os.path.join(data_folder, filename)
+        with open(file_path, 'w') as file:
+            json.dump(self.tournament.to_dict(), file, indent=4)
+
+    def save_players_to_json(self, filename="players.json"):
+        """Save players to a JSON file."""
+        if not self.tournament_exists():
+            self.view.display_message(
+                "Aucun tournoi en cours. Créez un tournoi d'abord."
+                )
+            return
+        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
+        os.makedirs(data_folder, exist_ok=True)
+        file_path = os.path.join(data_folder, filename)
+        players_data = [player.to_dict() for player in self.tournament.players]
+        with open(file_path, 'w') as file:
+            json.dump(players_data, file, indent=4)

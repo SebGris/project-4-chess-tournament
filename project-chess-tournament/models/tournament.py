@@ -26,6 +26,17 @@ class Tournament:
     def is_complete(self):
         """Checks if the tournament is over."""
         return self.current_round > self.total_rounds
+    
+    def to_dict(self):
+        """Convert Tournament object to dictionary."""
+        return {
+            'name': self.name,
+            'location': self.location,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'description': self.description,
+            'current_round': self.current_round
+        }
 
     def __str__(self):
         """Returns a string representation of the tournament."""

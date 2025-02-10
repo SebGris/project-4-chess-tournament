@@ -1,4 +1,5 @@
 import json
+import os
 from models.player import Player
 
 
@@ -23,13 +24,15 @@ class ControllerPlayer:
             # self.save_player(player)
             counter = counter + 1
 
-    def save_players_to_json(self, players, filename="players.json"):
-        """Save players to a JSON file."""
-        with open(filename, 'w') as file:
-            json.dump([player.to_dict() for player in players], file, indent=4)
-        self.view.show_saving_success()
+    def add_players(self, players):
+        """Add players to the list."""
+        self.players.extend(players)
 
-    def add_players_to_json(self):
-        """Add players."""
-        self.get_players()
-        self.view.display_players(self.players)
+    def save_players_to_json(self, filename="players.json"):
+        """Save players to a JSON file."""
+        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
+        os.makedirs(data_folder, exist_ok=True)
+        file_path = os.path.join(data_folder, filename)
+        with open(file_path, 'w') as file:
+            json.dump([player.to_dict() for player in self.players], file, indent=4)
+        self.view.show_saving_success()
