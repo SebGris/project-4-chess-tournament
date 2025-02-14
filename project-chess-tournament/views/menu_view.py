@@ -1,6 +1,6 @@
 class MenuView:
-    def display_menu(self, menu_items, title):
-        header = f"=== {title} ==="
+    def display_menu(self, title, menu_items):
+        header = f"\n=== {title} ==="
         print(header)
         for index, item in enumerate(menu_items):
             print(f"{index + 1}. {item}")

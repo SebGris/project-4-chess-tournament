@@ -19,29 +19,36 @@ class MenuController:
         self.view = view
         self.actions = {
             "Nouveau tournoi": self.new_tournament,
-            "Ajouter des joueurs au tournoi": self.add_players,
-            "Afficher les joueurs du tournoi": self.display_players,
+            "Ajouter des joueurs": self.add_players,
+            "Afficher les joueurs": self.display_players,
             "Démarrer un tournoi": self.start_tournament,
             "Ajouter une description au tournoi": self.add_description_tournament,
             "Afficher le tournoi": self.display_tournament,
-            "Test - Nouveau tournoi": self.new_tournament_test,
-            "Test - Ajouter des joueurs au tournoi": self.add_players_test,
-            "Test - Nouveau tournoi + Ajouter des joueurs": self.new_tournament_and_add_players_test,
-            "Test - Pairing": self.pairing_test,
-            "Test - Sauvegarder les joueurs et tournoi en JSON": self.save_players_test
+            "Test": self.test,
+            "Ajoute un nouveau tournoi": self.add_new_tournament_test,
+            "Ajouter des joueurs au tournoi": self.add_players_test,
+            "Nouveau tournoi + Ajouter des joueurs": self.new_tournament_and_add_players_test,
+            "Pairing": self.pairing_test,
+            "Sauvegarder les joueurs et tournoi en JSON": self.save_players_test,
+            "Retour au menu principal": self.show_main_menu
             }
 
-    def display_menu(self):
+    def show_main_menu(self):
+        self.display_menu("Menu principal",self.model.get_main_menu_options())
+
+    def show_test_items(self):
+        self.display_menu("Menu test",self.model.get_test_items_menu_options())
+
+    def display_menu(self, title, options):
         while True:
-            options = self.model.get_menu_items()
-            self.view.display_menu(options, "Menu principal")
-            choice = input("Sélectionnez une option (1-{}):".format(len(options)))
+            self.view.display_menu(title, options)
+            choice = input("Sélectionnez une option (1-{}) :".format(len(options)))
             if choice.isdigit():
                 choice = int(choice)
                 if 1 <= choice <= len(options):
                     selected_option = options[choice - 1]
                     if selected_option == "Quitter":
-                        break
+                        exit()
                     else:
                         action = self.actions.get(selected_option)
                         if action:
@@ -76,9 +83,12 @@ class MenuController:
     def display_tournament(self):
         """Display the tournament"""
         controller.display_tournament()
+    
+    def test(self):
+        self.show_test_items()
 
     # début menu test
-    def new_tournament_test(self):
+    def add_new_tournament_test(self):
         """Tournament variable for testing"""
         tournament = Tournament("Championnat de Paris", "Paris",
                                 "01/06/2025", "07/06/2025")
@@ -116,9 +126,9 @@ class MenuController:
         controller_player = ControllerPlayer(ViewPlayer())
         controller_player.add_players(self.get_players_test())
         controller_player.save_players_to_json()
-        self.new_tournament_test()
+        self.add_new_tournament_test()
         controller.save_tournament_to_json()
 
     def new_tournament_and_add_players_test(self):
-        self.new_tournament_test()
+        self.add_new_tournament_test()
         self.add_players_test()

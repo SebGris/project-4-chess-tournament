@@ -1,19 +1,26 @@
 class MenuModel:
     def __init__(self):
-        self.menu_items = [
+        self.main_menu = [
             "Nouveau tournoi",
-            "Ajouter des joueurs au tournoi",
-            "Afficher les joueurs du tournoi",
+            "Ajouter des joueurs",
+            "Afficher les joueurs",
             "Démarrer un tournoi",
             "Ajouter une description au tournoi",
             "Afficher le tournoi",
-            "Quitter",
-            "Test - Nouveau tournoi",
-            "Test - Ajouter des joueurs au tournoi",
-            "Test - Nouveau tournoi + Ajouter des joueurs",
-            "Test - Pairing",
-            "Test - Sauvegarder les joueurs et tournoi en JSON"
+            "Test",
+            "Quitter"
+            ]
+        self.test_items_menu = [
+            "Ajoute un nouveau tournoi",
+            "Ajouter des joueurs au tournoi",
+            "Nouveau tournoi + Ajouter des joueurs",
+            "Pairing",
+            "Sauvegarder les joueurs et tournoi en JSON",
+            "Retour au menu principal"
             ]
 
-    def get_menu_items(self):
-        return self.menu_items
+    def get_main_menu_options(self):
+        return self.main_menu
+    
+    def get_test_items_menu_options(self):
+        return self.test_items_menu
