@@ -85,3 +85,17 @@ class ViewTournament(View):
         """Display the result of a tournament."""
         self.display_message("Tournoi terminé !")
         self.display_players(players)
+
+    def display_tournament_players(self, tournament):
+        """Displays the list of players in the tournament."""
+        players = tournament.players
+        if not players:
+            self.display_message("Aucun joueur dans le tournoi.")
+        else:
+            self.display_message("Liste des joueurs du tournoi :")
+            for player in players:
+                self.display_message(
+                    f"Nom : {player.last_name} {player.first_name} | "
+                    f"Date de naissance : {player.birth_date} | "
+                    f"ID échecs : {player.id_chess}"
+                )

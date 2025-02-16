@@ -1,53 +1,17 @@
 {
-    "id": "39343509-d1a3-49ea-a730-bab09fe77a39",
+    "id": "cd3e5ea4-6eb7-488e-b520-3e80acd59c4b",
     "name": "Championnat de Paris",
     "location": "Paris",
     "start_date": "01/06/2025",
     "end_date": "07/06/2025",
-    "description": "",
     "current_round": 1,
-    "players": [
-        {
-            "last_name": "A",
-            "first_name": "Jean",
-            "birth_date": "12/11/1985",
-            "id_chess": "AB12345",
-            "score": 0.0
-        },
-        {
-            "last_name": "B",
-            "first_name": "Alain",
-            "birth_date": "12/11/1985",
-            "id_chess": "CD67890",
-            "score": 0.0
-        },
-        {
-            "last_name": "C",
-            "first_name": "Richard",
-            "birth_date": "28/10/1955",
-            "id_chess": "EF54321",
-            "score": 0.0
-        },
-        {
-            "last_name": "D",
-            "first_name": "Marc",
-            "birth_date": "23/06/1942",
-            "id_chess": "GH98765",
-            "score": 0.0
-        },
-        {
-            "last_name": "E",
-            "first_name": "Antoine",
-            "birth_date": "23/06/1942",
-            "id_chess": "II98765",
-            "score": 0.0
-        },
-        {
-            "last_name": "F",
-            "first_name": "Christophe",
-            "birth_date": "20/07/1990",
-            "id_chess": "ZZ98765",
-            "score": 0.0
-        }
+    "description": "",
+    "player_ids": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
     ]
 }

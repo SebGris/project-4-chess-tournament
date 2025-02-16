@@ -1,11 +1,13 @@
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
-from utils.file_utils import save_to_json
+from utils.file_utils import save_to_json, load_from_json
 
 
 class ControllerTournament:
     """Manages the logic of the tournament."""
+    TOURNAMENT_FILENAME = "tournament.json"
+
     def __init__(self, view):
         self.view = view
         self.tournament = None
@@ -63,7 +65,8 @@ class ControllerTournament:
                 player_details["last_name"],
                 player_details["first_name"],
                 player_details["birth_date"],
-                player_details["id_chess"]
+                player_details["id_chess"],
+                id=player_details.get("id")
                 )
         self.tournament.add_player(player)
         self.save_players_to_json()
@@ -117,7 +120,7 @@ class ControllerTournament:
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
             # Save the tournament state after each match result is recorded
-            # self.save_tournament_to_json()
+            self.save_tournament_to_json()
 
     def add_description(self):
         """Add a description to the tournament."""
@@ -151,17 +154,29 @@ class ControllerTournament:
                 )
             return
         self.view.display_tournament(self.tournament)
+        self.view.display_tournament_players(self.tournament)
 
-    def save_tournament_to_json(self, filename="tournament.json"):
-        """Save tournament to a JSON file."""
-        save_to_json(self.tournament.to_dict(), filename)
-
-    def save_players_to_json(self, filename="players.json"):
+    def save_players_to_json(self):
         """Save players to a JSON file."""
-        if not self.tournament_exists():
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        players_data = [player.to_dict() for player in self.tournament.players]
-        save_to_json(players_data, filename)
+        save_to_json(
+            [player.to_dict() for player in self.tournament.players],
+            "players.json"
+        )
+
+    def save_tournament_to_json(self, save_players=False):
+        """Save tournament to a JSON file."""
+        save_to_json(self.tournament.to_dict(), self.TOURNAMENT_FILENAME)
+        if save_players:
+            self.save_players_to_json()
+
+    def load_tournament_from_json(self):
+        """Load tournament from a JSON file."""
+        data = load_from_json(self.TOURNAMENT_FILENAME)
+        all_players = {player.id: player for player in self.load_all_players()}
+        self.tournament = Tournament.from_dict(data, all_players)
+        self.view.display_message("Tournoi chargé avec succès !")
+
+    def load_all_players(self):
+        """Load all players from a JSON file."""
+        data = load_from_json("players.json")
+        return [Player.from_dict(player_data) for player_data in data]

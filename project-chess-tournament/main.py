@@ -4,10 +4,10 @@ from views.menu_view import MenuView
 
 
 def main():
-    model = MenuModel()
-    view = MenuView()
-    controller = MenuController(model, view)
-    controller.show_menu()
+    menu_model = MenuModel()
+    menu_view = MenuView()
+    menu_controller = MenuController(menu_model, menu_view)
+    menu_controller.show_menu()
 
 
 if __name__ == "__main__":

@@ -4,17 +4,19 @@ class MenuModel:
             "main": [
                 "Gestion des tournois",
                 "Gestion des joueurs",
-                "Menu Test",
+                "Menu pour test",
                 "Quitter"
             ],
             "player": [
                 "Ajouter des joueurs",
+                "Charger les joueurs",
                 "Afficher les joueurs",
                 "Retour au menu principal",
                 "Quitter"
             ],
             "tournament": [
                 "Nouveau tournoi",
+                "Charger un tournoi",
                 "Démarrer un tournoi",
                 "Ajouter une description",
                 "Afficher le tournoi",

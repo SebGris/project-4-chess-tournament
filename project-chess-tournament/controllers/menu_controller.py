@@ -8,8 +8,10 @@ from controllers.controller_player import ControllerPlayer
 from views.view_player import ViewPlayer
 
 # Tournament creation
-view = ViewTournament()
-controller = ControllerTournament(view)
+tournament_view = ViewTournament()
+tournament_controller = ControllerTournament(tournament_view)
+player_view = ViewPlayer()
+player_controller = ControllerPlayer(player_view)
 
 
 class MenuController:
@@ -27,12 +29,15 @@ class MenuController:
             "Menu pour test": lambda: self.show_menu(
                 "test", "Menu pour test"
             ),
-            "Nouveau tournoi": controller.entering_a_tournament,
-            "Ajouter des joueurs": controller.add_players,
-            "Afficher les joueurs": controller.display_players,
-            "Démarrer un tournoi": controller.start_tournament,
-            "Ajouter une description": controller.add_description,
-            "Afficher le tournoi": controller.display_tournament,
+            "Ajouter des joueurs": player_controller.add_players,
+            "Charger les joueurs": player_controller.load_players_from_json,
+            "Afficher les joueurs": player_controller.display_players,
+            "Nouveau tournoi": tournament_controller.entering_a_tournament,
+            "Charger un tournoi":
+                tournament_controller.load_tournament_from_json,
+            "Démarrer un tournoi": tournament_controller.start_tournament,
+            "Ajouter une description": tournament_controller.add_description,
+            "Afficher le tournoi": tournament_controller.display_tournament,
             "Ajoute un tournoi": self.add_new_tournament_test,
             "Ajouter des joueurs au tournoi": self.add_players_test,
             "Nouveau tournoi + Ajouter des joueurs":
@@ -74,13 +79,14 @@ class MenuController:
                     "Entrée invalide. Veuillez entrer un nombre."
                 )
 
-    def add_new_tournament_test(self):
+    def add_new_tournament_test(self, players=None):
         """Tournament variable for testing"""
-        controller.entering_a_tournament(
-            Tournament(
-                "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025"
-            )
+        players = players or []
+        tournament = Tournament(
+            "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
+            players=players
         )
+        tournament_controller.entering_a_tournament(tournament)
 
     def get_players_test(self):
         """Ajouter des joueurs pour tester"""
@@ -99,7 +105,7 @@ class MenuController:
         """Ajouter des joueurs pour tester"""
         players = self.get_players_test()
         for player in players:
-            controller.add_player(player)
+            tournament_controller.add_player(player)
 
     def pairing_test(self):
         players = self.get_players_test()
@@ -117,9 +123,8 @@ class MenuController:
         """Save players to JSON for testing."""
         controller_player = ControllerPlayer(ViewPlayer())
         controller_player.add_players(self.get_players_test())
-        controller_player.save_players_to_json()
-        self.add_new_tournament_test()
-        controller.save_tournament_to_json()
+        self.add_new_tournament_test(controller_player.players)
+        tournament_controller.save_tournament_to_json(True)
 
     def new_tournament_and_add_players_test(self):
         self.add_new_tournament_test()

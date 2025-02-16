@@ -3,17 +3,19 @@ import uuid
 
 class Tournament:
     """Class representing a chess tournament."""
-    description = ""
     total_rounds = 4
-    players = []  # Liste des joueurs enregistrés
 
-    def __init__(self, name, location, start_date, end_date):
-        self.id = str(uuid.uuid4())  # Generate a unique ID for the tournament
+    def __init__(self, name, location, start_date, end_date,
+                 id=None, current_round=1, description="", players=None):
+        # Use provided ID or generate a unique one
+        self.id = id if id is not None else str(uuid.uuid4())
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.current_round = 1
+        self.current_round = current_round
+        self.description = description
+        self.players = players if players is not None else []
 
     def set_description(self, texte):
         """Define the tournament description."""
@@ -39,17 +41,32 @@ class Tournament:
             'location': self.location,
             'start_date': self.start_date,
             'end_date': self.end_date,
-            'description': self.description,
             'current_round': self.current_round,
-            'players': [player.to_dict() for player in self.players]
+            'description': self.description,
+            'player_ids': [player.id for player in self.players]
         }
+
+    @classmethod
+    def from_dict(cls, data, all_players):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            location=data["location"],
+            start_date=data["start_date"],
+            end_date=data["end_date"],
+            current_round=data["current_round"],
+            description=data["description"],
+            players=[
+                all_players[player_id] for player_id in data["player_ids"]
+            ]
+        )
 
     def __str__(self):
         """Returns a string representation of the tournament."""
         return (f"Tournoi: {self.name} | Lieu: {self.location} | "
                 f"Dates: {self.start_date} - "
-                f"{self.end_date}  | "
+                f"{self.end_date} | "
                 f"Nombre de tours : {self.total_rounds} | "
                 f"Tour actuel : {self.current_round}/{self.total_rounds}\n"
-                f"Joueurs inscrits : {len(self.players)}\n"
-                f"Description : {self.description}")
+                f"Description : {self.description}\n"
+                f"Joueurs inscrits : {len(self.players)}\n")
