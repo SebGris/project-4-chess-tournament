@@ -18,40 +18,42 @@ class MenuController:
         self.model = model
         self.view = view
         self.actions = {
-            "Nouveau tournoi": self.new_tournament,
-            "Ajouter des joueurs": self.add_players,
-            "Afficher les joueurs": self.display_players,
-            "Démarrer un tournoi": self.start_tournament,
-            "Ajouter une description au tournoi": 
-                self.add_description_tournament,
-            "Afficher le tournoi": self.display_tournament,
-            "Test": self.test,
-            "Ajoute un nouveau tournoi": self.add_new_tournament_test,
+            "Gestion des tournois": lambda: self.show_menu(
+                "tournament", "Gestion des tournois"
+            ),
+            "Gestion des joueurs": lambda: self.show_menu(
+                "player", "Gestion des joueurs"
+            ),
+            "Menu pour test": lambda: self.show_menu(
+                "test", "Menu pour test"
+            ),
+            "Nouveau tournoi": controller.entering_a_tournament,
+            "Ajouter des joueurs": controller.add_players,
+            "Afficher les joueurs": controller.display_players,
+            "Démarrer un tournoi": controller.start_tournament,
+            "Ajouter une description": controller.add_description,
+            "Afficher le tournoi": controller.display_tournament,
+            "Ajoute un tournoi": self.add_new_tournament_test,
             "Ajouter des joueurs au tournoi": self.add_players_test,
-            "Nouveau tournoi + Ajouter des joueurs": 
+            "Nouveau tournoi + Ajouter des joueurs":
                 self.new_tournament_and_add_players_test,
             "Pairing": self.pairing_test,
             "Sauvegarder les joueurs et tournoi en JSON":
                 self.save_players_test,
-            "Retour au menu principal": self.show_main_menu
+            "Retour au menu principal": self.show_menu
             }
 
-    def show_main_menu(self):
-        self.display_menu("Menu principal",self.model.get_main_menu_options())
-
-    def show_test_items(self):
-        self.display_menu("Menu test",self.model.get_test_items_menu_options())
-
-    def display_menu(self, title, options):
+    def show_menu(self, menu_name="main", menu_title="Menu principal"):
+        items = self.model.get_menu_items(menu_name)
+        self.view.display_menu(menu_title, items)
         while True:
-            self.view.display_menu(title, options)
             choice = input(
-                "Sélectionnez une option (1-{}) :".format(len(options))
+                "Sélectionnez une option (1-{}) :".format(len(items))
             )
             if choice.isdigit():
                 choice = int(choice)
-                if 1 <= choice <= len(options):
-                    selected_option = options[choice - 1]
+                if 1 <= choice <= len(items):
+                    selected_option = items[choice - 1]
                     if selected_option == "Quitter":
                         exit()
                     else:
@@ -71,49 +73,27 @@ class MenuController:
                 self.view.display_message(
                     "Entrée invalide. Veuillez entrer un nombre."
                 )
-    
-    def new_tournament(self):
-        """Start new tournament"""
-        controller.entering_a_tournament()
 
-    def add_players(self):
-        """Adding players to the tournament"""
-        controller.add_players()
-
-    def display_players(self):
-        """Display players in the tournament"""
-        controller.display_players()
-
-    def start_tournament(self):
-        """Starting a tournament"""
-        controller.start_tournament()
-
-    def add_description_tournament(self):
-        """Add a description to the tournament"""
-        controller.add_description()
-
-    def display_tournament(self):
-        """Display the tournament"""
-        controller.display_tournament()
-    
-    def test(self):
-        self.show_test_items()
-
-    # début menu test
     def add_new_tournament_test(self):
         """Tournament variable for testing"""
-        tournament = Tournament("Championnat de Paris", "Paris",
-                                "01/06/2025", "07/06/2025")
-        controller.entering_a_tournament(tournament)
+        controller.entering_a_tournament(
+            Tournament(
+                "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025"
+            )
+        )
 
     def get_players_test(self):
         """Ajouter des joueurs pour tester"""
-        return [Player("A", "Jean", "12/11/1985", "AB12345"),
-                Player("B", "Alain", "12/11/1985", "CD67890"),
-                Player("C", "Richard", "28/10/1955", "EF54321"),
-                Player("D", "Marc", "23/06/1942", "GH98765"),
-                Player("E", "Antoine", "23/06/1942", "II98765"),
-                Player("F", "Christophe", "20/07/1990", "ZZ98765")]
+        players_data = [
+            ("A", "Jean", "12/11/1985", "AB12345"),
+            ("B", "Alain", "12/11/1985", "CD67890"),
+            ("C", "Richard", "28/10/1955", "EF54321"),
+            ("D", "Marc", "23/06/1942", "GH98765"),
+            ("E", "Antoine", "23/06/1942", "II98765"),
+            ("F", "Christophe", "20/07/1990", "ZZ98765")
+        ]
+        # Unpacking each tuple in players_data into the Player constructor
+        return [Player(*data) for data in players_data]
 
     def add_players_test(self):
         """Ajouter des joueurs pour tester"""

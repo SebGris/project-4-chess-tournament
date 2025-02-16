@@ -40,7 +40,8 @@ class Tournament:
             'start_date': self.start_date,
             'end_date': self.end_date,
             'description': self.description,
-            'current_round': self.current_round
+            'current_round': self.current_round,
+            'players': [player.to_dict() for player in self.players]
         }
 
     def __str__(self):

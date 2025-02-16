@@ -7,7 +7,7 @@ def main():
     model = MenuModel()
     view = MenuView()
     controller = MenuController(model, view)
-    controller.show_main_menu()
+    controller.show_menu()
 
 
 if __name__ == "__main__":
