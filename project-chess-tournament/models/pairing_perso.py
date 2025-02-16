@@ -37,5 +37,4 @@ class PairingPerso:
                     used_player.add(player)
                     used_player.add(players[x])
                     break
-        
         return pairs

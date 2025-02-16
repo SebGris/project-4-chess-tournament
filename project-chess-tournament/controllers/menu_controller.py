@@ -22,14 +22,17 @@ class MenuController:
             "Ajouter des joueurs": self.add_players,
             "Afficher les joueurs": self.display_players,
             "Démarrer un tournoi": self.start_tournament,
-            "Ajouter une description au tournoi": self.add_description_tournament,
+            "Ajouter une description au tournoi": 
+                self.add_description_tournament,
             "Afficher le tournoi": self.display_tournament,
             "Test": self.test,
             "Ajoute un nouveau tournoi": self.add_new_tournament_test,
             "Ajouter des joueurs au tournoi": self.add_players_test,
-            "Nouveau tournoi + Ajouter des joueurs": self.new_tournament_and_add_players_test,
+            "Nouveau tournoi + Ajouter des joueurs": 
+                self.new_tournament_and_add_players_test,
             "Pairing": self.pairing_test,
-            "Sauvegarder les joueurs et tournoi en JSON": self.save_players_test,
+            "Sauvegarder les joueurs et tournoi en JSON":
+                self.save_players_test,
             "Retour au menu principal": self.show_main_menu
             }
 
@@ -42,7 +45,9 @@ class MenuController:
     def display_menu(self, title, options):
         while True:
             self.view.display_menu(title, options)
-            choice = input("Sélectionnez une option (1-{}) :".format(len(options)))
+            choice = input(
+                "Sélectionnez une option (1-{}) :".format(len(options))
+            )
             if choice.isdigit():
                 choice = int(choice)
                 if 1 <= choice <= len(options):
@@ -54,11 +59,18 @@ class MenuController:
                         if action:
                             action()
                         else:
-                            self.view.display_message(f"Aucune action définie pour {selected_option}.")
+                            self.view.display_message(
+                                f"Aucune action définie pour "
+                                f"{selected_option}."
+                            )
                 else:
-                    self.view.display_message("Option invalide. Veuillez réessayer.")
+                    self.view.display_message(
+                        "Option invalide. Veuillez réessayer."
+                    )
             else:
-                self.view.display_message("Entrée invalide. Veuillez entrer un nombre.")
+                self.view.display_message(
+                    "Entrée invalide. Veuillez entrer un nombre."
+                )
     
     def new_tournament(self):
         """Start new tournament"""

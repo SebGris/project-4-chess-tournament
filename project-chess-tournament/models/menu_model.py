@@ -21,6 +21,6 @@ class MenuModel:
 
     def get_main_menu_options(self):
         return self.main_menu
-    
+
     def get_test_items_menu_options(self):
         return self.test_items_menu

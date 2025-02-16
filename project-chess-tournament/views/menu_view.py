@@ -5,7 +5,6 @@ class MenuView:
         for index, item in enumerate(menu_items):
             print(f"{index + 1}. {item}")
         print("=" * len(header))
-        
 
     def display_message(self, message):
         print(message)

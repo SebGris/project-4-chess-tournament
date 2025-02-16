@@ -1,8 +1,7 @@
-import json
-import os
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
+from utils.file_utils import save_to_json
 
 
 class ControllerTournament:
@@ -155,11 +154,7 @@ class ControllerTournament:
 
     def save_tournament_to_json(self, filename="tournament.json"):
         """Save tournament to a JSON file."""
-        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
-        os.makedirs(data_folder, exist_ok=True)
-        file_path = os.path.join(data_folder, filename)
-        with open(file_path, 'w') as file:
-            json.dump(self.tournament.to_dict(), file, indent=4)
+        save_to_json(self.tournament.to_dict(), filename)
 
     def save_players_to_json(self, filename="players.json"):
         """Save players to a JSON file."""
@@ -168,9 +163,5 @@ class ControllerTournament:
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
             return
-        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
-        os.makedirs(data_folder, exist_ok=True)
-        file_path = os.path.join(data_folder, filename)
         players_data = [player.to_dict() for player in self.tournament.players]
-        with open(file_path, 'w') as file:
-            json.dump(players_data, file, indent=4)
+        save_to_json(players_data, filename)

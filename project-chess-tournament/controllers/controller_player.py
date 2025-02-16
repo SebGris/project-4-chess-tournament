@@ -1,6 +1,5 @@
-import json
-import os
 from models.player import Player
+from utils.file_utils import save_to_json
 
 
 class ControllerPlayer:
@@ -30,9 +29,5 @@ class ControllerPlayer:
 
     def save_players_to_json(self, filename="players.json"):
         """Save players to a JSON file."""
-        data_folder = os.path.join(os.getcwd(), 'data/tournaments')
-        os.makedirs(data_folder, exist_ok=True)
-        file_path = os.path.join(data_folder, filename)
-        with open(file_path, 'w') as file:
-            json.dump([player.to_dict() for player in self.players], file, indent=4)
+        save_to_json([player.to_dict() for player in self.players], filename)
         self.view.show_saving_success()

@@ -3,7 +3,6 @@ from models.menu_model import MenuModel
 from views.menu_view import MenuView
 
 
-
 def main():
     model = MenuModel()
     view = MenuView()
