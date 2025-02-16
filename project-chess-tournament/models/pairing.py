@@ -22,14 +22,14 @@ class Pairing:
         players.sort(key=lambda p: p.score, reverse=True)
         pairs = []
         used_players = set()
+        num_pairs_needed = len(previous_matches)
 
-        for i, player1 in enumerate(players):
+        for index, player1 in enumerate(players):
             if player1 in used_players:
                 continue
 
-            for j in range(i + 1, len(players)):
+            for j in range(index + 1, len(players)):
                 player2 = players[j]
-
                 if player2 in used_players:
                     continue
 
@@ -39,4 +39,14 @@ class Pairing:
                     used_players.update({player1, player2})
                     break
 
+            if len(pairs) == num_pairs_needed:
+                break
+
+        # If we still need more pairs, pair the remaining players
+        remaining_players = [p for p in players if p not in used_players]
+        players.sort(key=lambda p: p.score, reverse=True)
+        while len(pairs) < num_pairs_needed and len(remaining_players) >= 2:
+            player1 = remaining_players.pop(0)
+            player2 = remaining_players.pop(0)
+            pairs.append((player1, player2))
         return pairs

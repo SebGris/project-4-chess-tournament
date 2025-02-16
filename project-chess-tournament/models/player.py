@@ -4,12 +4,13 @@ from utils.id_generator import IDGenerator
 class Player:
     """Class representing a chess player."""
 
-    def __init__(self, last_name, first_name, birth_date, id_chess, id=None):
+    def __init__(self, last_name, first_name, birth_date, id_chess,
+                 id=None, score=0.0):
         self.last_name = last_name
         self.first_name = first_name
         self.birth_date = birth_date
         self.id_chess = id_chess
-        self.score = 0.0  # Points accumulated during the tournament
+        self.score = score  # Points accumulated during the tournament
         self.id = id or IDGenerator.get_next_id()
 
     def update_score(self, points):
@@ -25,8 +26,7 @@ class Player:
         return self.last_name < other.last_name
 
     def __repr__(self):
-        return (f"Player({self.last_name}, {self.first_name}, "
-                f"{self.birth_date})")
+        return (f"{self.get_full_name()} score: {self.score}")
 
     def __str__(self):
         """Returns a string representation of the player."""

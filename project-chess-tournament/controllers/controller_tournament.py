@@ -120,7 +120,7 @@ class ControllerTournament:
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
             # Save the tournament state after each match result is recorded
-            self.save_tournament_to_json()
+            self.save_tournament_to_json(True)
 
     def add_description(self):
         """Add a description to the tournament."""

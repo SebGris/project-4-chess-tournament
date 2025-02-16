@@ -16,6 +16,10 @@ class View:
         print(message)
 
     @staticmethod
+    def display_invalid_input_message_enter_a_number():
+        View.display_message("Entrée invalide. Veuillez entrer un nombre.")
+
+    @staticmethod
     def get_input(prompt):
         """Requests a user input with a specific message."""
         prompt = prompt.rstrip() + " "
