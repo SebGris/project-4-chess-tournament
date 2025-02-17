@@ -7,6 +7,11 @@ from models.tournament import Tournament
 from models.pairing import Pairing
 from controllers.controller_player import ControllerPlayer
 from views.view_player import ViewPlayer
+from commands.command import (
+    ShowMenuCommand,
+    AddPlayersCommand, LoadPlayersCommand, DisplayPlayersCommand
+    # ...import other command classes...
+)
 
 # Tournament creation
 tournament_view = ViewTournament()
@@ -21,18 +26,12 @@ class MenuController:
         self.model = model
         self.view = view
         self.actions = {
-            "Gestion des tournois": lambda: self.show_menu(
-                "tournament", "Gestion des tournois"
-            ),
-            "Gestion des joueurs": lambda: self.show_menu(
-                "player", "Gestion des joueurs"
-            ),
-            "Menu pour test": lambda: self.show_menu(
-                "test", "Menu pour test"
-            ),
-            "Ajouter des joueurs": player_controller.add_players,
-            "Charger les joueurs": player_controller.load_players_from_json,
-            "Afficher les joueurs": player_controller.display_players,
+            "Gestion des tournois": ShowMenuCommand(self, menu_name="tournament", menu_title="Gestion des tournois"),
+            "Gestion des joueurs": ShowMenuCommand(self, menu_name="player", menu_title="Gestion des joueurs"),
+            "Menu pour test": ShowMenuCommand(self, menu_name="test", menu_title="Menu pour test"),
+            "Ajouter des joueurs": AddPlayersCommand(player_controller),
+            "Charger les joueurs": LoadPlayersCommand(player_controller),
+            "Afficher les joueurs": DisplayPlayersCommand(player_controller),
             "Nouveau tournoi": tournament_controller.entering_a_tournament,
             "Ajouter des joueurs au tournoi": tournament_controller.add_players,
             "Charger un tournoi":
@@ -67,7 +66,7 @@ class MenuController:
                     else:
                         action = self.actions.get(selected_option)
                         if action:
-                            action()
+                            action.execute()
                         else:
                             self.view.display_message(
                                 f"Aucune action définie pour "
