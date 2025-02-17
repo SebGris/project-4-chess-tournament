@@ -16,16 +16,18 @@ class MenuModel:
             ],
             "tournament": [
                 "Nouveau tournoi",
+                "Ajouter des joueurs au tournoi",
                 "Charger un tournoi",
                 "Démarrer un tournoi",
                 "Ajouter une description",
-                "Afficher le tournoi",
+                "Afficher les joueurs du tournoi",
+                "Afficher le résultat du tournoi",
                 "Retour au menu principal",
                 "Quitter"
             ],
             "test": [
                 "Ajoute un tournoi",
-                "Ajouter des joueurs au tournoi",
+                "Ajouter des joueurs au tournoi (score 0)",
                 "Nouveau tournoi + Ajouter des joueurs",
                 "Pairing",
                 "Sauvegarder les joueurs et tournoi en JSON",

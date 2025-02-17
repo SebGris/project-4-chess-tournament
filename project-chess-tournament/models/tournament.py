@@ -1,4 +1,5 @@
 import uuid
+from models.round import Round
 
 
 class Tournament:
@@ -6,7 +7,7 @@ class Tournament:
     total_rounds = 4
 
     def __init__(self, name, location, start_date, end_date,
-                 id=None, current_round=1, description="", players=None):
+                 id=None, current_round=1, description="Aucune description", players=None, rounds=None):
         # Use provided ID or generate a unique one
         self.id = id if id is not None else str(uuid.uuid4())
         self.name = name
@@ -16,6 +17,7 @@ class Tournament:
         self.current_round = current_round
         self.description = description
         self.players = players if players is not None else []
+        self.rounds = rounds if rounds is not None else []
 
     def set_description(self, texte):
         """Define the tournament description."""
@@ -43,7 +45,8 @@ class Tournament:
             'end_date': self.end_date,
             'current_round': self.current_round,
             'description': self.description,
-            'player_ids': [player.id for player in self.players]
+            'player_ids': [player.id for player in self.players],
+            'rounds': [round_instance.to_dict() for round_instance in self.rounds]
         }
 
     @classmethod
@@ -58,7 +61,8 @@ class Tournament:
             description=data["description"],
             players=[
                 all_players[player_id] for player_id in data["player_ids"]
-            ]
+            ],
+            rounds=[Round.from_dict(round_data, all_players) for round_data in data["rounds"]]
         )
 
     def __str__(self):

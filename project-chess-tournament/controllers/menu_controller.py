@@ -34,13 +34,15 @@ class MenuController:
             "Charger les joueurs": player_controller.load_players_from_json,
             "Afficher les joueurs": player_controller.display_players,
             "Nouveau tournoi": tournament_controller.entering_a_tournament,
+            "Ajouter des joueurs au tournoi": tournament_controller.add_players,
             "Charger un tournoi":
                 tournament_controller.load_tournament_from_json,
             "Démarrer un tournoi": tournament_controller.start_tournament,
             "Ajouter une description": tournament_controller.add_description,
-            "Afficher le tournoi": tournament_controller.display_tournament,
+            "Afficher les joueurs du tournoi": tournament_controller.show_tournament_players,
+            "Afficher le résultat du tournoi": tournament_controller.show_results,
             "Ajoute un tournoi": self.add_new_tournament_test,
-            "Ajouter des joueurs au tournoi": self.add_players_test,
+            "Ajouter des joueurs au tournoi (score 0)": self.add_players_test,
             "Nouveau tournoi + Ajouter des joueurs":
                 self.new_tournament_and_add_players_test,
             "Pairing": self.pairing_test,
@@ -76,22 +78,13 @@ class MenuController:
             else:
                 self.view.display_invalid_input_message_enter_a_number()
 
-    def add_new_tournament_test(self, players=None):
-        """Tournament variable for testing"""
-        players = players or []
-        tournament = Tournament(
-            "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
-            players=players
-        )
-        tournament_controller.entering_a_tournament(tournament)
-
     def get_random_players(self, number=6):
         """Generate players for testing"""
         if number > 0:
             last_names = ["Jean", "Alain", "Richard", "Marc", "Antoine"]
             first_names = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
             players_data = []
-            for _ in range(number):
+            for id in range(number):
                 last_name = random.choice(last_names)
                 first_name = random.choice(first_names)
                 birth_date = "{:02d}/{:02d}/{}".format(
@@ -108,7 +101,7 @@ class MenuController:
                 players_data.append(
                     (
                         first_name, last_name, birth_date,
-                        id_chess, number, score
+                        id_chess, id+1, score
                     )
                 )
         else:
@@ -126,11 +119,23 @@ class MenuController:
         print(players)
         return players
 
-    def add_players_test(self):
+    def add_new_tournament_test(self, players=None):
+        """Tournament variable for testing"""
+        players = players or []
+        tournament = Tournament(
+            "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
+            players=players
+        )
+        tournament_controller.entering_a_tournament(tournament)
+    
+    def add_players_test(self, score_0=True):
         """Ajouter des joueurs pour tester"""
         players = self.get_random_players()
-        for player in players:
-            tournament_controller.add_player(player)
+        if score_0:
+            for player in players:
+                player.score = 0
+        tournament_controller.add_players(players)
+        tournament_controller.show_tournament_players()
 
     def pairing_test(self):
         try:
@@ -151,8 +156,8 @@ class MenuController:
         controller_player = ControllerPlayer(ViewPlayer())
         controller_player.add_players(self.get_random_players())
         self.add_new_tournament_test(controller_player.players)
-        tournament_controller.save_tournament_to_json(True)
+        tournament_controller.save_tournament_to_json(save_players=True)
 
     def new_tournament_and_add_players_test(self):
         self.add_new_tournament_test()
-        self.add_players_test()
+        self.add_players_test(False)

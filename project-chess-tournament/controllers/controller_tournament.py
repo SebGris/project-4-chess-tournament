@@ -23,87 +23,78 @@ class ControllerTournament:
             data = self.view.prompt_for_tournament()
             tournament = Tournament(*data)
         self.tournament = tournament
+        self.save_tournament_to_json()
         self.view.display_message("Tournoi ajouté avec succès !")
 
-    def tournament_exists(self):
-        """
-        Checks whether a tournament is currently defined in the controller.
-        :return: True if a tournament exists, otherwise False.
-        """
-        return self.tournament is not None
-
-    def add_players(self):
+    def add_players(self, players=None):
         """Adding players to the tournament"""
-        if not self.tournament_exists():
+        if self.tournament is None:
             self.view.display_message(
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
-            return
-        while True:
-            choice = self.view.prompt_for_add_player()
-            if choice == 'o':
-                self.add_player()
-            else:
-                break
+        elif players is not None:
+            for player in players:
+                self.tournament.add_player(player)
+            self.save_tournament_to_json(save_players=True)
+        else:
+            while True:
+                choice = self.view.prompt_for_add_player()
+                if choice == 'o':
+                    self.__add_player()
+                else:
+                    break
+            self.save_tournament_to_json(save_players=True)
 
-    def add_player(self, player=None):
+    def __add_player(self):
         """
         Adds a player to the tournament by requesting information via the view.
         """
-        if not self.tournament_exists():
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        if player is None:
-            player_details = self.view.prompt_for_player()
-            if not player_details["first_name"]:
-                # Si l'utilisateur valide sans entrer de nom
-                self.view.display_message("Ajout annulé.")
-                return
+        player_details = self.view.prompt_for_player()
+        if not player_details["first_name"]:
+            # Si l'utilisateur valide sans entrer de nom
+            self.view.display_message("Ajout annulé.")
+        else:
             player = Player(
                 player_details["last_name"],
                 player_details["first_name"],
                 player_details["birth_date"],
-                player_details["id_chess"],
-                id=player_details.get("id")
+                player_details["id_chess"]
                 )
-        self.tournament.add_player(player)
-        self.save_players_to_json()
-        self.view.display_message(
-            f"Joueur {player.get_full_name()} ajouté avec succès !"
-            )
+            self.tournament.add_player(player)
+            self.view.display_message(
+                f"Joueur {player.get_full_name()} ajouté avec succès !"
+                )
 
     def start_tournament(self):
         """Starts a tournament and manages the rounds."""
-        if not self.tournament_exists():
+        if self.tournament is None:
             self.view.display_message(
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
-            return
-        if (len(self.tournament.players) % 2) != 0:
+        elif (len(self.tournament.players) % 2) != 0:
             self.view.display_message(
                 "Le nombre de joueurs doit être pair."
                 )
-            return
-        while not self.tournament.is_complete():
-            round_instance = Round(
-                self.tournament.current_round,
-                self.tournament.players,
-                self.previous_matches
-            )
-            self.record_results(round_instance)
-            round_instance.end_round()
-            for match in round_instance.matches:
-                print(match)
-            self.previous_matches.extend(round_instance.get_played_matches())
-            self.tournament.current_round += 1
-        self.view.display_result(self.tournament.players)
+        else:
+            while not self.tournament.is_complete():
+                round_instance = Round(
+                    self.tournament.current_round,
+                    self.tournament.players,
+                    self.previous_matches
+                )
+                self.__record_results(round_instance)
+                round_instance.end_round()
+                for match in round_instance.matches:
+                    print(match)
+                self.previous_matches.extend(round_instance.get_played_matches())
+                self.tournament.rounds.append(round_instance)
+                self.tournament.current_round += 1
+            self.save_tournament_to_json(save_players=True)
+            self.view.display_result(self.tournament.players)
 
-    def record_results(self, round_instance):
+    def __record_results(self, round_instance):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")
-
         for match in round_instance.matches:
             player1_name = match.player1[0].get_full_name()
             player2_name = match.player2[0].get_full_name()
@@ -119,12 +110,10 @@ class ControllerTournament:
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
-            # Save the tournament state after each match result is recorded
-            self.save_tournament_to_json(True)
 
     def add_description(self):
         """Add a description to the tournament."""
-        if not self.tournament_exists():
+        if self.tournament is None:
             self.view.display_message(
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
@@ -137,9 +126,9 @@ class ControllerTournament:
         self.view.show_message("Résultats du tournoi :")
         self.tournament.show_results()
 
-    def display_players(self):
+    def show_tournament_players(self):
         """Displays the list of players registered for the tournament."""
-        if not self.tournament_exists():
+        if self.tournament is None:
             self.view.display_message(
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
@@ -148,7 +137,7 @@ class ControllerTournament:
 
     def display_tournament(self):
         """Displays the tournament."""
-        if not self.tournament_exists():
+        if self.tournament is None:
             self.view.display_message(
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
@@ -165,7 +154,9 @@ class ControllerTournament:
 
     def save_tournament_to_json(self, save_players=False):
         """Save tournament to a JSON file."""
-        save_to_json(self.tournament.to_dict(), self.TOURNAMENT_FILENAME)
+        tournament_data = self.tournament.to_dict()
+        tournament_data['rounds'] = [round_instance.to_dict() for round_instance in self.tournament.rounds]
+        save_to_json(tournament_data, self.TOURNAMENT_FILENAME)
         if save_players:
             self.save_players_to_json()
 

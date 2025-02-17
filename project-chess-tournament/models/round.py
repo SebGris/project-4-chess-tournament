@@ -32,3 +32,24 @@ class Round:
     def get_played_matches(self):
         """Retourne la liste des matchs joués."""
         return [(match.player1[0], match.player2[0]) for match in self.matches]
+
+    def to_dict(self):
+        """Convert Round object to dictionary."""
+        return {
+            "name": self.name,
+            "matches": [match.to_dict() for match in self.matches],
+            "start_time": self.start_time,
+            "end_time": self.end_time
+        }
+
+    @classmethod
+    def from_dict(cls, data, all_players):
+        round_instance = cls(
+            round_number=int(data["name"].split()[1]),
+            players=[all_players[player_id] for player_id in data["player_ids"]],
+            previous_matches=[]
+        )
+        round_instance.start_time = data["start_time"]
+        round_instance.end_time = data["end_time"]
+        round_instance.matches = [Match.from_dict(match_data, all_players) for match_data in data["matches"]]
+        return round_instance

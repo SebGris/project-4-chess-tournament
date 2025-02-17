@@ -10,21 +10,20 @@ class ControllerPlayer:
         self.players = []
         self.view = view
 
-    def get_players(self):
-        """Get some players."""
-        counter = 1
-        while True:
-            last_name, first_name, birth_date, id_chess, id = \
-                self.view.prompt_for_player(counter)
-            if not last_name:
-                return
-            player = Player(last_name, first_name, birth_date, id_chess, id)
-            self.players.append(player)
-            counter = counter + 1
-
-    def add_players(self, players):
+    def add_players(self, players=None):
         """Add players to the list."""
-        self.players.extend(players)
+        if players is None:
+            counter = 1
+            while True:
+                last_name, first_name, birth_date, id_chess, id = \
+                    self.view.prompt_for_player(counter)
+                if not last_name:
+                    return
+                player = Player(last_name, first_name, birth_date, id_chess, id)
+                self.players.append(player)
+                counter = counter + 1
+        else:
+            self.players.extend(players)
 
     def display_players(self):
         """Display the players."""
