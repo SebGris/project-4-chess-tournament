@@ -54,9 +54,7 @@ class MenuController:
         items = self.model.get_menu_items(menu_name)
         self.view.display_menu(menu_title, items)
         while True:
-            choice = input(
-                "Sélectionnez une option (1-{}) :".format(len(items))
-            )
+            choice = self.view.get_user_choice(len(items))
             if choice.isdigit():
                 choice = int(choice)
                 if 1 <= choice <= len(items):
