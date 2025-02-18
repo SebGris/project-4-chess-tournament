@@ -4,6 +4,16 @@ class Command:
         raise NotImplementedError("You should implement this method.")
 
 
+class ChangeMenuCommand:
+    def __init__(self, menu_controller, menu_name, menu_title):
+        self.menu_controller = menu_controller
+        self.menu_name = menu_name
+        self.menu_title = menu_title
+
+    def execute(self):
+        self.menu_controller.run(self.menu_name, self.menu_title)
+
+
 class AddPlayersCommand(Command):
     def __init__(self, controller):
         self.controller = controller
@@ -12,29 +22,7 @@ class AddPlayersCommand(Command):
         self.controller.add_players()
 
 
-class LoadPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
+class QuitCommand(Command):
     def execute(self):
-        self.controller.load_players_from_json()
-
-
-class DisplayPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_players()
-
-
-class ShowMenuCommand(Command):
-    def __init__(self, controller, menu_name, menu_title):
-        self.controller = controller
-        self.menu_name = menu_name
-        self.menu_title = menu_title
-
-    def execute(self):
-        self.controller.show_menu(self.menu_name, self.menu_title)
-
-# ...other command classes for each menu action...
+        print("Au revoir !")
+        exit()

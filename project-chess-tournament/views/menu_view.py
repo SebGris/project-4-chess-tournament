@@ -11,8 +11,11 @@ class MenuView(View):
             print(f"{index + 1}. {item}")
         print("=" * len(header))
 
-    def get_user_choice(self, total_menu_items):
-        return input("Choisissez une option (1-{}) :".format(total_menu_items))
-    
+    def get_user_choice(self, menu_item_count):
+        return input("Choisissez une option (1-{}) :".format(menu_item_count))
+
     def display_invalid_option_message_try_again(self):
         self.display_message("Choix invalide, veuillez réessayer.")
+
+    def display_invalid_input_message_enter_a_number(self):
+        self.display_message("Entrée invalide, veuillez entrer un nombre.")
