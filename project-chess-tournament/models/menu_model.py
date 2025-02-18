@@ -1,6 +1,6 @@
 class MenuModel:
     def __init__(self):
-        self.menus = {
+        self.menu_navigation = {
             "main": [
                 "Gestion des tournois",
                 "Gestion des joueurs",
@@ -36,5 +36,5 @@ class MenuModel:
             ]
         }
 
-    def get_menu_items(self, menu_name):
-        return self.menus.get(menu_name, [])
+    def get_menu_navigation(self, menu_name):
+        return self.menu_navigation.get(menu_name, [])

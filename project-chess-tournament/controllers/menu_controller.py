@@ -47,18 +47,18 @@ class MenuController:
             "Pairing": self.pairing_test,
             "Sauvegarder les joueurs et tournoi en JSON":
                 self.save_players_test,
-            "Retour au menu principal": self.show_menu
+            "Retour au menu principal": self.start_menu_navigation
             }
 
-    def show_menu(self, menu_name="main", menu_title="Menu principal"):
-        items = self.model.get_menu_items(menu_name)
-        self.view.display_menu(menu_title, items)
+    def start_menu_navigation(self, menu_name="main", menu_title="Menu principal"):
         while True:
-            choice = self.view.get_user_choice(len(items))
+            menu_items = self.model.get_menu_navigation(menu_name)
+            self.view.display_menu(menu_title, menu_items)
+            choice = self.view.get_user_choice(len(menu_items))
             if choice.isdigit():
                 choice = int(choice)
-                if 1 <= choice <= len(items):
-                    selected_option = items[choice - 1]
+                if 1 <= choice <= len(menu_items):
+                    selected_option = menu_items[choice - 1]
                     if selected_option == "Quitter":
                         exit()
                     else:

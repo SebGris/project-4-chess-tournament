@@ -7,7 +7,7 @@ def main():
     menu_model = MenuModel()
     menu_view = MenuView()
     menu_controller = MenuController(menu_model, menu_view)
-    menu_controller.show_menu()
+    menu_controller.start_menu_navigation()
 
 
 if __name__ == "__main__":
