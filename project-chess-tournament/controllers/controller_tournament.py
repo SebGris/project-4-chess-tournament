@@ -121,10 +121,19 @@ class ControllerTournament:
         description = self.view.prompt_for_description()
         self.tournament.set_description(description)
 
-    def show_results(self):
+    def display_description(self):
+        """Displays the description of the tournament."""
+        if self.tournament is None:
+            self.view.display_message(
+                "Aucun tournoi en cours. Créez un tournoi d'abord."
+                )
+            return
+        self.view.display_description(self.tournament)
+
+    def display_tournament_result(self):
         """Affiche les résultats du tournoi."""
         self.view.show_message("Résultats du tournoi :")
-        self.tournament.show_results()
+        self.tournament.display_result()
 
     def display_tournament_players(self):
         """Displays the list of players registered for the tournament."""
@@ -142,7 +151,7 @@ class ControllerTournament:
                 "Aucun tournoi en cours. Créez un tournoi d'abord."
                 )
             return
-        self.view.display_tournament(self.tournament)
+        self.view.display_description(self.tournament)
         self.view.display_tournament_players(self.tournament)
 
     def save_players_to_json(self):
@@ -171,3 +180,12 @@ class ControllerTournament:
         """Load all players from a JSON file."""
         data = load_from_json("players.json")
         return [Player.from_dict(player_data) for player_data in data]
+
+    def add_new_tournament_test(self, players=None):
+        """Tournament variable for testing"""
+        players = players or []
+        self.tournament = Tournament(
+            "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
+            players=players
+        )
+        self.view.display_message("Tournoi ajouté avec succès !")

@@ -11,7 +11,7 @@ class ChangeMenuCommand:
         self.menu_title = menu_title
 
     def execute(self):
-        self.menu_controller.start_menu_navigation(self.menu_name, self.menu_title)
+        self.menu_controller.display_menu(self.menu_name, self.menu_title)
 
 
 class AddPlayersCommand(Command):
@@ -19,7 +19,8 @@ class AddPlayersCommand(Command):
         self.controller = controller
 
     def execute(self):
-        self.controller.add_players() # TODO Ajoute un seul joueur ?
+        self.controller.add_players()  # TODO Ajoute un seul joueur ?
+
 
 class LoadPlayersCommand(Command):
     def __init__(self, controller):
@@ -74,7 +75,7 @@ class DisplayTournamentsCommand(Command):
         self.controller = controller
 
     def execute(self):
-        self.controller.display_tournaments() # TODO Affiche les tournois
+        self.controller.display_tournaments()  # TODO Affiche les tournois
 
 
 class AddDescriptionCommand(Command):
@@ -85,12 +86,30 @@ class AddDescriptionCommand(Command):
         self.controller.add_description()
 
 
+class DisplayDescriptionCommand(Command):
+    def __init__(self, controller):
+        self.controller = controller
+
+    def execute(self):
+        self.controller.display_description()
+
+
 class DisplayTournamentPlayersCommand(Command):
     def __init__(self, controller):
         self.controller = controller
 
     def execute(self):
         self.controller.display_tournament_players()
+
+
+class DisplayTournamentResultCommand(Command):
+    def __init__(self, controller):
+        self.controller = controller
+
+    def execute(self):
+        self.controller.display_tournament_result()
+
+
 class QuitCommand(Command):
     def execute(self):
         print("Au revoir !")

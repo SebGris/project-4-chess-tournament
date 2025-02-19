@@ -20,6 +20,7 @@ class MenuModel:
                 "Charger un tournoi",
                 "Démarrer un tournoi",
                 "Ajouter une description",
+                "Afficher la description",
                 "Afficher les joueurs du tournoi",
                 "Afficher le résultat du tournoi",
                 "Retour au menu principal",

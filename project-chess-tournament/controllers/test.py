@@ -57,16 +57,6 @@ def get_random_players(number=6):
     return players
 
 
-def add_new_tournament_test(players=None):
-    """Tournament variable for testing"""
-    players = players or []
-    tournament = Tournament(
-        "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
-        players=players
-    )
-    tournament_controller.new_tournament(tournament)
-
-
 def add_players_test(self, score_0=True):
     """Ajouter des joueurs pour tester"""
     players = self.get_random_players()

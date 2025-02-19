@@ -66,7 +66,7 @@ class ViewTournament(View):
             for player in players:
                 self.display_message(player)
 
-    def display_tournament(self, tournament):
+    def display_description(self, tournament):
         """Displays the details of a tournament."""
         self.display_message(str(tournament))
 
