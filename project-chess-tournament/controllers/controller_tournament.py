@@ -13,7 +13,7 @@ class ControllerTournament:
         self.tournament = None
         self.previous_matches = []
 
-    def entering_a_tournament(self, tournament=None):
+    def new_tournament(self, tournament=None):
         """
         Manages the entry to a tournament.
         - If a tournament is supplied, it is used directly.
@@ -126,7 +126,7 @@ class ControllerTournament:
         self.view.show_message("Résultats du tournoi :")
         self.tournament.show_results()
 
-    def show_tournament_players(self):
+    def display_tournament_players(self):
         """Displays the list of players registered for the tournament."""
         if self.tournament is None:
             self.view.display_message(

@@ -64,7 +64,7 @@ def add_new_tournament_test(players=None):
         "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
         players=players
     )
-    tournament_controller.entering_a_tournament(tournament)
+    tournament_controller.new_tournament(tournament)
 
 
 def add_players_test(self, score_0=True):
@@ -74,7 +74,7 @@ def add_players_test(self, score_0=True):
         for player in players:
             player.score = 0
     tournament_controller.add_players(players)
-    tournament_controller.show_tournament_players()
+    tournament_controller.display_tournament_players()
 
 
 def pairing_test(self):
