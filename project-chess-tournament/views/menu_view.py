@@ -1,4 +1,4 @@
-from views.view import View
+from views.base_view import View
 
 
 class MenuView(View):

@@ -1,10 +1,10 @@
 from models.player import Player
-from utils.file_utils import save_to_json, load_from_json
+from controllers.base_controller import Controller
+from commands.file_commands import ReadJsonFileCommand, WriteJsonFileCommand
 
 
-class ControllerPlayer:
+class ControllerPlayer(Controller):
     """Controller for adding players"""
-    PLAYERS_FILENAME = "players.json"
 
     def __init__(self, view):
         self.players = []
@@ -19,7 +19,9 @@ class ControllerPlayer:
                     self.view.prompt_for_player(counter)
                 if not last_name:
                     return
-                player = Player(last_name, first_name, birth_date, id_chess, id)
+                player = Player(
+                    last_name, first_name, birth_date, id_chess, id
+                )
                 self.players.append(player)
                 counter = counter + 1
         else:
@@ -31,13 +33,15 @@ class ControllerPlayer:
 
     def save_players_to_json(self):
         """Save players to a JSON file."""
-        save_to_json(
-            [player.to_dict() for player in self.players],
-            self.PLAYERS_FILENAME
+        write_command = WriteJsonFileCommand(
+            self.players_file_path,
+            [player.to_dict() for player in self.players]
         )
+        write_command.execute()
         self.view.show_saving_success()
 
     def load_players_from_json(self):
-        data = load_from_json(self.PLAYERS_FILENAME)
+        read_command = ReadJsonFileCommand(self.players_file_path)
+        data = read_command.execute()
         self.players = [Player.from_dict(player_data) for player_data in data]
         self.view.display_message("Joueurs chargés avec succès !")

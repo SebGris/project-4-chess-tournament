@@ -1,12 +1,12 @@
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
-from utils.file_utils import save_to_json, load_from_json
+from controllers.base_controller import Controller
+from commands.file_commands import ReadJsonFileCommand, WriteJsonFileCommand
 
 
-class ControllerTournament:
+class ControllerTournament(Controller):
     """Manages the logic of the tournament."""
-    TOURNAMENT_FILENAME = "tournament.json"
 
     def __init__(self, view):
         self.view = view
@@ -156,29 +156,36 @@ class ControllerTournament:
 
     def save_players_to_json(self):
         """Save players to a JSON file."""
-        save_to_json(
-            [player.to_dict() for player in self.tournament.players],
-            "players.json"
+        write_command = WriteJsonFileCommand(
+            self.players_file_path,
+            [player.to_dict() for player in self.tournament.players]
         )
+        write_command.execute()
 
     def save_tournament_to_json(self, save_players=False):
         """Save tournament to a JSON file."""
         tournament_data = self.tournament.to_dict()
-        tournament_data['rounds'] = [round_instance.to_dict() for round_instance in self.tournament.rounds]
-        save_to_json(tournament_data, self.TOURNAMENT_FILENAME)
+        tournament_data['rounds'] = [
+            round_instance.to_dict() for round_instance in self.tournament.rounds
+        ]
+        write_command = WriteJsonFileCommand(
+            self.tournament_file_path, tournament_data)
+        write_command.execute()
         if save_players:
             self.save_players_to_json()
 
     def load_tournament_from_json(self):
         """Load tournament from a JSON file."""
-        data = load_from_json(self.TOURNAMENT_FILENAME)
+        read_command = ReadJsonFileCommand(self.tournament_file_path)
+        data = read_command.execute()
         all_players = {player.id: player for player in self.load_all_players()}
         self.tournament = Tournament.from_dict(data, all_players)
         self.view.display_message("Tournoi chargé avec succès !")
 
     def load_all_players(self):
         """Load all players from a JSON file."""
-        data = load_from_json("players.json")
+        read_command = ReadJsonFileCommand(self.players_file_path)
+        data = read_command.execute()
         return [Player.from_dict(player_data) for player_data in data]
 
     def add_new_tournament_test(self, players=None):

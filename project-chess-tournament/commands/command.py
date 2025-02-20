@@ -1,7 +1,4 @@
-
-class Command:
-    def execute(self):
-        raise NotImplementedError("You should implement this method.")
+from commands.base_command import Command
 
 
 class ChangeMenuCommand:
