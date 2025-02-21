@@ -108,6 +108,9 @@ class DisplayTournamentResultCommand(Command):
 
 
 class QuitCommand(Command):
+    def __init__(self, view):
+        self.view = view
+
     def execute(self):
-        print("Au revoir !")
+        self.view.display_quit_message()
         exit()

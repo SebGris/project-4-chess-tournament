@@ -19,3 +19,6 @@ class MenuView(View):
 
     def display_invalid_input_message_enter_a_number(self):
         self.display_message("Entrée invalide, veuillez entrer un nombre.")
+    
+    def display_quit_message(self):
+        self.quit()

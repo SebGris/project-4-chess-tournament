@@ -37,3 +37,6 @@ class View:
                     "Format invalide. "
                     "Veuillez entrer une date au format JJ/MM/AAAA."
                     )
+    @staticmethod
+    def quit():
+        print("Au revoir !")

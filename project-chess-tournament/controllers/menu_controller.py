@@ -71,7 +71,7 @@ class MenuController:
             "Pairing": PairingCommandTest(tournament_controller),
             "Sauvegarder les joueurs et tournoi en JSON":
                 SavePlayersCommandTest(tournament_controller),
-            "Quitter": QuitCommand()
+            "Quitter": QuitCommand(self.view)
             }
 
     def display_menu(self, menu_name="main", menu_title="Menu principal"):
