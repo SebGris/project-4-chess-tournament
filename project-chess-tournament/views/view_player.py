@@ -1,8 +1,8 @@
 import re
-from views.base_view import View
+from views.base_view import BaseView
 
 
-class ViewPlayer(View):
+class ViewPlayer(BaseView):
     """View representing the user interface."""
 
     def prompt_for_player(self, counter):

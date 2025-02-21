@@ -1,8 +1,8 @@
 import re
-from views.base_view import View
+from views.base_view import BaseView
 
 
-class ViewTournament(View):
+class ViewTournament(BaseView):
     """View to display tournament information."""
 
     def prompt_for_tournament(self):

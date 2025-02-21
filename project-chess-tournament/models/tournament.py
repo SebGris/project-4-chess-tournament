@@ -6,8 +6,10 @@ class Tournament:
     """Class representing a chess tournament."""
     total_rounds = 4
 
-    def __init__(self, name, location, start_date, end_date,
-                 id=None, current_round=1, description="Aucune description", players=None, rounds=None):
+    def __init__(self, name=None, location=None, start_date=None, 
+                 end_date=None, id=None, current_round=1, 
+                 description="Aucune description", players=None, 
+                 rounds=None):
         # Use provided ID or generate a unique one
         self.id = id if id is not None else str(uuid.uuid4())
         self.name = name
@@ -18,6 +20,11 @@ class Tournament:
         self.description = description
         self.players = players if players is not None else []
         self.rounds = rounds if rounds is not None else []
+        self.is_loaded = True
+
+    def unload_tournament(self):
+        self.name = None
+        self.is_loaded = False
 
     def set_description(self, texte):
         """Define the tournament description."""

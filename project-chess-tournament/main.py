@@ -1,14 +1,6 @@
-from controllers.menu_controller import MenuController
-from models.menu_model import MenuModel
-from views.menu_view import MenuView
-
-
-def main():
-    menu_model = MenuModel()
-    menu_view = MenuView()
-    menu_controller = MenuController(menu_model, menu_view)
-    menu_controller.display_menu()
+from controllers.controller import Controller
 
 
 if __name__ == "__main__":
-    main()
+    controller = Controller()
+    controller.run()

@@ -1,3 +1,4 @@
+from utils.json_file_manager import JsonFileManager
 from commands.base_command import Command
 
 
@@ -59,6 +60,22 @@ class LoadTournamentCommand(Command):
         self.controller.load_tournament_from_json()
 
 
+class SaveTournamentCommand(Command):
+    def __init__(self, tournament, file_path):
+        self.tournament = tournament
+        self.file_path = file_path
+
+    def execute(self):
+        if not self.tournament.is_loaded:
+            return "Aucun tournoi chargé à sauvegarder."
+        try:
+            data = self.tournament.to_dict()
+            JsonFileManager.write(self.file_path, data)
+            return f"Tournoi {self.tournament.name} sauvegardé."
+        except ValueError as e:
+            return str(e)
+
+
 class StartTournamentCommand(Command):
     def __init__(self, controller):
         self.controller = controller
@@ -108,9 +125,6 @@ class DisplayTournamentResultCommand(Command):
 
 
 class QuitCommand(Command):
-    def __init__(self, view):
-        self.view = view
-
     def execute(self):
-        self.view.display_quit_message()
+        print("Au revoir !")
         exit()

@@ -1,9 +1,9 @@
 from models.player import Player
-from controllers.base_controller import Controller
+from controllers.base_controller import BaseController
 from commands.file_commands import ReadJsonFileCommand, WriteJsonFileCommand
 
 
-class ControllerPlayer(Controller):
+class ControllerPlayer(BaseController):
     """Controller for adding players"""
 
     def __init__(self, view):

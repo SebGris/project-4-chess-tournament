@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 
 
-class View:
+class BaseView:
     """Base class for the view, offering generic display methods."""
 
     @staticmethod
@@ -28,7 +28,7 @@ class View:
         Returns a date formatted as text.
         """
         while True:
-            date_input = View.get_input(prompt)
+            date_input = BaseView.get_input(prompt)
             try:
                 date_object = datetime.strptime(date_input, "%d/%m/%Y")
                 return date_object.strftime("%d/%m/%Y")
@@ -37,6 +37,3 @@ class View:
                     "Format invalide. "
                     "Veuillez entrer une date au format JJ/MM/AAAA."
                     )
-    @staticmethod
-    def quit():
-        print("Au revoir !")

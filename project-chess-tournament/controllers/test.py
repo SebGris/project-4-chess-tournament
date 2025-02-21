@@ -1,6 +1,6 @@
 import random
 from controllers.controller_tournament import ControllerTournament
-from views.view_tournament import ViewTournament
+from views.view_tournament import View
 # import pour test
 from models.player import Player
 from models.pairing import Pairing
@@ -8,7 +8,7 @@ from controllers.controller_player import ControllerPlayer
 from views.view_player import ViewPlayer
 
 # Tournament creation
-tournament_view = ViewTournament()
+tournament_view = View()
 tournament_controller = ControllerTournament(tournament_view)
 player_view = ViewPlayer()
 player_controller = ControllerPlayer(player_view)
@@ -87,7 +87,7 @@ def save_players_test(self):
     controller_player = ControllerPlayer(ViewPlayer())
     controller_player.add_players(self.get_random_players())
     self.add_new_tournament_test(controller_player.players)
-    tournament_controller.save_tournament_to_json(save_with_players=True)
+    tournament_controller.save_tournament(save_with_players=True)
 
 
 def new_tournament_and_add_players_test(self):

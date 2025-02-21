@@ -15,10 +15,10 @@ from commands.command_test import (
 from controllers.controller_player import ControllerPlayer
 from controllers.controller_tournament import ControllerTournament
 from views.view_player import ViewPlayer
-from views.view_tournament import ViewTournament
+from views.view_tournament import View
 
 
-tournament_view = ViewTournament()
+tournament_view = View()
 tournament_controller = ControllerTournament(tournament_view)
 player_view = ViewPlayer()
 player_controller = ControllerPlayer(player_view)
