@@ -5,25 +5,21 @@ class Player:
     """Class representing a chess player."""
 
     def __init__(self, last_name, first_name, birth_date, id_chess,
-                 id=None, score=0.0):
+                 id=None):
         self.id = id if id is not None else str(uuid.uuid4())
         self.last_name = last_name
         self.first_name = first_name
         self.birth_date = birth_date
         self.id_chess = id_chess
-        self.score = score  # Points accumulated during the tournament
+        self.score = 0.0  # Points accumulated during the tournament
 
     def update_score(self, points):
         """Adds points to the player's score."""
         self.score += points
-
-    def __lt__(self, other):
-        # Comparer d'abord par nom de famille, puis prénom, puis date
-        if self.last_name == other.last_name:
-            if self.first_name == other.first_name:
-                return self.birth_date < other.birth_date
-            return self.first_name < other.first_name
-        return self.last_name < other.last_name
+    
+    def reset_score(self):
+        """Resets the player's score to zero."""
+        self.score = 0.0
 
     def __repr__(self):
         return (f"{self.get_full_name()} score: {self.score}")

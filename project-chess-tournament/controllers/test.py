@@ -17,10 +17,10 @@ player_controller = ControllerPlayer(player_view)
 
 def get_random_players(number=6):
     """Generate players for testing"""
+    players_data = []
     if number > 0:
         last_names = ["Jean", "Alain", "Richard", "Marc", "Antoine"]
         first_names = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-        players_data = []
         for id in range(number):
             last_name = random.choice(last_names)
             first_name = random.choice(first_names)
@@ -34,24 +34,25 @@ def get_random_players(number=6):
             )
             random_digits = "".join(random.choices("0123456789", k=5))
             id_chess = random_letters + random_digits
-            score = round(random.uniform(0, 10), 1)
             players_data.append(
                 (
                     first_name, last_name, birth_date,
-                    id_chess, id+1, score
+                    id_chess, id+1
                 )
             )
     else:
         players_data = [
-            ("A", "Jean", "12/11/1985", "AB12345", 1, 5),
-            ("B", "Alain", "12/11/1985", "CD67890", 2, 6),
-            ("C", "Richard", "28/10/1955", "EF54321", 3, 7),
-            ("D", "Marc", "23/06/1942", "GH98765", 4, 4),
-            ("E", "Antoine", "23/06/1942", "II98765", 5, 3),
-            ("F", "Christophe", "20/07/1990", "ZZ98765", 6, 8)
+            ("A", "Jean", "12/11/1985", "AB12345", 1),
+            ("B", "Alain", "12/11/1985", "CD67890", 2),
+            ("C", "Richard", "28/10/1955", "EF54321", 3),
+            ("D", "Marc", "23/06/1942", "GH98765", 4),
+            ("E", "Antoine", "23/06/1942", "II98765", 5),
+            ("F", "Christophe", "20/07/1990", "ZZ98765", 6)
         ]
     # Unpacking each tuple in players_data into the Player constructor
     players = [Player(*data) for data in players_data]
+    for player in players:
+        player.update_score(round(random.uniform(0, 10), 1))
     print("Joueurs générés pour test :")
     print(players)
     return players
@@ -62,7 +63,7 @@ def add_players_test(self, score_0=True):
     players = self.get_random_players()
     if score_0:
         for player in players:
-            player.score = 0
+            player.reset_score()
     tournament_controller.add_players(players)
     tournament_controller.display_tournament_players()
 
