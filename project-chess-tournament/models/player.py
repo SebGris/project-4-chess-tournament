@@ -1,4 +1,4 @@
-from utils.id_generator import IDGenerator
+import uuid
 
 
 class Player:
@@ -6,12 +6,12 @@ class Player:
 
     def __init__(self, last_name, first_name, birth_date, id_chess,
                  id=None, score=0.0):
+        self.id = id if id is not None else str(uuid.uuid4())
         self.last_name = last_name
         self.first_name = first_name
         self.birth_date = birth_date
         self.id_chess = id_chess
         self.score = score  # Points accumulated during the tournament
-        self.id = id or IDGenerator.get_next_id()
 
     def update_score(self, points):
         """Adds points to the player's score."""
