@@ -87,7 +87,7 @@ def save_players_test(self):
     controller_player = ControllerPlayer(ViewPlayer())
     controller_player.add_players(self.get_random_players())
     self.add_new_tournament_test(controller_player.players)
-    tournament_controller.save_tournament_to_json(save_players=True)
+    tournament_controller.save_tournament_to_json(save_with_players=True)
 
 
 def new_tournament_and_add_players_test(self):

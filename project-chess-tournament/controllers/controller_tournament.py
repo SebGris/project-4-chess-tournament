@@ -35,7 +35,7 @@ class ControllerTournament(Controller):
         elif players is not None:
             for player in players:
                 self.tournament.add_player(player)
-            self.save_tournament_to_json(save_players=True)
+            self.save_tournament_to_json(save_with_players=True)
         else:
             while True:
                 choice = self.view.prompt_for_add_player()
@@ -43,7 +43,7 @@ class ControllerTournament(Controller):
                     self.__add_player()
                 else:
                     break
-            self.save_tournament_to_json(save_players=True)
+            self.save_tournament_to_json(save_with_players=True)
 
     def __add_player(self):
         """
@@ -89,7 +89,7 @@ class ControllerTournament(Controller):
                 self.previous_matches.extend(round_instance.get_played_matches())
                 self.tournament.rounds.append(round_instance)
                 self.tournament.current_round += 1
-            self.save_tournament_to_json(save_players=True)
+            self.save_tournament_to_json(save_with_players=True)
             self.view.display_result(self.tournament.players)
 
     def __record_results(self, round_instance):
@@ -162,7 +162,7 @@ class ControllerTournament(Controller):
         )
         write_command.execute()
 
-    def save_tournament_to_json(self, save_players=False):
+    def save_tournament_to_json(self, save_with_players=False):
         """Save tournament to a JSON file."""
         tournament_data = self.tournament.to_dict()
         tournament_data['rounds'] = [
@@ -171,7 +171,7 @@ class ControllerTournament(Controller):
         write_command = WriteJsonFileCommand(
             self.tournament_file_path, tournament_data)
         write_command.execute()
-        if save_players:
+        if save_with_players:
             self.save_players_to_json()
 
     def load_tournament_from_json(self):
