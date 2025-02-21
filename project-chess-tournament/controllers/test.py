@@ -3,7 +3,6 @@ from controllers.controller_tournament import ControllerTournament
 from views.view_tournament import ViewTournament
 # import pour test
 from models.player import Player
-from models.tournament import Tournament
 from models.pairing import Pairing
 from controllers.controller_player import ControllerPlayer
 from views.view_player import ViewPlayer

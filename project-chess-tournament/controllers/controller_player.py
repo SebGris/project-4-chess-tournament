@@ -15,12 +15,12 @@ class ControllerPlayer(Controller):
         if players is None:
             counter = 1
             while True:
-                last_name, first_name, birth_date, id_chess, id = \
+                last_name, first_name, birth_date, id_chess = \
                     self.view.prompt_for_player(counter)
                 if not last_name:
                     return
                 player = Player(
-                    last_name, first_name, birth_date, id_chess, id
+                    last_name, first_name, birth_date, id_chess
                 )
                 self.players.append(player)
                 counter = counter + 1
