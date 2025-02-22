@@ -96,10 +96,10 @@ class LoadTournamentCommand(Command):
             location = data.get('location')
             start_date = data.get('start_date')
             end_date = data.get('end_date')
-            description = data.get('description')
             players = data.get('players', [])
+            description = data.get('description')
             self.tournament.set_tournament(
-                name, location, start_date, end_date, description, players
+                name, location, start_date, end_date, players, description
             )
             self.menu.set_tournament_loaded(True)
             return f"Tournoi {name} chargé."
@@ -138,11 +138,19 @@ class DisplayTournamentsCommand(Command):
 
 
 class AddDescriptionCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
+    def __init__(self, tournament, view, save_path=None):
+        self.tournament = tournament
+        self.view = view
+        self.save_path = save_path
 
     def execute(self):
-        self.controller.add_description()
+        description = self.view.get_tournament_description()
+        self.tournament.set_description(description)
+        if self.save_path is None:
+            self.save_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(self.tournament, self.save_path)
+        save_message = save_command.execute()
+        return f"Description ajoutée: {description} et {save_message}"
 
 
 class DisplayDescriptionCommand(Command):

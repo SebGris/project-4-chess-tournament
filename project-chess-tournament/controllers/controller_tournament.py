@@ -25,6 +25,13 @@ class ControllerTournament(BaseController):
         message = command.execute()
         self.view.display_message(message)
 
+    def add_description(self):
+        command = AddDescriptionCommand(
+            self.tournament, self.view, self.tournament_file_path
+        )
+        message = command.execute()
+        self.view.display_message(message)
+
     def add_players(self, players=None):
         """Adding players to the tournament"""
         if self.tournament is None:
@@ -111,11 +118,6 @@ class ControllerTournament(BaseController):
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
-
-    def add_description(self):
-        command = AddDescriptionCommand(self.tournament, self.view)
-        message = command.execute()
-        self.view.display_message(message)
 
     def display_description(self):
         """Displays the description of the tournament."""

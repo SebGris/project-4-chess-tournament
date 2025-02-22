@@ -55,10 +55,7 @@ class Tournament:
             'end_date': self.end_date,
             'current_round': self.current_round,
             'description': self.description,
-            'player_ids': [player.id for player in self.players],
-            'rounds': [
-                round_instance.to_dict() for round_instance in self.rounds
-            ]
+            'player_ids': self.players
         }
 
     def __str__(self):
