@@ -36,11 +36,27 @@ class DisplayPlayersCommand(Command):
         self.controller.display_players()
 
 
+class DisplayTournamentCommand(Command):
+    def __init__(self, tournament):
+        self.tournament = tournament
+
+    def execute(self):
+        return (
+            f"Tournoi : {self.tournament.name}\n"
+            f"Lieu : {self.tournament.location}\n"
+            f"Date : du {self.tournament.start_date} au "
+            f"{self.tournament.end_date}\n"
+            f"Joueurs : {', '.join(self.tournament.players)}\n"
+            f"Description : {self.tournament.description}"
+        )
+
+
 class NewTournamentCommand(Command):
-    def __init__(self, tournament, menu, view):
+    def __init__(self, tournament, menu, view, save_path=None):
         self.tournament = tournament
         self.menu = menu
         self.view = view
+        self.save_path = save_path
 
     def execute(self):
         name = self.view.get_tournament_name()
@@ -48,12 +64,15 @@ class NewTournamentCommand(Command):
         start_date = self.view.get_tournament_start_date()
         end_date = self.view.get_tournament_end_date()
         players = self.view.get_tournament_players()
-        print(players)
         self.tournament.set_tournament(
             name, location, start_date, end_date, players
         )
         self.menu.set_tournament_loaded(True)
-        return f"Nouveau tournoi {name} créé."
+        if self.save_path is None:
+            self.save_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(self.tournament, self.save_path)
+        save_message = save_command.execute()
+        return f"Nouveau tournoi {name} créé et {save_message}"
 
 
 class AddPlayersToTournamentCommand(Command):
