@@ -11,7 +11,6 @@ class Menu:
 
     def clear_menu(self):
         self.groups = []
-        self.tournament_loaded = False
 
     def is_tournament_loaded(self):
         return self.tournament_loaded

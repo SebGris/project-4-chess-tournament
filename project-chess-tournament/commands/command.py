@@ -36,12 +36,38 @@ class DisplayPlayersCommand(Command):
         self.controller.display_players()
 
 
-class NewTournamentCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
+class DisplayTournamentCommand(Command):
+    def __init__(self, tournament):
+        self.tournament = tournament
 
     def execute(self):
-        self.controller.new_tournament()
+        return (
+            f"Tournoi : {self.tournament.name}\n"
+            f"Lieu : {self.tournament.location}\n"
+            f"Date : du {self.tournament.start_date} au "
+            f"{self.tournament.end_date}\n"
+            f"Joueurs : {', '.join(self.tournament.players)}\n"
+            f"Description : {self.tournament.description}"
+        )
+
+
+class NewTournamentCommand(Command):
+    def __init__(self, tournament, menu, view):
+        self.tournament = tournament
+        self.menu = menu
+        self.view = view
+
+    def execute(self):
+        name = self.view.get_tournament_name()
+        location = self.view.get_tournament_location()
+        start_date = self.view.get_tournament_start_date()
+        end_date = self.view.get_tournament_end_date()
+        players = self.view.get_tournament_players()
+        self.tournament.set_tournament(
+            name, location, start_date, end_date, players
+        )
+        self.menu.set_tournament_loaded(True)
+        return f"Nouveau tournoi {name} créé."
 
 
 class AddPlayersToTournamentCommand(Command):

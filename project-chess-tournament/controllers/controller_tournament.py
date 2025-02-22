@@ -1,28 +1,27 @@
-from commands.command import SaveTournamentCommand, LoadTournamentCommand
+from commands.command import (
+    AddDescriptionCommand, DisplayTournamentCommand,
+    LoadTournamentCommand,
+    NewTournamentCommand,
+    SaveTournamentCommand
+)
+from controllers.base_controller import BaseController
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
 
 
-class ControllerTournament:
+class ControllerTournament(BaseController):
     def __init__(self, tournament, menu, view):
+        super().__init__()  # Appel au constructeur de BaseController
         self.tournament = tournament
         self.menu = menu
         self.view = view
         self.previous_matches = []
 
-    def new_tournament(self, tournament=None):
-        """
-        Manages the entry to a tournament.
-        - If a tournament is supplied, it is used directly.
-        - If not, the user is invited to create one.
-        """
-        if tournament is None:
-            data = self.view.get_tournament()
-            tournament = Tournament(*data)
-        self.tournament = tournament
-        self.save_tournament()
-        self.view.display_message("Tournoi ajouté avec succès !")
+    def new_tournament(self):
+        command = NewTournamentCommand(self.tournament, self.menu, self.view)
+        message = command.execute()
+        self.view.display_message(message)
 
     def add_players(self, players=None):
         """Adding players to the tournament"""
@@ -112,14 +111,9 @@ class ControllerTournament:
                 match.player2[0].update_score(0.5)
 
     def add_description(self):
-        """Add a description to the tournament."""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        description = self.view.get_description()
-        self.tournament.set_description(description)
+        command = AddDescriptionCommand(self.tournament, self.view)
+        message = command.execute()
+        self.view.display_message(message)
 
     def display_description(self):
         """Displays the description of the tournament."""
@@ -145,22 +139,9 @@ class ControllerTournament:
         self.view.display_players(self.tournament.players)
 
     def display_tournament(self):
-        """Displays the tournament."""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        self.view.display_description(self.tournament)
-        self.view.display_tournament_players(self.tournament)
-
-    def save_players_to_json(self):
-        """Save players to a JSON file."""
-        write_command = WriteJsonFileCommand(
-            self.players_file_path,
-            [player.to_dict() for player in self.tournament.players]
-        )
-        write_command.execute()
+        command = DisplayTournamentCommand(self.tournament)
+        message = command.execute()
+        self.view.display_message(message)
 
     def save_tournament(self):
         """Save tournament to a JSON file."""
@@ -169,28 +150,13 @@ class ControllerTournament:
         message = command.execute()
         self.view.display_message(message)
 
-        # tournament_data = self.tournament.to_dict()
-        # tournament_data['rounds'] = [
-        #     round_instance.to_dict() for round_instance in self.tournament.rounds
-        # ]
-        # write_command = WriteJsonFileCommand(
-        #     self.tournament_file_path, tournament_data)
-        # write_command.execute()
-        # if save_with_players:
-        #     self.save_players_to_json()
-
     def load_tournament(self):
         """Load tournament from a JSON file."""
-        file_path = self.view.get_tournament_file_path()
+        # file_path = self.view.get_tournament_file_path()
+        file_path = self.tournament_file_path
         command = LoadTournamentCommand(self.tournament, self.menu, file_path)
         message = command.execute()
         self.view.display_message(message)
-
-    def load_all_players(self):
-        """Load all players from a JSON file."""
-        read_command = ReadJsonFileCommand(self.players_file_path)
-        data = read_command.execute()
-        return [Player.from_dict(player_data) for player_data in data]
 
     def add_new_tournament_test(self, players=None):
         """Tournament variable for testing"""

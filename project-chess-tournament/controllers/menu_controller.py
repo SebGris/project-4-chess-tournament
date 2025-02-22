@@ -1,9 +1,8 @@
 from commands.command import (
-    ChangeMenuCommand,
     AddPlayersCommand, LoadPlayersCommand, DisplayPlayersCommand,
-    NewTournamentCommand, AddPlayersToTournamentCommand,
+    AddPlayersToTournamentCommand,
     LoadTournamentCommand, StartTournamentCommand,
-    DisplayTournamentsCommand, AddDescriptionCommand,
+    DisplayTournamentsCommand,
     DisplayDescriptionCommand,
     DisplayTournamentPlayersCommand, DisplayTournamentResultCommand,
     QuitCommand
@@ -36,16 +35,12 @@ class MenuController:
             "Gestion des joueurs": ChangeMenuCommand(
                 self, "player", "Gestion des joueurs"
             ),
-            "Menu pour test": ChangeMenuCommand(
-                self, "test", "Menu pour test"
-            ),
             "Retour au menu principal": ChangeMenuCommand(
                 self, "main", "Menu principal"
             ),
             "Ajouter des joueurs": AddPlayersCommand(player_controller),
             "Charger les joueurs": LoadPlayersCommand(player_controller),
             "Afficher les joueurs": DisplayPlayersCommand(player_controller),
-            "Nouveau tournoi": NewTournamentCommand(tournament_controller),
             "Ajouter des joueurs au tournoi":
                 AddPlayersToTournamentCommand(tournament_controller),
             "Charger un tournoi":
@@ -54,8 +49,6 @@ class MenuController:
                 StartTournamentCommand(tournament_controller),
             "Afficher les tournois":
                 DisplayTournamentsCommand(tournament_controller),
-            "Ajouter une description":
-                AddDescriptionCommand(tournament_controller),
             "Afficher la description":
                 DisplayDescriptionCommand(tournament_controller),
             "Afficher les joueurs du tournoi":
@@ -76,7 +69,7 @@ class MenuController:
 
     def display_menu(self, menu_name="main", menu_title="Menu principal"):
         while True:
-            options = self.model.get_menu_navigation(menu_name)
+            options = self.model.get_menu_items(menu_name)
             self.view.display_menu(menu_title, options)
             try:
                 choice = int(self.view.get_user_choice(len(options)))

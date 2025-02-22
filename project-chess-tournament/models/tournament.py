@@ -21,13 +21,13 @@ class Tournament:
         self.rounds = rounds if rounds is not None else []
 
     def set_tournament(self, name, location, start_date, end_date,
-                       description, players):
+                       players, description="Aucune description"):
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.description = description
         self.players = players
+        self.description = description
 
     def set_description(self, texte):
         """Define the tournament description."""

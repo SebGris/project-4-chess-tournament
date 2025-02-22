@@ -19,24 +19,32 @@ class Controller(BaseController):
         while True:
             self.menu.clear_menu()
             if self.menu.is_tournament_loaded():
-                self.menu.add_group("Tournoi", [
+                self.menu.add_group("Menu Tournoi", [
                     {
                         "label": "Afficher le tournoi",
                         "command": self.tournament_controller
                                     .display_tournament},
+                    {
+                        "label": "Ajouter une description",
+                        "command": self.tournament_controller.add_description
+                    },
                     {
                         "label": "Sauvegarder le tournoi",
                         "command": self.tournament_controller.save_tournament
                     }
                 ])
             else:
-                self.menu.add_group("Tournoi", [
+                self.menu.add_group("Menu Tournoi", [
+                    {
+                        "label": "Nouveau tournoi",
+                        "command": self.tournament_controller.new_tournament
+                    },
                     {
                         "label": "Charger un tournoi",
                         "command": self.tournament_controller.load_tournament
                     }
                 ])
-            self.menu.add_group("Général", [
+            self.menu.add_group("Menu Général", [
                 {"label": "Quitter", "command": QuitCommand().execute}
             ])
 

@@ -15,13 +15,28 @@ class View(BaseView):
             print("=" * len(menu_group_header))
 
     def get_user_choice(self):
-        return input("Choisissez une option :")
+        return input("Choisissez une option : ")
 
     def get_tournament_file_path(self):
-        return input("Entrez le chemin du fichier JSON du tournoi: ")
+        return input("Entrez le chemin du fichier JSON du tournoi : ")
 
-    def display_invalid_option_message_try_again(self):
-        self.display_message("Choix invalide, veuillez réessayer.")
+    def get_tournament_name(self):
+        return input("Entrez le nom du tournoi : ")
 
-    def display_invalid_input_message_enter_a_number(self):
-        self.display_message("Entrée invalide, veuillez entrer un nombre.")
+    def get_tournament_location(self):
+        return input("Entrez le lieu du tournoi : ")
+
+    def get_tournament_start_date(self):
+        return input("Entrez la date de début du tournoi : ")
+
+    def get_tournament_end_date(self):
+        return input("Entrez la date de fin du tournoi : ")
+
+    def get_tournament_players(self):
+        players = input(
+            "Entrez les joueurs du tournoi (séparés par des virgules) : "
+        )
+        return [player.strip() for player in players.split(',')]
+
+    def get_tournament_description(self):
+        return input("Entrez la description du tournoi : ")
