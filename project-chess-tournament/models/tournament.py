@@ -1,14 +1,13 @@
 import uuid
-from models.round import Round
 
 
 class Tournament:
     """Class representing a chess tournament."""
     total_rounds = 4
 
-    def __init__(self, name=None, location=None, start_date=None, 
-                 end_date=None, id=None, current_round=1, 
-                 description="Aucune description", players=None, 
+    def __init__(self, name=None, location=None, start_date=None,
+                 end_date=None, id=None, current_round=1,
+                 description="Aucune description", players=None,
                  rounds=None):
         # Use provided ID or generate a unique one
         self.id = id if id is not None else str(uuid.uuid4())
@@ -20,11 +19,15 @@ class Tournament:
         self.description = description
         self.players = players if players is not None else []
         self.rounds = rounds if rounds is not None else []
-        self.is_loaded = True
 
-    def unload_tournament(self):
-        self.name = None
-        self.is_loaded = False
+    def set_tournament(self, name, location, start_date, end_date,
+                       description, players):
+        self.name = name
+        self.location = location
+        self.start_date = start_date
+        self.end_date = end_date
+        self.description = description
+        self.players = players
 
     def set_description(self, texte):
         """Define the tournament description."""
@@ -53,24 +56,10 @@ class Tournament:
             'current_round': self.current_round,
             'description': self.description,
             'player_ids': [player.id for player in self.players],
-            'rounds': [round_instance.to_dict() for round_instance in self.rounds]
+            'rounds': [
+                round_instance.to_dict() for round_instance in self.rounds
+            ]
         }
-
-    @classmethod
-    def from_dict(cls, data, all_players):
-        return cls(
-            id=data["id"],
-            name=data["name"],
-            location=data["location"],
-            start_date=data["start_date"],
-            end_date=data["end_date"],
-            current_round=data["current_round"],
-            description=data["description"],
-            players=[
-                all_players[player_id] for player_id in data["player_ids"]
-            ],
-            rounds=[Round.from_dict(round_data, all_players) for round_data in data["rounds"]]
-        )
 
     def __str__(self):
         """Returns a string representation of the tournament."""

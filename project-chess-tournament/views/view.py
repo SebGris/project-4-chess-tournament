@@ -17,6 +17,9 @@ class View(BaseView):
     def get_user_choice(self):
         return input("Choisissez une option :")
 
+    def get_tournament_file_path(self):
+        return input("Entrez le chemin du fichier JSON du tournoi: ")
+
     def display_invalid_option_message_try_again(self):
         self.display_message("Choix invalide, veuillez réessayer.")
 

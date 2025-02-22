@@ -53,11 +53,27 @@ class AddPlayersToTournamentCommand(Command):
 
 
 class LoadTournamentCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
+    def __init__(self, tournament, menu, file_path):
+        self.tournament = tournament
+        self.menu = menu
+        self.file_path = file_path
 
     def execute(self):
-        self.controller.load_tournament_from_json()
+        try:
+            data = JsonFileManager.read(self.file_path)
+            name = data.get('name')
+            location = data.get('location')
+            start_date = data.get('start_date')
+            end_date = data.get('end_date')
+            description = data.get('description')
+            players = data.get('players', [])
+            self.tournament.set_tournament(
+                name, location, start_date, end_date, description, players
+            )
+            self.menu.set_tournament_loaded(True)
+            return f"Tournoi {name} chargé."
+        except ValueError as e:
+            return str(e)
 
 
 class SaveTournamentCommand(Command):
@@ -66,8 +82,6 @@ class SaveTournamentCommand(Command):
         self.file_path = file_path
 
     def execute(self):
-        if not self.tournament.is_loaded:
-            return "Aucun tournoi chargé à sauvegarder."
         try:
             data = self.tournament.to_dict()
             JsonFileManager.write(self.file_path, data)

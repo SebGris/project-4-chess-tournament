@@ -5,7 +5,7 @@ from views.base_view import BaseView
 class ViewTournament(BaseView):
     """View to display tournament information."""
 
-    def prompt_for_tournament(self):
+    def get_tournament(self):
         """Requests information from a tournament and returns it."""
         # self.clear_console()
         self.display_message("Nouveau tournoi.")
@@ -17,22 +17,22 @@ class ViewTournament(BaseView):
         end_date = self.get_input_date("Entrez la date de fin (JJ/MM/AAAA) :")
         return name, location, start_date, end_date
 
-    def prompt_for_description(self):
+    def get_description(self):
         """Request a description for the tournament."""
         return self.get_input("Ajoutez une description :")
 
-    def prompt_for_add_player(self):
+    def get_add_player(self):
         """Request to add a player to the tournament."""
         return self.get_input("Ajouter un joueur ? (o/n) :").lower()
 
-    def prompt_for_player(self):
+    def get_player(self):
         """Prompt for player details"""
         first_name = self.get_input("Entrez le prénom du joueur :")
         last_name = self.get_input("Entrez son nom :")
         birth_date = self.get_input_date(
             "Entrez sa date de naissance (format JJ/MM/AAAA):"
         )
-        id_chess = self._prompt_for_id_chess()
+        id_chess = self._get_id_chess()
         return {
             "first_name": first_name,
             "last_name": last_name,
@@ -40,7 +40,7 @@ class ViewTournament(BaseView):
             "id_chess": id_chess
         }
 
-    def _prompt_for_id_chess(self):
+    def _get_id_chess(self):
         """
         Requests and validates the national chess identifier (format XX#####).
         """

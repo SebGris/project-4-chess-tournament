@@ -1,25 +1,24 @@
 from commands.command import QuitCommand
-from models.menu import Menu
 from models.tournament import Tournament
 from controllers.base_controller import BaseController
-from views.view import View
 from controllers.controller_tournament import ControllerTournament
 
 
 class Controller(BaseController):
     """Manages the logic of the tournament."""
 
-    def __init__(self,):
+    def __init__(self, menu, view):
+        self.menu = menu
+        self.view = view
         self.tournament = Tournament()
-        self.view = View()
-        self.menu = Menu()
         self.tournament_controller = ControllerTournament(
-            self.tournament)
+            self.tournament, self.menu, self.view
+        )
 
     def run(self):
         while True:
-            self.menu = Menu()  # Reset menu for each iteration
-            if self.tournament.is_loaded:
+            self.menu.clear_menu()
+            if self.menu.is_tournament_loaded():
                 self.menu.add_group("Tournoi", [
                     {
                         "label": "Afficher le tournoi",
@@ -30,9 +29,6 @@ class Controller(BaseController):
                         "command": self.tournament_controller.save_tournament
                     }
                 ])
-                self.menu.add_group("Général", [
-                    {"label": "Quitter", "command": QuitCommand().execute}
-                ])
             else:
                 self.menu.add_group("Tournoi", [
                     {
@@ -40,9 +36,9 @@ class Controller(BaseController):
                         "command": self.tournament_controller.load_tournament
                     }
                 ])
-                self.menu.add_group("Général", [
-                    {"label": "Quitter", "command": QuitCommand().execute}
-                ])
+            self.menu.add_group("Général", [
+                {"label": "Quitter", "command": QuitCommand().execute}
+            ])
 
             self.view.display_menu(self.menu)
             choice = self.view.get_user_choice()
