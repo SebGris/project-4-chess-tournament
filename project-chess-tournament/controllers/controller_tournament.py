@@ -19,7 +19,9 @@ class ControllerTournament(BaseController):
         self.previous_matches = []
 
     def new_tournament(self):
-        command = NewTournamentCommand(self.tournament, self.menu, self.view)
+        command = NewTournamentCommand(
+            self.tournament, self.menu, self.view, self.tournament_file_path
+        )
         message = command.execute()
         self.view.display_message(message)
 

@@ -36,21 +36,6 @@ class DisplayPlayersCommand(Command):
         self.controller.display_players()
 
 
-class DisplayTournamentCommand(Command):
-    def __init__(self, tournament):
-        self.tournament = tournament
-
-    def execute(self):
-        return (
-            f"Tournoi : {self.tournament.name}\n"
-            f"Lieu : {self.tournament.location}\n"
-            f"Date : du {self.tournament.start_date} au "
-            f"{self.tournament.end_date}\n"
-            f"Joueurs : {', '.join(self.tournament.players)}\n"
-            f"Description : {self.tournament.description}"
-        )
-
-
 class NewTournamentCommand(Command):
     def __init__(self, tournament, menu, view):
         self.tournament = tournament
@@ -63,6 +48,7 @@ class NewTournamentCommand(Command):
         start_date = self.view.get_tournament_start_date()
         end_date = self.view.get_tournament_end_date()
         players = self.view.get_tournament_players()
+        print(players)
         self.tournament.set_tournament(
             name, location, start_date, end_date, players
         )
