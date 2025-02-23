@@ -1,4 +1,5 @@
 import uuid
+from models.round import Round
 
 
 class Tournament:
@@ -26,7 +27,7 @@ class Tournament:
         self.end_date = end_date
         self.players = players
         self.description = description
-        self.rounds = rounds if rounds is not None else []
+        self.rounds = [Round(**round) for round in rounds] if rounds else []
         self.number_of_rounds = number_of_rounds
 
     def set_description(self, description):
@@ -37,9 +38,19 @@ class Tournament:
         """Define the number of rounds."""
         self.number_of_rounds = number_of_rounds
 
-    def add_player(self, player_id):
+    def add_player(self, player):
         """Add a player to the tournament."""
-        self.players.append(player_id)
+        self.players.append(player)
+
+    def update_scores(self, match_results):
+        for match in match_results:
+            player1_id, player1_score = match[0]
+            player2_id, player2_score = match[1]
+            for player in self.players:
+                if str(player.id) == player1_id:
+                    player.score += player1_score
+                elif str(player.id) == player2_id:
+                    player.score += player2_score
 
     def is_complete(self):
         """Checks if the tournament is over."""
@@ -53,7 +64,7 @@ class Tournament:
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "players": self.players,
+            "players": [str(player.id) for player in self.players],
             "description": self.description,
             "rounds": [round.to_dict() for round in self.rounds],
             "number_of_rounds": self.number_of_rounds

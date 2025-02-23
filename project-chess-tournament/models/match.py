@@ -2,38 +2,22 @@ class Match:
     """Represents a match between two players in a chess tournament."""
 
     def __init__(self, player1, player2):
-        """
-        Initialises a match with two players and default scores of 0.
-        :param player1: Player object representing the first player.
-        :param player2: Player object representing the second player.
-        """
-        self.player1 = [player1, 0]  # Joueur 1 et son score
-        self.player2 = [player2, 0]  # Joueur 2 et son score
+        self.player1 = player1
+        self.player2 = player2
+        self.player1_score = 0
+        self.player2_score = 0
 
-    def set_score(self, score1, score2):
-        """
-        Scores the players after a match.
-        """
-        self.player1[1] = score1
-        self.player2[1] = score2
+    def set_result(self, player1_score, player2_score):
+        self.player1_score = player1_score
+        self.player2_score = player2_score
 
     def to_dict(self):
-        """Convert Match object to dictionary."""
         return {
-            "player1": self.player1[0].to_dict(),
-            "player2": self.player2[0].to_dict(),
-            "score1": self.player1[1],
-            "score2": self.player2[1]
+            "player1": str(self.player1.id),
+            "player1_score": self.player1_score,
+            "player2": str(self.player2.id),
+            "player2_score": self.player2_score
         }
-
-    @classmethod
-    def from_dict(cls, data, all_players):
-        match_instance = cls(
-            player1=all_players[data["player1"]["id"]],
-            player2=all_players[data["player2"]["id"]]
-        )
-        match_instance.set_score(data["score1"], data["score2"])
-        return match_instance
 
     def __str__(self):
         """Returns a text representation of the match."""

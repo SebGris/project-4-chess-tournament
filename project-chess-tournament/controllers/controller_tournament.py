@@ -1,9 +1,11 @@
 from commands.command import (
-    AddDescriptionCommand, AddPlayersCommand, DisplayTournamentCommand,
+    AddDescriptionCommand, AddPlayersCommand,
+    DisplayTournamentCommand, EndRoundCommand, LoadAllPlayersCommand,
     LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
     StartTournamentCommand, UpdateNumberOfRoundsCommand
 )
 from controllers.base_controller import BaseController
+from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
@@ -15,7 +17,17 @@ class ControllerTournament(BaseController):
         self.tournament = tournament
         self.menu = menu
         self.view = view
+        self.all_players = self.load_all_players()
         self.previous_matches = []
+
+    def load_all_players(self):
+        command = LoadAllPlayersCommand(self.players_file_path)
+        players_data = command.execute()
+        all_players = {
+            player_data['id']: Player(**player_data)
+            for player_data in players_data
+        }
+        return all_players
 
     def start_tournament_old(self):
         """Starts a tournament and manages the rounds."""
@@ -100,7 +112,9 @@ class ControllerTournament(BaseController):
     def load_tournament(self):
         # file_path = self.view.get_tournament_file_path()
         file_path = self.tournament_file_path
-        command = LoadTournamentCommand(self.tournament, self.menu, file_path)
+        command = LoadTournamentCommand(
+            self.tournament, self.menu, file_path, self.all_players
+        )
         message = command.execute()
         self.view.display_message(message)
 
@@ -137,7 +151,7 @@ class ControllerTournament(BaseController):
             player_data = self.view.get_player_data()
             if player_data:
                 player = Player(**player_data)
-                players.append(player.to_dict())
+                players.append(player)
                 self.view.display_message(f"Joueur {player.full_name} ajouté.")
             else:
                 break
@@ -157,5 +171,31 @@ class ControllerTournament(BaseController):
         command = UpdateNumberOfRoundsCommand(
             self.tournament, self.view, self.tournament_file_path
         )
+        message = command.execute()
+        self.view.display_message(message)
+
+    def add_round(self):
+        round_name = f"Round {len(self.tournament.rounds) + 1}"
+        new_round = Round(round_name)
+        previous_matches = {
+            (match.player1.id, match.player2.id)
+            for round in self.tournament.rounds
+            for match in round.matches
+        }
+        if len(self.tournament.rounds) == 0:
+            pairs = Pairing.generate_first_round_pairs(self.tournament.players)
+        else:
+            pairs = Pairing.generate_next_round_pairs(
+                self.tournament.players, previous_matches)
+        for player1, player2 in pairs:
+            new_round.add_match(player1, player2)
+        self.tournament.rounds.append(new_round)
+        save_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(self.tournament, save_path)
+        save_message = save_command.execute()
+        self.view.display_message(f"{round_name} ajouté et {save_message}")
+
+    def end_round(self):
+        command = EndRoundCommand(self.tournament, self.view)
         message = command.execute()
         self.view.display_message(message)

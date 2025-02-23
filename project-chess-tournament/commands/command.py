@@ -1,5 +1,6 @@
 from utils.json_file_manager import JsonFileManager
 from commands.base_command import Command
+from datetime import datetime
 
 
 class LoadPlayersCommand(Command):
@@ -51,10 +52,11 @@ class DisplayTournamentResultCommand(Command):
 
 
 class LoadTournamentCommand(Command):
-    def __init__(self, tournament, menu, tournament_file_path):
+    def __init__(self, tournament, menu, tournament_file_path, all_players):
         self.tournament = tournament
         self.menu = menu
         self.tournament_file_path = tournament_file_path
+        self.all_players = all_players
 
     def execute(self):
         try:
@@ -63,10 +65,11 @@ class LoadTournamentCommand(Command):
             location = data.get('location')
             start_date = data.get('start_date')
             end_date = data.get('end_date')
-            players = data.get('players', [])
+            player_ids = data.get('players', [])
             description = data.get('description')
             rounds = data.get('rounds', [])
             number_of_rounds = data.get('number_of_rounds', 4)
+            players = [self.all_players[player_id] for player_id in player_ids]
             self.tournament.set_tournament(
                 name, location, start_date, end_date, number_of_rounds,
                 players, description, rounds
@@ -96,7 +99,9 @@ class DisplayTournamentCommand(Command):
         self.tournament = tournament
 
     def execute(self):
-        players_data = ', '.join(player for player in self.tournament.players)
+        players_data = ', '.join(
+            player.full_name for player in self.tournament.players
+        )
         rounds_data = ', '.join(round.name for round in self.tournament.rounds)
         return (
             f"Tournoi : {self.tournament.name}\n"
@@ -166,7 +171,7 @@ class AddPlayersCommand(Command):
 
     def execute(self):
         for player in self.players:
-            self.tournament.add_player(player['id'])
+            self.tournament.add_player(player)
         if self.tournament_file_path is None:
             self.tournament_file_path = self.view.get_tournament_file_path()
         save_command = SaveTournamentCommand(
@@ -175,7 +180,9 @@ class AddPlayersCommand(Command):
         if self.players_file_path is None:
             self.players_file_path = self.view.get_players_file_path()
         existing_players = JsonFileManager.read(self.players_file_path)
-        updated_players = existing_players + self.players
+        updated_players = existing_players + [
+            player.to_dict() for player in self.players
+        ]
         JsonFileManager.write(self.players_file_path, updated_players)
         return f"Joueurs ajoutés et {save_message}"
 
@@ -216,6 +223,36 @@ class UpdateNumberOfRoundsCommand(Command):
             f"Nombre de tours mis à jour à {number_of_rounds} "
             f"et {save_message}"
         )
+
+
+class EndRoundCommand(Command):
+    def __init__(self, tournament, view):
+        self.tournament = tournament
+        self.view = view
+
+    def execute(self):
+        if not self.tournament.rounds:
+            return "Aucun tour en cours."
+        current_round = self.tournament.rounds[-1]
+        current_round["end_datetime"] = datetime.now().isoformat()
+        save_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(self.tournament, save_path)
+        save_message = save_command.execute()
+        return f"{current_round['name']} terminé et {save_message}"
+
+
+class LoadAllPlayersCommand(Command):
+    def __init__(self, players_file_path):
+        self.players_file_path = players_file_path
+
+    def execute(self):
+        try:
+            if self.players_file_path is None:
+                self.players_file_path = self.view.get_players_file_path()
+            players_data = JsonFileManager.read(self.players_file_path)
+            return players_data
+        except ValueError as e:
+            return str(e)
 
 
 class QuitCommand(Command):

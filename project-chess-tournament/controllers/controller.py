@@ -41,6 +41,14 @@ class Controller(BaseController):
                         "command":
                         self.tournament_controller.update_number_of_rounds
                     },
+                    {
+                        "label": "Ajouter un tour",
+                        "command": self.tournament_controller.add_round
+                    },
+                    {
+                        "label": "Terminer le tour",
+                        "command": self.tournament_controller.end_round
+                    }
                 ])
             else:
                 self.menu.add_group("Menu Tournoi", [

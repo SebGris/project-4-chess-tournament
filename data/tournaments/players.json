@@ -14,5 +14,13 @@
         "birth_date": "15/10/1974",
         "id_chess": "AB12344",
         "score": 0.0
+    },
+    {
+        "id": "70c07548-1fd5-4ac0-a01b-f669f9e91fe5",
+        "last_name": "GUY",
+        "first_name": " Fred",
+        "birth_date": " 15/10/1999",
+        "id_chess": " AA12345",
+        "score": 0.0
     }
 ]
