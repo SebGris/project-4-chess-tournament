@@ -32,6 +32,10 @@ class Controller(BaseController):
                         "label": "Ajouter des joueurs",
                         "command": self.tournament_controller.add_players
                     },
+                    {
+                        "label": "Démarrer un tournoi",
+                        "command": self.tournament_controller.start_tournament
+                    },
                 ])
             else:
                 self.menu.add_group("Menu Tournoi", [

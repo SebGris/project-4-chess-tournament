@@ -18,14 +18,6 @@ class DisplayPlayersCommand(Command):
         self.controller.display_players()
 
 
-class StartTournamentCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.start_tournament()
-
-
 class DisplayTournamentsCommand(Command):
     def __init__(self, controller):
         self.controller = controller
@@ -180,6 +172,24 @@ class AddPlayersCommand(Command):
         updated_players = existing_players + self.players
         JsonFileManager.write(self.players_file_path, updated_players)
         return f"Joueurs ajoutés et {save_message}"
+
+
+class StartTournamentCommand(Command):
+    def __init__(self, tournament):
+        self.tournament = tournament
+
+    def execute(self):
+        if not self.tournament.players:
+            return "Le tournoi ne peut pas commencer sans joueurs."
+        if len(self.tournament.players) % 2 != 0:
+            return (
+                "Le nombre de joueurs doit être pair pour commencer le "
+                "tournoi."
+            )
+        return (
+            f"Le tournoi {self.tournament.name} a commencé avec "
+            f"{len(self.tournament.players)} joueurs."
+        )
 
 
 class QuitCommand(Command):

@@ -1,6 +1,7 @@
 from commands.command import (
     AddDescriptionCommand, AddPlayersCommand, DisplayTournamentCommand,
-    LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand
+    LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
+    StartTournamentCommand
 )
 from controllers.base_controller import BaseController
 from models.player import Player
@@ -144,5 +145,10 @@ class ControllerTournament(BaseController):
             self.tournament, players, self.tournament_file_path,
             self.players_file_path
         )
+        message = command.execute()
+        self.view.display_message(message)
+
+    def start_tournament(self):
+        command = StartTournamentCommand(self.tournament)
         message = command.execute()
         self.view.display_message(message)
