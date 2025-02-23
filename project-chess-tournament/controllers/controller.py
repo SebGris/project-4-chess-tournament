@@ -28,10 +28,6 @@ class Controller(BaseController):
                         "label": "Ajouter une description",
                         "command": self.tournament_controller.add_description
                     },
-                    {
-                        "label": "Sauvegarder le tournoi",
-                        "command": self.tournament_controller.save_tournament
-                    }
                 ])
             else:
                 self.menu.add_group("Menu Tournoi", [

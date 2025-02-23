@@ -1,8 +1,7 @@
 from commands.command import (
     AddDescriptionCommand, DisplayTournamentCommand,
     LoadTournamentCommand,
-    NewTournamentCommand,
-    SaveTournamentCommand
+    NewTournamentCommand
 )
 from controllers.base_controller import BaseController
 from models.player import Player
@@ -144,13 +143,6 @@ class ControllerTournament(BaseController):
 
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament)
-        message = command.execute()
-        self.view.display_message(message)
-
-    def save_tournament(self):
-        """Save tournament to a JSON file."""
-        file_path = self.view.get_tournament_file_path()
-        command = SaveTournamentCommand(self.tournament, file_path)
         message = command.execute()
         self.view.display_message(message)
 
