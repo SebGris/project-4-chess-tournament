@@ -9,11 +9,11 @@ class Menu:
     def get_groups(self):
         return self.groups
 
-    def clear_menu(self):
-        self.groups = []
-
     def is_tournament_loaded(self):
         return self.tournament_loaded
 
     def set_tournament_loaded(self, loaded):
         self.tournament_loaded = loaded
+
+    def clear_menu(self):
+        self.groups = []

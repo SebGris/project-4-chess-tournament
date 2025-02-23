@@ -4,9 +4,8 @@ import uuid
 class Player:
     """Class representing a chess player."""
 
-    def __init__(self, last_name, first_name, birth_date, id_chess,
-                 id=None):
-        self.id = id if id is not None else str(uuid.uuid4())
+    def __init__(self, last_name, first_name, birth_date, id_chess):
+        self.id = uuid.uuid4()
         self.last_name = last_name
         self.first_name = first_name
         self.birth_date = birth_date
@@ -16,7 +15,7 @@ class Player:
     def update_score(self, points):
         """Adds points to the player's score."""
         self.score += points
-    
+
     def reset_score(self):
         """Resets the player's score to zero."""
         self.score = 0.0
@@ -35,24 +34,14 @@ class Player:
     def to_dict(self):
         """Convert Player object to dictionary."""
         return {
+            "id": str(self.id),
             "last_name": self.last_name,
             "first_name": self.first_name,
             "birth_date": self.birth_date,
             "id_chess": self.id_chess,
-            "score": self.score,
-            "id": self.id
+            "score": self.score
         }
 
     def get_full_name(self):
         """Returns the full name of the player."""
         return f"{self.first_name} {self.last_name}"
-
-    @classmethod
-    def from_dict(cls, data):
-        return cls(
-            data["last_name"],
-            data["first_name"],
-            data["birth_date"],
-            data["id_chess"],
-            data.get("id")
-        )

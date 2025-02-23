@@ -53,9 +53,9 @@ class Tournament:
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "players": self.players,
+            "players": [player.id for player in self.players],
             "description": self.description,
-            "rounds": self.rounds
+            "rounds": [round.to_dict() for round in self.rounds]
         }
 
     def __str__(self):
