@@ -136,7 +136,6 @@ class ControllerTournament(BaseController):
             player_data = self.view.get_player_data()
             if player_data:
                 player = Player(**player_data)
-                print(player)
                 players.append(player.to_dict())
                 self.view.display_message(f"Joueur {player.full_name} ajouté.")
             else:

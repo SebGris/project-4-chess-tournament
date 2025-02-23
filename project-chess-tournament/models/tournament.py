@@ -52,7 +52,7 @@ class Tournament:
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "players": [player.id for player in self.players],
+            "players": self.players,
             "description": self.description,
             "rounds": [round.to_dict() for round in self.rounds]
         }
