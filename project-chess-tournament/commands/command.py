@@ -2,16 +2,6 @@ from utils.json_file_manager import JsonFileManager
 from commands.base_command import Command
 
 
-class ChangeMenuCommand:
-    def __init__(self, menu_controller, menu_name, menu_title):
-        self.menu_controller = menu_controller
-        self.menu_name = menu_name
-        self.menu_title = menu_title
-
-    def execute(self):
-        self.menu_controller.display_menu(self.menu_name, self.menu_title)
-
-
 class AddPlayersCommand(Command):
     def __init__(self, controller):
         self.controller = controller
@@ -47,7 +37,8 @@ class DisplayTournamentCommand(Command):
             f"Date : du {self.tournament.start_date} au "
             f"{self.tournament.end_date}\n"
             f"Joueurs : {', '.join(self.tournament.players)}\n"
-            f"Description : {self.tournament.description}"
+            f"Description : {self.tournament.description}\n"
+            f"Rounds: {self.tournament.rounds}"
         )
 
 
@@ -98,8 +89,10 @@ class LoadTournamentCommand(Command):
             end_date = data.get('end_date')
             players = data.get('players', [])
             description = data.get('description')
+            rounds = data.get('rounds', [])
             self.tournament.set_tournament(
-                name, location, start_date, end_date, players, description
+                name, location, start_date, end_date, players,
+                description, rounds
             )
             self.menu.set_tournament_loaded(True)
             return f"Tournoi {name} chargé."

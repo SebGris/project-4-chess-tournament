@@ -6,32 +6,32 @@ class Tournament:
     total_rounds = 4
 
     def __init__(self, name=None, location=None, start_date=None,
-                 end_date=None, id=None, current_round=1,
-                 description="Aucune description", players=None,
+                 end_date=None, current_round=1,
+                 players=None, description=None,
                  rounds=None):
-        # Use provided ID or generate a unique one
-        self.id = id if id is not None else str(uuid.uuid4())
+        self.id = uuid.uuid4()
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
         self.current_round = current_round
-        self.description = description
         self.players = players if players is not None else []
+        self.description = description
         self.rounds = rounds if rounds is not None else []
 
-    def set_tournament(self, name, location, start_date, end_date,
-                       players, description="Aucune description"):
+    def set_tournament(self, name, location, start_date, end_date, players,
+                       description=None, rounds=None):
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
         self.players = players
         self.description = description
+        self.rounds = rounds if rounds is not None else []
 
-    def set_description(self, texte):
+    def set_description(self, description):
         """Define the tournament description."""
-        self.description = texte
+        self.description = description
 
     def set_number_of_rounds(self, number):
         """Define the number of rounds."""
@@ -48,14 +48,14 @@ class Tournament:
     def to_dict(self):
         """Convert Tournament object to dictionary."""
         return {
-            'id': self.id,
-            'name': self.name,
-            'location': self.location,
-            'start_date': self.start_date,
-            'end_date': self.end_date,
-            'current_round': self.current_round,
-            'description': self.description,
-            'player_ids': self.players
+            "id": str(self.id),
+            "name": self.name,
+            "location": self.location,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "players": self.players,
+            "description": self.description,
+            "rounds": self.rounds
         }
 
     def __str__(self):
