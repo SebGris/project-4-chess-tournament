@@ -1,11 +1,12 @@
 {
-    "id": "09fee61f-cbd3-4b6b-bce3-5cf5a9540561",
+    "id": "c4b8472b-d2bc-488a-bf24-08bb13d16105",
     "name": "ee",
     "location": "ici",
     "start_date": "15/10/2024",
     "end_date": "20/10/2024",
     "players": [
-        "88decebc-9fa4-478b-b556-805754a48092"
+        "88decebc-9fa4-478b-b556-805754a48092",
+        "f8fa19c7-4914-473a-8480-bb45fb8a22cb"
     ],
     "description": "rezut",
     "rounds": []

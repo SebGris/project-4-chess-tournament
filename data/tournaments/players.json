@@ -6,5 +6,13 @@
         "birth_date": "15/10/2022",
         "id_chess": "AB12345",
         "score": 0.0
+    },
+    {
+        "id": "f8fa19c7-4914-473a-8480-bb45fb8a22cb",
+        "last_name": "GROS",
+        "first_name": "Jean",
+        "birth_date": "15/10/1974",
+        "id_chess": "AB12344",
+        "score": 0.0
     }
 ]

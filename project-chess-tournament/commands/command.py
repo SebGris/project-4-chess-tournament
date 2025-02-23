@@ -176,8 +176,9 @@ class AddPlayersCommand(Command):
         save_message = save_command.execute()
         if self.players_file_path is None:
             self.players_file_path = self.view.get_players_file_path()
-        players_data = [player for player in self.players]
-        JsonFileManager.write(self.players_file_path, players_data)
+        existing_players = JsonFileManager.read(self.players_file_path)
+        updated_players = existing_players + self.players
+        JsonFileManager.write(self.players_file_path, updated_players)
         return f"Joueurs ajoutés et {save_message}"
 
 
