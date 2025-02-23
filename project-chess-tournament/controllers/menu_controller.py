@@ -1,6 +1,5 @@
 from commands.command import (
-    AddPlayersCommand, LoadPlayersCommand, DisplayPlayersCommand,
-    AddPlayersToTournamentCommand,
+    LoadPlayersCommand, DisplayPlayersCommand,
     LoadTournamentCommand, StartTournamentCommand,
     DisplayTournamentsCommand,
     DisplayDescriptionCommand,
@@ -29,16 +28,6 @@ class MenuController:
         self.model = model
         self.view = view
         self.commands = {
-            "Gestion des tournois": ChangeMenuCommand(
-                self, "tournament", "Gestion des tournois"
-            ),
-            "Gestion des joueurs": ChangeMenuCommand(
-                self, "player", "Gestion des joueurs"
-            ),
-            "Retour au menu principal": ChangeMenuCommand(
-                self, "main", "Menu principal"
-            ),
-            "Ajouter des joueurs": AddPlayersCommand(player_controller),
             "Charger les joueurs": LoadPlayersCommand(player_controller),
             "Afficher les joueurs": DisplayPlayersCommand(player_controller),
             "Ajouter des joueurs au tournoi":

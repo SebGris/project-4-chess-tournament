@@ -6,15 +6,14 @@ class Tournament:
     total_rounds = 4
 
     def __init__(self, name=None, location=None, start_date=None,
-                 end_date=None, current_round=1,
-                 players=None, description=None,
+                 end_date=None, players=None, description=None,
                  rounds=None):
         self.id = uuid.uuid4()
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.current_round = current_round
+        self.current_round = 1
         self.players = players if players is not None else []
         self.description = description
         self.rounds = rounds if rounds is not None else []
@@ -33,13 +32,13 @@ class Tournament:
         """Define the tournament description."""
         self.description = description
 
+    def add_player(self, player_id):
+        """Add a player to the tournament."""
+        self.players.append(player_id)
+
     def set_number_of_rounds(self, number):
         """Define the number of rounds."""
         self.total_rounds = number
-
-    def add_player(self, player):
-        """Add a player to the tournament."""
-        self.players.append(player)
 
     def is_complete(self):
         """Checks if the tournament is over."""

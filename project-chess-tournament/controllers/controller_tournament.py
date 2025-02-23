@@ -1,7 +1,6 @@
 from commands.command import (
-    AddDescriptionCommand, DisplayTournamentCommand,
-    LoadTournamentCommand,
-    NewTournamentCommand
+    AddDescriptionCommand, AddPlayersCommand, DisplayTournamentCommand,
+    LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand
 )
 from controllers.base_controller import BaseController
 from models.player import Player
@@ -16,59 +15,6 @@ class ControllerTournament(BaseController):
         self.menu = menu
         self.view = view
         self.previous_matches = []
-
-    def new_tournament(self):
-        command = NewTournamentCommand(
-            self.tournament, self.menu, self.view, self.tournament_file_path
-        )
-        message = command.execute()
-        self.view.display_message(message)
-
-    def add_description(self):
-        command = AddDescriptionCommand(
-            self.tournament, self.view, self.tournament_file_path
-        )
-        message = command.execute()
-        self.view.display_message(message)
-
-    def add_players(self, players=None):
-        """Adding players to the tournament"""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-        elif players is not None:
-            for player in players:
-                self.tournament.add_player(player)
-            self.save_tournament(save_with_players=True)
-        else:
-            while True:
-                choice = self.view.get_add_player()
-                if choice == 'o':
-                    self.__add_player()
-                else:
-                    break
-            self.save_tournament(save_with_players=True)
-
-    def __add_player(self):
-        """
-        Adds a player to the tournament by requesting information via the view.
-        """
-        player_details = self.view.get_player()
-        if not player_details["first_name"]:
-            # Si l'utilisateur valide sans entrer de nom
-            self.view.display_message("Ajout annulé.")
-        else:
-            player = Player(
-                player_details["last_name"],
-                player_details["first_name"],
-                player_details["birth_date"],
-                player_details["id_chess"]
-                )
-            self.tournament.add_player(player)
-            self.view.display_message(
-                f"Joueur {player.get_full_name()} ajouté avec succès !"
-                )
 
     def start_tournament(self):
         """Starts a tournament and manages the rounds."""
@@ -103,8 +49,8 @@ class ControllerTournament(BaseController):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")
         for match in round_instance.matches:
-            player1_name = match.player1[0].get_full_name()
-            player2_name = match.player2[0].get_full_name()
+            player1_name = match.player1[0].full_name()
+            player2_name = match.player2[0].full_name()
             print(f"\n{player1_name} vs {player2_name}")
             result = self.view.get_match_result()
             if result == "1":
@@ -141,19 +87,6 @@ class ControllerTournament(BaseController):
             return
         self.view.display_players(self.tournament.players)
 
-    def display_tournament(self):
-        command = DisplayTournamentCommand(self.tournament)
-        message = command.execute()
-        self.view.display_message(message)
-
-    def load_tournament(self):
-        """Load tournament from a JSON file."""
-        # file_path = self.view.get_tournament_file_path()
-        file_path = self.tournament_file_path
-        command = LoadTournamentCommand(self.tournament, self.menu, file_path)
-        message = command.execute()
-        self.view.display_message(message)
-
     def add_new_tournament_test(self, players=None):
         """Tournament variable for testing"""
         players = players or []
@@ -162,3 +95,55 @@ class ControllerTournament(BaseController):
             players=players
         )
         self.view.display_message("Tournoi ajouté avec succès !")
+
+    def load_tournament(self):
+        # file_path = self.view.get_tournament_file_path()
+        file_path = self.tournament_file_path
+        command = LoadTournamentCommand(self.tournament, self.menu, file_path)
+        message = command.execute()
+        self.view.display_message(message)
+
+    def save_tournament(self):
+        file_path = self.view.get_tournament_file_path()
+        command = SaveTournamentCommand(self.tournament, file_path)
+        message = command.execute()
+        self.view.display_message(message)
+
+    def display_tournament(self):
+        command = DisplayTournamentCommand(self.tournament)
+        message = command.execute()
+        self.view.display_message(message)
+
+    def new_tournament(self):
+        command = NewTournamentCommand(
+            self.tournament, self.menu, self.view, self.tournament_file_path
+        )
+        response = command.execute()
+        self.view.display_message(response)
+        if response.lower() == 'oui':
+            self.add_players()
+
+    def add_description(self):
+        command = AddDescriptionCommand(
+            self.tournament, self.view, self.tournament_file_path
+        )
+        message = command.execute()
+        self.view.display_message(message)
+
+    def add_players(self):
+        players = []
+        while True:
+            player_data = self.view.get_player_data()
+            if player_data:
+                player = Player(**player_data)
+                print(player)
+                players.append(player.to_dict())
+                self.view.display_message(f"Joueur {player.full_name} ajouté.")
+            else:
+                break
+        command = AddPlayersCommand(
+            self.tournament, players, self.tournament_file_path,
+            self.players_file_path
+        )
+        message = command.execute()
+        self.view.display_message(message)

@@ -28,6 +28,10 @@ class Controller(BaseController):
                         "label": "Ajouter une description",
                         "command": self.tournament_controller.add_description
                     },
+                    {
+                        "label": "Ajouter des joueurs",
+                        "command": self.tournament_controller.add_players
+                    },
                 ])
             else:
                 self.menu.add_group("Menu Tournoi", [

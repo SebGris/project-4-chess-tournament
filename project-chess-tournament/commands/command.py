@@ -2,14 +2,6 @@ from utils.json_file_manager import JsonFileManager
 from commands.base_command import Command
 
 
-class AddPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.add_players()  # TODO Ajoute un seul joueur ?
-
-
 class LoadPlayersCommand(Command):
     def __init__(self, controller):
         self.controller = controller
@@ -24,14 +16,6 @@ class DisplayPlayersCommand(Command):
 
     def execute(self):
         self.controller.display_players()
-
-
-class AddPlayersToTournamentCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.add_players()
 
 
 class StartTournamentCommand(Command):
@@ -119,14 +103,16 @@ class DisplayTournamentCommand(Command):
         self.tournament = tournament
 
     def execute(self):
+        players_data = ', '.join(player for player in self.tournament.players)
+        rounds_data = ', '.join(round.name for round in self.tournament.rounds)
         return (
             f"Tournoi : {self.tournament.name}\n"
             f"Lieu : {self.tournament.location}\n"
             f"Date : du {self.tournament.start_date} au "
             f"{self.tournament.end_date}\n"
-            f"Joueurs : {', '.join(self.tournament.players)}\n"
+            f"Joueurs : {players_data}\n"
             f"Description : {self.tournament.description}\n"
-            f"Rounds: {', '.join(round.name for round in self.tournament.rounds)}"
+            f"Rounds: {rounds_data}"
         )
 
 
@@ -142,16 +128,18 @@ class NewTournamentCommand(Command):
         location = self.view.get_tournament_location()
         start_date = self.view.get_tournament_start_date()
         end_date = self.view.get_tournament_end_date()
-        players = self.view.get_tournament_players()
         self.tournament.set_tournament(
-            name, location, start_date, end_date, players
+            name, location, start_date, end_date, [], None, []
         )
         self.menu.set_tournament_loaded(True)
         if self.save_path is None:
             self.save_path = self.view.get_tournament_file_path()
         save_command = SaveTournamentCommand(self.tournament, self.save_path)
         save_message = save_command.execute()
-        return f"Nouveau tournoi {name} créé et {save_message}"
+        self.view.display_message(
+            f"Nouveau tournoi {name} créé et {save_message}"
+        )
+        return self.view.ask_to_add_players()
 
 
 class AddDescriptionCommand(Command):
@@ -168,6 +156,29 @@ class AddDescriptionCommand(Command):
         save_command = SaveTournamentCommand(self.tournament, self.save_path)
         save_message = save_command.execute()
         return f"Description ajoutée: {description} et {save_message}"
+
+
+class AddPlayersCommand(Command):
+    def __init__(self, tournament, players, tournament_file_path=None,
+                 players_file_path=None):
+        self.tournament = tournament
+        self.players = players
+        self.tournament_file_path = tournament_file_path
+        self.players_file_path = players_file_path
+
+    def execute(self):
+        for player in self.players:
+            self.tournament.add_player(player['id'])
+        if self.tournament_file_path is None:
+            self.tournament_file_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournament_file_path)
+        save_message = save_command.execute()
+        if self.players_file_path is None:
+            self.players_file_path = self.view.get_players_file_path()
+        players_data = [player for player in self.players]
+        JsonFileManager.write(self.players_file_path, players_data)
+        return f"Joueurs ajoutés et {save_message}"
 
 
 class QuitCommand(Command):

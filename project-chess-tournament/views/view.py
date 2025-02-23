@@ -18,7 +18,10 @@ class View(BaseView):
         return input("Choisissez une option : ")
 
     def get_tournament_file_path(self):
-        return input("Entrez le chemin du fichier JSON du tournoi : ")
+        return input("Entrez le chemin du fichier JSON du tournoi: ")
+
+    def get_players_file_path(self):
+        return input("Entrez le chemin du fichier JSON des joueurs: ")
 
     def get_tournament_name(self):
         return input("Entrez le nom du tournoi : ")
@@ -32,11 +35,27 @@ class View(BaseView):
     def get_tournament_end_date(self):
         return input("Entrez la date de fin du tournoi : ")
 
-    def get_tournament_players(self):
-        players = input(
-            "Entrez les joueurs du tournoi (séparés par des virgules) : "
+    def ask_to_add_players(self):
+        return input(
+            "Voulez-vous saisir les joueurs maintenant ? (oui/non) : "
         )
-        return [player.strip() for player in players.split(',')]
+
+    def get_player_data(self):
+        player_data = input(
+            "Entrez les données du joueur "
+            "(nom de famille, prénom, date de naissance, "
+            "id échecs) ou appuyez sur Entrée pour arrêter: "
+        )
+        if player_data:
+            last_name, first_name, birth_date, id_chess = \
+                player_data.strip().split(',')
+            return {
+                "last_name": last_name,
+                "first_name": first_name,
+                "birth_date": birth_date,
+                "id_chess": id_chess
+            }
+        return None
 
     def get_tournament_description(self):
         return input("Entrez la description du tournoi : ")
