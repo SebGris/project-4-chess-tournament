@@ -35,6 +35,14 @@ class View(BaseView):
     def get_tournament_end_date(self):
         return input("Entrez la date de fin du tournoi : ")
 
+    def get_tournament_description(self):
+        return input("Entrez la description du tournoi : ")
+
+    def get_tournament_number_of_rounds(self):
+        return int(
+            input("Entrez le nombre de tours du tournoi (par défaut 4): ") or 4
+        )
+
     def ask_to_add_players(self):
         return input(
             "Voulez-vous saisir les joueurs maintenant ? (oui/non) : "
@@ -56,6 +64,3 @@ class View(BaseView):
                 "id_chess": id_chess
             }
         return None
-
-    def get_tournament_description(self):
-        return input("Entrez la description du tournoi : ")

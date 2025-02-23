@@ -1,5 +1,5 @@
 {
-    "id": "c4b8472b-d2bc-488a-bf24-08bb13d16105",
+    "id": "073ddef2-2643-43c3-a210-5c212c6f52de",
     "name": "ee",
     "location": "ici",
     "start_date": "15/10/2024",
@@ -9,5 +9,6 @@
         "f8fa19c7-4914-473a-8480-bb45fb8a22cb"
     ],
     "description": "rezut",
-    "rounds": []
+    "rounds": [],
+    "number_of_rounds": 6
 }

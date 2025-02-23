@@ -51,14 +51,14 @@ class DisplayTournamentResultCommand(Command):
 
 
 class LoadTournamentCommand(Command):
-    def __init__(self, tournament, menu, file_path):
+    def __init__(self, tournament, menu, tournament_file_path):
         self.tournament = tournament
         self.menu = menu
-        self.file_path = file_path
+        self.tournament_file_path = tournament_file_path
 
     def execute(self):
         try:
-            data = JsonFileManager.read(self.file_path)
+            data = JsonFileManager.read(self.tournament_file_path)
             name = data.get('name')
             location = data.get('location')
             start_date = data.get('start_date')
@@ -66,9 +66,10 @@ class LoadTournamentCommand(Command):
             players = data.get('players', [])
             description = data.get('description')
             rounds = data.get('rounds', [])
+            number_of_rounds = data.get('number_of_rounds', 4)
             self.tournament.set_tournament(
-                name, location, start_date, end_date, players,
-                description, rounds
+                name, location, start_date, end_date, number_of_rounds,
+                players, description, rounds
             )
             self.menu.set_tournament_loaded(True)
             return f"Tournoi {name} chargé."
@@ -77,14 +78,14 @@ class LoadTournamentCommand(Command):
 
 
 class SaveTournamentCommand(Command):
-    def __init__(self, tournament, file_path):
+    def __init__(self, tournament, tournament_file_path):
         self.tournament = tournament
-        self.file_path = file_path
+        self.tournament_file_path = tournament_file_path
 
     def execute(self):
         try:
             data = self.tournament.to_dict()
-            JsonFileManager.write(self.file_path, data)
+            JsonFileManager.write(self.tournament_file_path, data)
             return f"Tournoi {self.tournament.name} sauvegardé."
         except ValueError as e:
             return str(e)
@@ -104,29 +105,33 @@ class DisplayTournamentCommand(Command):
             f"{self.tournament.end_date}\n"
             f"Joueurs : {players_data}\n"
             f"Description : {self.tournament.description}\n"
+            f"Nombre de tours: {self.tournament.number_of_rounds}\n"
             f"Rounds: {rounds_data}"
         )
 
 
 class NewTournamentCommand(Command):
-    def __init__(self, tournament, menu, view, save_path=None):
+    def __init__(self, tournament, menu, view, tournament_file_path=None):
         self.tournament = tournament
         self.menu = menu
         self.view = view
-        self.save_path = save_path
+        self.tournament_file_path = tournament_file_path
 
     def execute(self):
         name = self.view.get_tournament_name()
         location = self.view.get_tournament_location()
         start_date = self.view.get_tournament_start_date()
         end_date = self.view.get_tournament_end_date()
+        number_of_rounds = 4
         self.tournament.set_tournament(
-            name, location, start_date, end_date, [], None, []
+            name, location, start_date, end_date, number_of_rounds,
+            [], None, [],
         )
         self.menu.set_tournament_loaded(True)
-        if self.save_path is None:
-            self.save_path = self.view.get_tournament_file_path()
-        save_command = SaveTournamentCommand(self.tournament, self.save_path)
+        if self.tournament_file_path is None:
+            self.tournament_file_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournament_file_path)
         save_message = save_command.execute()
         self.view.display_message(
             f"Nouveau tournoi {name} créé et {save_message}"
@@ -135,17 +140,18 @@ class NewTournamentCommand(Command):
 
 
 class AddDescriptionCommand(Command):
-    def __init__(self, tournament, view, save_path=None):
+    def __init__(self, tournament, view, tournament_file_path=None):
         self.tournament = tournament
         self.view = view
-        self.save_path = save_path
+        self.tournament_file_path = tournament_file_path
 
     def execute(self):
         description = self.view.get_tournament_description()
         self.tournament.set_description(description)
-        if self.save_path is None:
-            self.save_path = self.view.get_tournament_file_path()
-        save_command = SaveTournamentCommand(self.tournament, self.save_path)
+        if self.tournament_file_path is None:
+            self.tournament_file_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournament_file_path)
         save_message = save_command.execute()
         return f"Description ajoutée: {description} et {save_message}"
 
@@ -189,6 +195,26 @@ class StartTournamentCommand(Command):
         return (
             f"Le tournoi {self.tournament.name} a commencé avec "
             f"{len(self.tournament.players)} joueurs."
+        )
+
+
+class UpdateNumberOfRoundsCommand(Command):
+    def __init__(self, tournament, view, tournament_file_path=None):
+        self.tournament = tournament
+        self.view = view
+        self.tournament_file_path = tournament_file_path
+
+    def execute(self):
+        number_of_rounds = self.view.get_tournament_number_of_rounds()
+        self.tournament.set_number_of_rounds(number_of_rounds)
+        if self.tournament_file_path is None:
+            self.tournament_file_path = self.view.get_tournament_file_path()
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournament_file_path)
+        save_message = save_command.execute()
+        return (
+            f"Nombre de tours mis à jour à {number_of_rounds} "
+            f"et {save_message}"
         )
 
 

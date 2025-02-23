@@ -36,6 +36,11 @@ class Controller(BaseController):
                         "label": "Démarrer un tournoi",
                         "command": self.tournament_controller.start_tournament
                     },
+                    {
+                        "label": "Modifier le nombre de tours",
+                        "command":
+                        self.tournament_controller.update_number_of_rounds
+                    },
                 ])
             else:
                 self.menu.add_group("Menu Tournoi", [

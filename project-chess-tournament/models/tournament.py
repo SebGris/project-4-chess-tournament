@@ -3,11 +3,9 @@ import uuid
 
 class Tournament:
     """Class representing a chess tournament."""
-    total_rounds = 4
-
     def __init__(self, name=None, location=None, start_date=None,
-                 end_date=None, players=None, description=None,
-                 rounds=None):
+                 end_date=None, number_of_rounds=4, players=None,
+                 description=None, rounds=None):
         self.id = uuid.uuid4()
         self.name = name
         self.location = location
@@ -17,9 +15,11 @@ class Tournament:
         self.players = players if players is not None else []
         self.description = description
         self.rounds = rounds if rounds is not None else []
+        self.number_of_rounds = number_of_rounds
 
-    def set_tournament(self, name, location, start_date, end_date, players,
-                       description=None, rounds=None):
+    def set_tournament(self, name, location, start_date, end_date,
+                       number_of_rounds, players, description=None,
+                       rounds=None):
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -27,22 +27,23 @@ class Tournament:
         self.players = players
         self.description = description
         self.rounds = rounds if rounds is not None else []
+        self.number_of_rounds = number_of_rounds
 
     def set_description(self, description):
         """Define the tournament description."""
         self.description = description
 
+    def set_number_of_rounds(self, number_of_rounds):
+        """Define the number of rounds."""
+        self.number_of_rounds = number_of_rounds
+
     def add_player(self, player_id):
         """Add a player to the tournament."""
         self.players.append(player_id)
 
-    def set_number_of_rounds(self, number):
-        """Define the number of rounds."""
-        self.total_rounds = number
-
     def is_complete(self):
         """Checks if the tournament is over."""
-        return self.current_round > self.total_rounds
+        return self.current_round > self.number_of_rounds
 
     def to_dict(self):
         """Convert Tournament object to dictionary."""
@@ -54,7 +55,8 @@ class Tournament:
             "end_date": self.end_date,
             "players": self.players,
             "description": self.description,
-            "rounds": [round.to_dict() for round in self.rounds]
+            "rounds": [round.to_dict() for round in self.rounds],
+            "number_of_rounds": self.number_of_rounds
         }
 
     def __str__(self):
@@ -62,7 +64,7 @@ class Tournament:
         return (f"Tournoi: {self.name} | Lieu: {self.location} | "
                 f"Dates: {self.start_date} - "
                 f"{self.end_date} | "
-                f"Nombre de tours : {self.total_rounds} | "
-                f"Tour actuel : {self.current_round}/{self.total_rounds}\n"
+                f"Nombre de tours : {self.number_of_rounds} | "
+                f"Tour actuel : {self.current_round}/{self.number_of_rounds}\n"
                 f"Description : {self.description}\n"
                 f"Joueurs inscrits : {len(self.players)}\n")

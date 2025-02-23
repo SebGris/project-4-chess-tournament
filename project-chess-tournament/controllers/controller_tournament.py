@@ -1,7 +1,7 @@
 from commands.command import (
     AddDescriptionCommand, AddPlayersCommand, DisplayTournamentCommand,
     LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
-    StartTournamentCommand
+    StartTournamentCommand, UpdateNumberOfRoundsCommand
 )
 from controllers.base_controller import BaseController
 from models.player import Player
@@ -17,7 +17,7 @@ class ControllerTournament(BaseController):
         self.view = view
         self.previous_matches = []
 
-    def start_tournament(self):
+    def start_tournament_old(self):
         """Starts a tournament and manages the rounds."""
         if self.tournament is None:
             self.view.display_message(
@@ -150,5 +150,12 @@ class ControllerTournament(BaseController):
 
     def start_tournament(self):
         command = StartTournamentCommand(self.tournament)
+        message = command.execute()
+        self.view.display_message(message)
+
+    def update_number_of_rounds(self):
+        command = UpdateNumberOfRoundsCommand(
+            self.tournament, self.view, self.tournament_file_path
+        )
         message = command.execute()
         self.view.display_message(message)
