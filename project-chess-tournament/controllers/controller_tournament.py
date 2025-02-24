@@ -14,7 +14,7 @@ from utils.file_utils import get_file_path
 class ControllerTournament():
     def __init__(self, tournament, menu, view):
         self.players_file_path = get_file_path("players.json")
-        self.tournament_file_path = get_file_path("tournaments.json")
+        self.tournaments_file_path = get_file_path("tournaments.json")
         self.tournament = tournament
         self.menu = menu
         self.view = view
@@ -93,16 +93,10 @@ class ControllerTournament():
 
     def load_tournament(self):
         # file_path = self.view.get_tournament_file_path()
-        file_path = self.tournament_file_path
+        file_path = self.tournaments_file_path
         command = LoadTournamentCommand(
             self.tournament, self.menu, file_path, self.all_players
         )
-        message = command.execute()
-        self.view.display_message(message)
-
-    def save_tournament(self):
-        file_path = self.view.get_tournament_file_path()
-        command = SaveTournamentCommand(self.tournament, file_path)
         message = command.execute()
         self.view.display_message(message)
 
@@ -113,7 +107,7 @@ class ControllerTournament():
 
     def new_tournament(self):
         command = NewTournamentCommand(
-            self.tournament, self.menu, self.view, self.tournament_file_path
+            self.tournament, self.menu, self.view, self.tournaments_file_path
         )
         response = command.execute()
         self.view.display_message(response)
@@ -122,7 +116,7 @@ class ControllerTournament():
 
     def add_description(self):
         command = AddDescriptionCommand(
-            self.tournament, self.view, self.tournament_file_path
+            self.tournament, self.view, self.tournaments_file_path
         )
         message = command.execute()
         self.view.display_message(message)
@@ -138,7 +132,7 @@ class ControllerTournament():
             else:
                 break
         command = AddPlayersCommand(
-            self.tournament, players, self.tournament_file_path,
+            self.tournament, players, self.tournaments_file_path,
             self.players_file_path
         )
         message = command.execute()
@@ -176,7 +170,7 @@ class ControllerTournament():
 
     def update_number_of_rounds(self):
         command = UpdateNumberOfRoundsCommand(
-            self.tournament, self.view, self.tournament_file_path
+            self.tournament, self.view, self.tournaments_file_path
         )
         message = command.execute()
         self.view.display_message(message)
@@ -197,8 +191,8 @@ class ControllerTournament():
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)
-        save_path = self.view.get_tournament_file_path()
-        save_command = SaveTournamentCommand(self.tournament, save_path)
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournaments_file_path)
         save_message = save_command.execute()
         self.view.display_message(f"{round_name} ajouté et {save_message}")
 
