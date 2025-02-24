@@ -41,12 +41,8 @@ class ControllerMenu():
                         self.tournament_controller.update_number_of_rounds
                     },
                     {
-                        "label": "Ajouter un tour",
-                        "command": self.tournament_controller.add_round
-                    },
-                    {
-                        "label": "Terminer le tour",
-                        "command": self.tournament_controller.end_round
+                        "label": "Saisir les scores",
+                        "command": self.tournament_controller.record_results
                     }
                 ])
             else:

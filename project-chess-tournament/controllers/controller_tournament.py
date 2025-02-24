@@ -117,24 +117,24 @@ class ControllerTournament():
         message = self.get_pairs_message(self.tournament.current_round)
         self.view.display_message(message)
 
-    def start_tournament_old(self):
-        while not self.tournament.is_complete():
-            round_instance = Round(
-                self.tournament.current_round,
-                self.tournament.players,
-                self.previous_matches
-            )
-            self.__record_results(round_instance)
-            round_instance.end_round()
-            for match in round_instance.matches:
-                print(match)
-            self.previous_matches.extend(
-                round_instance.get_played_matches()
-            )
-            self.tournament.rounds.append(round_instance)
-            self.tournament.current_round += 1
-        self.save_tournament(save_with_players=True)
-        self.view.display_result(self.tournament.players)
+    # def start_tournament_old(self):
+    #     while not self.tournament.is_complete():
+    #         round_instance = Round(
+    #             self.tournament.current_round,
+    #             self.tournament.players,
+    #             self.previous_matches
+    #         )
+    #         self.__record_results(round_instance)
+    #         round_instance.end_round()
+    #         for match in round_instance.matches:
+    #             print(match)
+    #         self.previous_matches.extend(
+    #             round_instance.get_played_matches()
+    #         )
+    #         self.tournament.rounds.append(round_instance)
+    #         self.tournament.current_round += 1
+    #     self.save_tournament(save_with_players=True)
+    #     self.view.display_result(self.tournament.players)
 
     # Méthodes d'accès
     # Méthodes d'affichage
@@ -181,8 +181,7 @@ class ControllerTournament():
             f"{pairs_message}"
         )
 
-    # Méthodes privées
-    def __record_results(self, round_instance):
+    def record_results(self, round_instance):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")
         for match in round_instance.matches:
@@ -200,3 +199,4 @@ class ControllerTournament():
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
+    # Méthodes privées
