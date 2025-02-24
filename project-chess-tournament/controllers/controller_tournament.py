@@ -118,23 +118,10 @@ class ControllerTournament():
                 "pour commencer le tournoi."
             )
             return
-
-        # Ajouter le premier round
         self.add_round()
-
-        # Afficher les paires de joueurs
-        round_name = f"Round {len(self.tournament.rounds)}"
-        current_round = self.tournament.rounds[-1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
-        self.view.display_message(
-            f"{round_name} ajouté avec les paires suivantes:\n{pairs_message}"
-        )
+        self.tournament.current_round += 1
+        # current_round = self.tournament.rounds[-1]
+        self.display_pairs()
 
     def start_tournament_old(self):
         while not self.tournament.is_complete():
@@ -184,6 +171,21 @@ class ControllerTournament():
             players=players
         )
         self.view.display_message("Tournoi ajouté avec succès !")
+
+    def display_pairs(self):
+        """Affiche les paires de joueurs pour le round actuel."""
+        current_round = self.tournament.rounds[-1]
+        pairs = [
+            (match.player1.full_name, match.player2.full_name)
+            for match in current_round.matches
+        ]
+        pairs_message = "\n".join(
+            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        )
+        self.view.display_message(
+            f"{current_round.name} ajouté avec les paires suivantes:\n"
+            f"{pairs_message}"
+        )
 
     # Méthodes privées
     def __record_results(self, round_instance):
