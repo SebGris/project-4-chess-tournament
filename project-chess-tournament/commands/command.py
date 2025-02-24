@@ -61,13 +61,16 @@ class DisplayTournamentCommand(Command):
         )
         rounds_data = ', '.join(round.name for round in self.tournament.rounds)
         return (
-            f"Tournoi : {self.tournament.name}\n"
-            f"Lieu : {self.tournament.location}\n"
+            f"Tournoi : {self.tournament.name} | Lieu : "
+            f"{self.tournament.location}\n"
             f"Date : du {self.tournament.start_date} au "
             f"{self.tournament.end_date}\n"
             f"Joueurs : {players_data}\n"
+            f"Nombre de joueurs : {len(self.tournament.players)}\n"
             f"Description : {self.tournament.description}\n"
             f"Nombre de tours: {self.tournament.number_of_rounds}\n"
+            f"Tour actuel : {self.tournament.current_round}/"
+            f"{self.tournament.number_of_rounds}\n"
             f"Rounds: {rounds_data}"
         )
 

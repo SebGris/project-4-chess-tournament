@@ -40,6 +40,5 @@ class Player:
             "last_name": self.last_name,
             "first_name": self.first_name,
             "birth_date": self.birth_date,
-            "id_chess": self.id_chess,
-            "score": self.score
+            "id_chess": self.id_chess
         }
