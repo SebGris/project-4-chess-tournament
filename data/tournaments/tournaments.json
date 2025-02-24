@@ -1,18 +1,36 @@
 {
-    "id": "ed46b5d7-3dd3-48fb-a58b-0fd025a8fce4",
+    "id": "388548df-8da4-4167-a1f3-8cfb4a4d5037",
     "name": "ee",
     "location": "ici",
     "start_date": "15/10/2024",
     "end_date": "20/10/2024",
     "players": [
+        "70c07548-1fd5-4ac0-a01b-f669f9e91fe5",
         "88decebc-9fa4-478b-b556-805754a48092",
         "f8fa19c7-4914-473a-8480-bb45fb8a22cb",
-        "7f19b25e-ffd4-4582-9f95-400acf2a556b",
-        "70c07548-1fd5-4ac0-a01b-f669f9e91fe5"
+        "7f19b25e-ffd4-4582-9f95-400acf2a556b"
     ],
     "description": "rezut",
     "rounds": [
         {
             "name": "Round 1",
             "matches": [
-                
+                {
+                    "player1": "70c07548-1fd5-4ac0-a01b-f669f9e91fe5",
+                    "player1_score": 0,
+                    "player2": "88decebc-9fa4-478b-b556-805754a48092",
+                    "player2_score": 0
+                },
+                {
+                    "player1": "f8fa19c7-4914-473a-8480-bb45fb8a22cb",
+                    "player1_score": 0,
+                    "player2": "7f19b25e-ffd4-4582-9f95-400acf2a556b",
+                    "player2_score": 0
+                }
+            ],
+            "start_datetime": "2025-02-24T10:21:54.203345",
+            "end_datetime": null
+        }
+    ],
+    "number_of_rounds": 4
+}

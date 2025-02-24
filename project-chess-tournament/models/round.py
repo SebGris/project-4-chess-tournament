@@ -30,7 +30,7 @@ class Round:
         """Convert Round object to dictionary."""
         return {
             "name": self.name,
-            "matches": self.matches,
+            "matches": [match.to_dict() for match in self.matches],
             "start_datetime": self.start_datetime.isoformat(),
             "end_datetime": (
                 self.end_datetime.isoformat() if self.end_datetime else None
