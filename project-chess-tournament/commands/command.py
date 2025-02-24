@@ -1,54 +1,11 @@
 from utils.json_file_manager import JsonFileManager
-from commands.base_command import Command
 from datetime import datetime
 
 
-class LoadPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
+class Command:
+    """Base class for all commands."""
     def execute(self):
-        self.controller.load_players_from_json()
-
-
-class DisplayPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_players()
-
-
-class DisplayTournamentsCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_tournaments()  # TODO Affiche les tournois
-
-
-class DisplayDescriptionCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_description()
-
-
-class DisplayTournamentPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_tournament_players()
-
-
-class DisplayTournamentResultCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.display_tournament_result()
+        raise NotImplementedError("You should implement this method.")
 
 
 class LoadTournamentCommand(Command):
@@ -185,24 +142,6 @@ class AddPlayersCommand(Command):
         ]
         JsonFileManager.write(self.players_file_path, updated_players)
         return f"Joueurs ajoutés et {save_message}"
-
-
-class StartTournamentCommand(Command):
-    def __init__(self, tournament):
-        self.tournament = tournament
-
-    def execute(self):
-        if not self.tournament.players:
-            return "Le tournoi ne peut pas commencer sans joueurs."
-        if len(self.tournament.players) % 2 != 0:
-            return (
-                "Le nombre de joueurs doit être pair pour commencer le "
-                "tournoi."
-            )
-        return (
-            f"Le tournoi {self.tournament.name} a commencé avec "
-            f"{len(self.tournament.players)} joueurs."
-        )
 
 
 class UpdateNumberOfRoundsCommand(Command):

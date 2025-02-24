@@ -2,18 +2,19 @@ from commands.command import (
     AddDescriptionCommand, AddPlayersCommand,
     DisplayTournamentCommand, EndRoundCommand, LoadAllPlayersCommand,
     LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
-    StartTournamentCommand, UpdateNumberOfRoundsCommand
+    UpdateNumberOfRoundsCommand
 )
-from controllers.base_controller import BaseController
 from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
+from utils.file_utils import get_file_path
 
 
-class ControllerTournament(BaseController):
+class ControllerTournament():
     def __init__(self, tournament, menu, view):
-        super().__init__()  # Appel au constructeur de BaseController
+        self.players_file_path = get_file_path("players.json")
+        self.tournament_file_path = get_file_path("tournaments.json")
         self.tournament = tournament
         self.menu = menu
         self.view = view
@@ -30,33 +31,23 @@ class ControllerTournament(BaseController):
         return all_players
 
     def start_tournament_old(self):
-        """Starts a tournament and manages the rounds."""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-        elif (len(self.tournament.players) % 2) != 0:
-            self.view.display_message(
-                "Le nombre de joueurs doit être pair."
-                )
-        else:
-            while not self.tournament.is_complete():
-                round_instance = Round(
-                    self.tournament.current_round,
-                    self.tournament.players,
-                    self.previous_matches
-                )
-                self.__record_results(round_instance)
-                round_instance.end_round()
-                for match in round_instance.matches:
-                    print(match)
-                self.previous_matches.extend(
-                    round_instance.get_played_matches()
-                )
-                self.tournament.rounds.append(round_instance)
-                self.tournament.current_round += 1
-            self.save_tournament(save_with_players=True)
-            self.view.display_result(self.tournament.players)
+        while not self.tournament.is_complete():
+            round_instance = Round(
+                self.tournament.current_round,
+                self.tournament.players,
+                self.previous_matches
+            )
+            self.__record_results(round_instance)
+            round_instance.end_round()
+            for match in round_instance.matches:
+                print(match)
+            self.previous_matches.extend(
+                round_instance.get_played_matches()
+            )
+            self.tournament.rounds.append(round_instance)
+            self.tournament.current_round += 1
+        self.save_tournament(save_with_players=True)
+        self.view.display_result(self.tournament.players)
 
     def __record_results(self, round_instance):
         """Records the results of matches in the current round."""
@@ -76,15 +67,6 @@ class ControllerTournament(BaseController):
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
-
-    def display_description(self):
-        """Displays the description of the tournament."""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        self.view.display_description(self.tournament)
 
     def display_tournament_result(self):
         """Affiche les résultats du tournoi."""
@@ -163,9 +145,34 @@ class ControllerTournament(BaseController):
         self.view.display_message(message)
 
     def start_tournament(self):
-        command = StartTournamentCommand(self.tournament)
-        message = command.execute()
-        self.view.display_message(message)
+        if not self.tournament.players:
+            self.view.display_message(
+                "Le tournoi ne peut pas commencer sans joueurs."
+            )
+            return
+        if len(self.tournament.players) % 2 != 0:
+            self.view.display_message(
+                "Le nombre de joueurs doit être pair "
+                "pour commencer le tournoi."
+            )
+            return
+
+        # Ajouter le premier round
+        self.add_round()
+
+        # Afficher les paires de joueurs
+        round_name = f"Round {len(self.tournament.rounds)}"
+        current_round = self.tournament.rounds[-1]
+        pairs = [
+            (match.player1.full_name, match.player2.full_name)
+            for match in current_round.matches
+        ]
+        pairs_message = "\n".join(
+            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        )
+        self.view.display_message(
+            f"{round_name} ajouté avec les paires suivantes:\n{pairs_message}"
+        )
 
     def update_number_of_rounds(self):
         command = UpdateNumberOfRoundsCommand(

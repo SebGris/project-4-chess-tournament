@@ -1,10 +1,9 @@
 from commands.command import QuitCommand
 from models.tournament import Tournament
-from controllers.base_controller import BaseController
 from controllers.controller_tournament import ControllerTournament
 
 
-class Controller(BaseController):
+class ControllerMenu():
     """Manages the logic of the tournament."""
 
     def __init__(self, menu, view):
