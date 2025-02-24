@@ -1,6 +1,6 @@
 from commands.command import (
     AddDescriptionCommand, AddPlayersCommand,
-    DisplayTournamentCommand, EndRoundCommand, LoadAllPlayersCommand,
+    DisplayTournamentCommand, LoadAllPlayersCommand,
     LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
     UpdateNumberOfRoundsCommand
 )
@@ -8,7 +8,6 @@ from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from utils.file_utils import get_file_path
-from models.match import Match
 
 
 class ControllerTournament():
@@ -92,11 +91,6 @@ class ControllerTournament():
         save_message = save_command.execute()
         self.view.display_message(f"{round_name} ajouté et {save_message}")
 
-    def end_round(self):
-        command = EndRoundCommand(self.tournament, self.view)
-        message = command.execute()
-        self.view.display_message(message)
-
     def load_tournament(self):
         file_path = self.tournaments_file_path
         command = LoadTournamentCommand(
@@ -172,19 +166,15 @@ class ControllerTournament():
         if round_number > len(self.tournament.rounds) or round_number < 1:
             return "Numéro de round invalide."
         current_round = self.tournament.rounds[round_number - 1]
-        all_players_info = []
-        for match in current_round.matches:
-            player1 = match['player1']
-            player2 = match['player2']
-            player1_score = match['player1_score']
-            player2_score = match['player2_score']
-            match_info = (
-                f"{player1['last_name']} {player1['first_name']}, "
-                f"{player1_score} ({player1['id']}) vs "
-                f"{player2['last_name']} {player2['first_name']}, "
-                f"{player2_score} ({player2['id']})"
-            )
-            all_players_info.append(match_info)
+        all_players_info = [
+            f"{match['player1']['last_name']} "
+            f"{match['player1']['first_name']}, "
+            f"score : {match['player1_score']} {match['player1']['id']} vs "
+            f"{match['player2']['last_name']} "
+            f"{match['player2']['first_name']}, "
+            f"score : {match['player2_score']} {match['player2']['id']}"
+            for match in current_round.matches
+        ]
         pairs_message = "\n".join(all_players_info)
         return (
             f"{current_round.name} avec les paires suivantes:\n"

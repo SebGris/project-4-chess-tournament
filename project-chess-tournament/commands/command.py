@@ -1,5 +1,4 @@
 from utils.json_file_manager import JsonFileManager
-from datetime import datetime
 
 
 class Command:
@@ -70,7 +69,6 @@ class DisplayTournamentCommand(Command):
             f"Nombre de tours: {self.tournament.number_of_rounds}\n"
             f"Tour actuel : {self.tournament.current_round}/"
             f"{self.tournament.number_of_rounds}\n"
-            # f"Rounds:\n{rounds_data}"
         )
 
 
@@ -164,22 +162,6 @@ class UpdateNumberOfRoundsCommand(Command):
             f"Nombre de tours mis à jour à {number_of_rounds} "
             f"et {save_message}"
         )
-
-
-class EndRoundCommand(Command):
-    def __init__(self, tournament, view):
-        self.tournament = tournament
-        self.view = view
-
-    def execute(self):
-        if not self.tournament.rounds:
-            return "Aucun tour en cours."
-        current_round = self.tournament.rounds[-1]
-        current_round["end_datetime"] = datetime.now().isoformat()
-        save_path = self.view.get_tournament_file_path()
-        save_command = SaveTournamentCommand(self.tournament, save_path)
-        save_message = save_command.execute()
-        return f"{current_round['name']} terminé et {save_message}"
 
 
 class LoadAllPlayersCommand(Command):
