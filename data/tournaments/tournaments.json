@@ -1,18 +1,18 @@
 {
-    "id": "80142d2d-5c3d-40d9-bc82-1dc58f6a570c",
+    "id": "44414231-0b65-4316-8c9b-2bf0dd1f8b6e",
     "name": "Tournoi de test",
     "location": "ici",
     "start_date": "15/10/2024",
     "end_date": "20/10/2024",
     "players": [
-        "350cf9b5-75db-4703-94c1-7c633ae1c490",
-        "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-        "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-        "52995956-a29c-471d-aa81-e393c16c3ce5",
-        "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
         "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+        "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+        "350cf9b5-75db-4703-94c1-7c633ae1c490",
         "812160aa-8e0a-453a-a345-80335d77eb59",
-        "1698dd71-58c2-407f-8550-dd3a44c5cd0e"
+        "52995956-a29c-471d-aa81-e393c16c3ce5",
+        "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+        "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+        "03b5eef5-caa6-421f-8e2a-e645a57eaa5f"
     ],
     "description": "zut",
     "rounds": [
@@ -20,31 +20,31 @@
             "name": "Round 1",
             "matches": [
                 {
+                    "player1": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+                    "player1_score": 0,
+                    "player2": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+                    "player2_score": 0
+                },
+                {
                     "player1": "350cf9b5-75db-4703-94c1-7c633ae1c490",
+                    "player1_score": 0,
+                    "player2": "812160aa-8e0a-453a-a345-80335d77eb59",
+                    "player2_score": 0
+                },
+                {
+                    "player1": "52995956-a29c-471d-aa81-e393c16c3ce5",
                     "player1_score": 0,
                     "player2": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
                     "player2_score": 0
                 },
                 {
-                    "player1": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+                    "player1": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
                     "player1_score": 0,
-                    "player2": "52995956-a29c-471d-aa81-e393c16c3ce5",
-                    "player2_score": 0
-                },
-                {
-                    "player1": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-                    "player1_score": 0,
-                    "player2": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-                    "player2_score": 0
-                },
-                {
-                    "player1": "812160aa-8e0a-453a-a345-80335d77eb59",
-                    "player1_score": 0,
-                    "player2": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+                    "player2": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
                     "player2_score": 0
                 }
             ],
-            "start_datetime": "2025-02-24T11:45:35.935439",
+            "start_datetime": "2025-02-24T12:27:20.977307",
             "end_datetime": null
         }
     ],

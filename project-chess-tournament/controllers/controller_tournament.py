@@ -2,12 +2,11 @@ from commands.command import (
     AddDescriptionCommand, AddPlayersCommand,
     DisplayTournamentCommand, EndRoundCommand, LoadAllPlayersCommand,
     LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
-    UpdateNumberOfRoundsCommand
+    UpdateNumberOfRoundsCommand, GetPairsMessageCommand
 )
 from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
-from models.tournament import Tournament
 from utils.file_utils import get_file_path
 
 
@@ -120,8 +119,10 @@ class ControllerTournament():
             return
         self.add_round()
         self.tournament.current_round += 1
-        # current_round = self.tournament.rounds[-1]
-        self.display_pairs()
+        command = GetPairsMessageCommand(
+            self.tournament, self.tournament.current_round)
+        message = command.execute()
+        self.view.display_message(message)
 
     def start_tournament_old(self):
         while not self.tournament.is_complete():
@@ -162,30 +163,6 @@ class ControllerTournament():
                 )
             return
         self.view.display_players(self.tournament.players)
-
-    def add_new_tournament_test(self, players=None):
-        """Tournament variable for testing"""
-        players = players or []
-        self.tournament = Tournament(
-            "Championnat de Paris", "Paris", "01/06/2025", "07/06/2025",
-            players=players
-        )
-        self.view.display_message("Tournoi ajouté avec succès !")
-
-    def display_pairs(self):
-        """Affiche les paires de joueurs pour le round actuel."""
-        current_round = self.tournament.rounds[-1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
-        self.view.display_message(
-            f"{current_round.name} ajouté avec les paires suivantes:\n"
-            f"{pairs_message}"
-        )
 
     # Méthodes privées
     def __record_results(self, round_instance):
