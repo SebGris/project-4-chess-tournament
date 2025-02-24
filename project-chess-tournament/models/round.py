@@ -36,3 +36,13 @@ class Round:
                 self.end_datetime.isoformat() if self.end_datetime else None
             )
         }
+
+    def __str__(self):
+        """Returns a string representation of the round."""
+        matches_str = "\n".join(str(match) for match in self.matches)
+        return (
+            f"Round: {self.name}\n"
+            f"Start: {self.start_datetime}\n"
+            f"End: {self.end_datetime}\n"
+            f"Matches:\n{matches_str}"
+        )

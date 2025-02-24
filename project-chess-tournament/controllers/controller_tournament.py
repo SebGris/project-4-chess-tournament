@@ -5,6 +5,7 @@ from commands.command import (
     UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
+from models.match import Match
 from models.player import Player
 from models.round import Round
 from utils.file_utils import get_file_path
@@ -97,6 +98,25 @@ class ControllerTournament():
             self.tournament, self.menu, file_path, self.all_players
         )
         message = command.execute()
+        round_matches = []
+        for round in self.tournament.rounds:
+            for match in round.matches:
+                round_matches.append(
+                    Match(
+                        Player(
+                            match['player1']['last_name'],
+                            match['player2']['last_name'],
+                            id=match['player1']['id']
+                        ),
+                        Player(
+                            match['player2']['last_name'],
+                            match['player2']['last_name'],
+                            id=match['player2']['id']
+                        ),
+                        match['player1_score'],
+                        match['player2_score']
+                    )
+                )
         self.view.display_message(message)
 
     # Méthodes d'action

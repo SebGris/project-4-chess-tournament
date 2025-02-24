@@ -4,7 +4,7 @@ import uuid
 class Player:
     """Class representing a chess player."""
 
-    def __init__(self, last_name, first_name, birth_date, id_chess,
+    def __init__(self, last_name, first_name, birth_date=None, id_chess=None,
                  score=0.0, id=None):
         self.id = uuid.UUID(id) if id else uuid.uuid4()
         self.last_name = last_name
