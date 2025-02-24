@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.match import Match
+from models.player import Player
 
 
 class Round:
@@ -9,7 +10,7 @@ class Round:
         self, name, matches=None, start_datetime=None, end_datetime=None
     ):
         self.name = name
-        self.matches = matches if matches is not None else []
+        self.matches = self.convert_dict_to_matches(matches) if matches is not None else []
         self.start_datetime = (
             datetime.fromisoformat(start_datetime) if start_datetime else \
             datetime.now()
@@ -17,6 +18,27 @@ class Round:
         self.end_datetime = (
             datetime.fromisoformat(end_datetime) if end_datetime else None
         )
+
+    def convert_dict_to_matches(self, matches):
+        round_matches = []
+        for match in matches:
+            round_matches.append(
+                Match(
+                    Player(
+                        match['player1']['last_name'],
+                        match['player2']['last_name'],
+                        id=match['player1']['id']
+                    ),
+                    Player(
+                        match['player2']['last_name'],
+                        match['player2']['last_name'],
+                        id=match['player2']['id']
+                    ),
+                    match['player1_score'],
+                    match['player2_score']
+                )
+            )
+        return round_matches
 
     def add_match(self, player1, player2):
         match = Match(player1, player2)

@@ -98,25 +98,6 @@ class ControllerTournament():
             self.tournament, self.menu, file_path, self.all_players
         )
         message = command.execute()
-        round_matches = []
-        for round in self.tournament.rounds:
-            for match in round.matches:
-                round_matches.append(
-                    Match(
-                        Player(
-                            match['player1']['last_name'],
-                            match['player2']['last_name'],
-                            id=match['player1']['id']
-                        ),
-                        Player(
-                            match['player2']['last_name'],
-                            match['player2']['last_name'],
-                            id=match['player2']['id']
-                        ),
-                        match['player1_score'],
-                        match['player2_score']
-                    )
-                )
         self.view.display_message(message)
 
     # Méthodes d'action
@@ -185,16 +166,13 @@ class ControllerTournament():
         if round_number > len(self.tournament.rounds) or round_number < 1:
             return "Numéro de round invalide."
         current_round = self.tournament.rounds[round_number - 1]
-        all_players_info = [
-            f"{match['player1']['last_name']} "
-            f"{match['player1']['first_name']}, "
-            f"score : {match['player1_score']} {match['player1']['id']} vs "
-            f"{match['player2']['last_name']} "
-            f"{match['player2']['first_name']}, "
-            f"score : {match['player2_score']} {match['player2']['id']}"
+        pairs = [
+            (match.player1.full_name, match.player2.full_name)
             for match in current_round.matches
         ]
-        pairs_message = "\n".join(all_players_info)
+        pairs_message = "\n".join(
+            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        )
         return (
             f"{current_round.name} avec les paires suivantes:\n"
             f"{pairs_message}"
