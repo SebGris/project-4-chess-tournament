@@ -114,8 +114,7 @@ class ControllerTournament():
             return
         self.add_round()
         self.tournament.current_round += 1
-        message = self.get_pairs_message(self.tournament.current_round)
-        self.view.display_message(message)
+        self.display_pairs(self.tournament.current_round)
 
     # def start_tournament_old(self):
     #     while not self.tournament.is_complete():
@@ -141,11 +140,7 @@ class ControllerTournament():
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament)
         message = command.execute()
-        rounds_data = '\n'.join(
-            self.get_pairs_message(i + 1)
-            for i in range(len(self.tournament.rounds))
-         )
-        self.view.display_message(message + rounds_data)
+        self.view.display_message(message)
 
     def display_tournament_result(self):
         """Affiche les résultats du tournoi."""
@@ -161,26 +156,25 @@ class ControllerTournament():
             return
         self.view.display_players(self.tournament.players)
 
-    def get_pairs_message(self, round_number):
+    def display_pairs(self, round_number):
         """Affiche les paires de joueurs pour un round en particulier."""
         if round_number > len(self.tournament.rounds) or round_number < 1:
-            return "Numéro de round invalide."
+            self.view.display_message("Numéro de round invalide.")
+            return
         current_round = self.tournament.rounds[round_number - 1]
-        all_players_info = [
-            f"{match['player1']['last_name']} "
-            f"{match['player1']['first_name']}, "
-            f"score : {match['player1_score']} {match['player1']['id']} vs "
-            f"{match['player2']['last_name']} "
-            f"{match['player2']['first_name']}, "
-            f"score : {match['player2_score']} {match['player2']['id']}"
+        pairs = [
+            (match.player1.full_name, match.player2.full_name)
             for match in current_round.matches
         ]
-        pairs_message = "\n".join(all_players_info)
-        return (
+        pairs_message = "\n".join(
+            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        )
+        self.view.display_message(
             f"{current_round.name} avec les paires suivantes:\n"
             f"{pairs_message}"
         )
 
+    # Méthodes privées
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")
@@ -199,4 +193,3 @@ class ControllerTournament():
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
-    # Méthodes privées
