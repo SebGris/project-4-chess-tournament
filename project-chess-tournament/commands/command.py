@@ -59,10 +59,6 @@ class DisplayTournamentCommand(Command):
         players_data = ', '.join(
             player.full_name for player in self.tournament.players
         )
-        rounds_data = '\n'.join(
-            GetPairsMessageCommand(self.tournament, i + 1).execute()
-            for i in range(len(self.tournament.rounds))
-        )
         return (
             f"Tournoi : {self.tournament.name} | Lieu : "
             f"{self.tournament.location}\n"
@@ -74,7 +70,7 @@ class DisplayTournamentCommand(Command):
             f"Nombre de tours: {self.tournament.number_of_rounds}\n"
             f"Tour actuel : {self.tournament.current_round}/"
             f"{self.tournament.number_of_rounds}\n"
-            f"Rounds:\n{rounds_data}"
+            # f"Rounds:\n{rounds_data}"
         )
 
 
@@ -198,29 +194,6 @@ class LoadAllPlayersCommand(Command):
             return players_data
         except ValueError as e:
             return str(e)
-
-
-class GetPairsMessageCommand(Command):
-    def __init__(self, tournament, round_number):
-        self.tournament = tournament
-        self.round_number = round_number
-
-    def execute(self):
-        if (self.round_number > len(self.tournament.rounds) or
-                self.round_number < 1):
-            return "Numéro de round invalide."
-        current_round = self.tournament.rounds[self.round_number - 1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
-        return (
-            f"{current_round.name} avec les paires suivantes:\n"
-            f"{pairs_message}"
-        )
 
 
 class QuitCommand(Command):
