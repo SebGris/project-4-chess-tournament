@@ -13,9 +13,17 @@ class Match:
 
     def to_dict(self):
         return {
-            "player1": str(self.player1.id),
+            "player1": {
+                "id": str(self.player1.id),
+                "last_name": self.player1.last_name,
+                "first_name": self.player1.first_name
+            },
             "player1_score": self.player1_score,
-            "player2": str(self.player2.id),
+            "player2": {
+                "id": str(self.player2.id),
+                "last_name": self.player2.last_name,
+                "first_name": self.player2.first_name
+            },
             "player2_score": self.player2_score
         }
 

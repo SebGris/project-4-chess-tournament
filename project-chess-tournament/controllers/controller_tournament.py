@@ -8,6 +8,7 @@ from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from utils.file_utils import get_file_path
+from models.match import Match
 
 
 class ControllerTournament():
@@ -171,13 +172,13 @@ class ControllerTournament():
         if round_number > len(self.tournament.rounds) or round_number < 1:
             return "Numéro de round invalide."
         current_round = self.tournament.rounds[round_number - 1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
+        # pairs = [
+        #     (match.player1.full_name, match.player2.full_name)
+        #     for match in current_round.matches
+        # ]
+        # pairs_message = "\n".join(
+        #     [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        # )
         return (
             f"{current_round.name} avec les paires suivantes:\n"
             f"{pairs_message}"
