@@ -141,7 +141,11 @@ class ControllerTournament():
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament)
         message = command.execute()
-        self.view.display_message(message)
+        rounds_data = '\n'.join(
+            self.get_pairs_message(i + 1)
+            for i in range(len(self.tournament.rounds))
+         )
+        self.view.display_message(message + rounds_data)
 
     def display_tournament_result(self):
         """Affiche les résultats du tournoi."""
