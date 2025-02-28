@@ -1,10 +1,10 @@
-from commands.command import QuitCommand
 from models.tournament import Tournament
 from controllers.controller_tournament import ControllerTournament
+from controllers.menu_state_manager import MenuStateManager
 
 
 class ControllerMenu():
-    """Manages the logic of the tournament."""
+    """Contrôleur principal de l'application"""
 
     def __init__(self, menu, view):
         self.menu = menu
@@ -13,53 +13,11 @@ class ControllerMenu():
         self.tournament_controller = ControllerTournament(
             self.tournament, self.menu, self.view
         )
+        self.menu_state_manager = MenuStateManager(self.menu, self.tournament_controller)
 
     def run(self):
         while True:
-            self.menu.clear_menu()
-            if self.menu.is_tournament_loaded():
-                self.menu.add_group("Menu Tournoi", [
-                    {
-                        "label": "Afficher le tournoi",
-                        "command": self.tournament_controller
-                                    .display_tournament},
-                    {
-                        "label": "Ajouter une description",
-                        "command": self.tournament_controller.add_description
-                    },
-                    {
-                        "label": "Ajouter des joueurs",
-                        "command": self.tournament_controller.add_players
-                    },
-                    {
-                        "label": "Démarrer un tournoi",
-                        "command": self.tournament_controller.start_tournament
-                    },
-                    {
-                        "label": "Modifier le nombre de tours",
-                        "command":
-                        self.tournament_controller.update_number_of_rounds
-                    },
-                    {
-                        "label": "Saisir les scores",
-                        "command": self.tournament_controller.record_results
-                    }
-                ])
-            else:
-                self.menu.add_group("Menu Tournoi", [
-                    {
-                        "label": "Nouveau tournoi",
-                        "command": self.tournament_controller.new_tournament
-                    },
-                    {
-                        "label": "Charger un tournoi",
-                        "command": self.tournament_controller.load_tournament
-                    }
-                ])
-            self.menu.add_group("Menu Général", [
-                {"label": "Quitter", "command": QuitCommand().execute}
-            ])
-
+            self.menu_state_manager.update_menu()
             self.view.display_menu(self.menu)
             choice = self.view.get_user_choice()
 
