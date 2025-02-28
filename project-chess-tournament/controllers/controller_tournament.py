@@ -5,7 +5,6 @@ from commands.command import (
     UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
-from models.match import Match
 from models.player import Player
 from models.round import Round
 from utils.file_utils import get_file_path
@@ -18,17 +17,8 @@ class ControllerTournament():
         self.tournament = tournament
         self.menu = menu
         self.view = view
-        self.all_players = self.load_all_players()
+        self.all_players = self.__load_all_players()
         self.previous_matches = []
-
-    def load_all_players(self):
-        command = LoadAllPlayersCommand(self.players_file_path)
-        players_data = command.execute()
-        all_players = {
-            player_data['id']: Player(**player_data)
-            for player_data in players_data
-        }
-        return all_players
 
     # Méthodes de gestion de l'état
     def new_tournament(self):
@@ -71,27 +61,6 @@ class ControllerTournament():
         message = command.execute()
         self.view.display_message(message)
 
-    def add_round(self):
-        round_name = f"Round {len(self.tournament.rounds) + 1}"
-        new_round = Round(round_name)
-        previous_matches = {
-            (match.player1.id, match.player2.id)
-            for round in self.tournament.rounds
-            for match in round.matches
-        }
-        if len(self.tournament.rounds) == 0:
-            pairs = Pairing.generate_first_round_pairs(self.tournament.players)
-        else:
-            pairs = Pairing.generate_next_round_pairs(
-                self.tournament.players, previous_matches)
-        for player1, player2 in pairs:
-            new_round.add_match(player1, player2)
-        self.tournament.rounds.append(new_round)
-        save_command = SaveTournamentCommand(
-            self.tournament, self.tournaments_file_path)
-        save_message = save_command.execute()
-        self.view.display_message(f"{round_name} ajouté et {save_message}")
-
     def load_tournament(self):
         file_path = self.tournaments_file_path
         command = LoadTournamentCommand(
@@ -113,9 +82,9 @@ class ControllerTournament():
                 "pour commencer le tournoi."
             )
             return
-        self.add_round()
+        self.__add_round()
         self.tournament.current_round += 1
-        message = self.get_pairs_message(self.tournament.current_round)
+        message = self.__get_pairs_message(self.tournament.current_round)
         self.view.display_message(message)
 
     # def start_tournament_old(self):
@@ -143,40 +112,24 @@ class ControllerTournament():
         command = DisplayTournamentCommand(self.tournament)
         message = command.execute()
         rounds_data = '\n'.join(
-            self.get_pairs_message(i + 1)
+            self.__get_pairs_message(i + 1)
             for i in range(len(self.tournament.rounds))
          )
         self.view.display_message(message + rounds_data)
 
-    def display_tournament_result(self):
-        """Affiche les résultats du tournoi."""
-        self.view.show_message("Résultats du tournoi :")
-        self.tournament.display_result()
+    # def display_tournament_result(self):
+    #     """Affiche les résultats du tournoi."""
+    #     self.view.show_message("Résultats du tournoi :")
+    #     self.tournament.display_result()
 
-    def display_tournament_players(self):
-        """Displays the list of players registered for the tournament."""
-        if self.tournament is None:
-            self.view.display_message(
-                "Aucun tournoi en cours. Créez un tournoi d'abord."
-                )
-            return
-        self.view.display_players(self.tournament.players)
-
-    def get_pairs_message(self, round_number):
-        if round_number > len(self.tournament.rounds) or round_number < 1:
-            return "Numéro de round invalide."
-        current_round = self.tournament.rounds[round_number - 1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
-        return (
-            f"{current_round.name} avec les paires suivantes:\n"
-            f"{pairs_message}"
-        )
+    # def display_tournament_players(self):
+    #     """Displays the list of players registered for the tournament."""
+    #     if self.tournament is None:
+    #         self.view.display_message(
+    #             "Aucun tournoi en cours. Créez un tournoi d'abord."
+    #             )
+    #         return
+    #     self.view.display_players(self.tournament.players)
 
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
@@ -196,4 +149,50 @@ class ControllerTournament():
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
+    
     # Méthodes privées
+    def __load_all_players(self):
+        command = LoadAllPlayersCommand(self.players_file_path)
+        players_data = command.execute()
+        all_players = {
+            player_data['id']: Player(**player_data)
+            for player_data in players_data
+        }
+        return all_players
+    
+    def __add_round(self):
+        round_name = f"Round {len(self.tournament.rounds) + 1}"
+        new_round = Round(round_name)
+        previous_matches = {
+            (match.player1.id, match.player2.id)
+            for round in self.tournament.rounds
+            for match in round.matches
+        }
+        if len(self.tournament.rounds) == 0:
+            pairs = Pairing.generate_first_round_pairs(self.tournament.players)
+        else:
+            pairs = Pairing.generate_next_round_pairs(
+                self.tournament.players, previous_matches)
+        for player1, player2 in pairs:
+            new_round.add_match(player1, player2)
+        self.tournament.rounds.append(new_round)
+        save_command = SaveTournamentCommand(
+            self.tournament, self.tournaments_file_path)
+        save_message = save_command.execute()
+        self.view.display_message(f"{round_name} ajouté et {save_message}")
+
+    def __get_pairs_message(self, round_number):
+        if round_number > len(self.tournament.rounds) or round_number < 1:
+            return "Numéro de round invalide."
+        current_round = self.tournament.rounds[round_number - 1]
+        pairs = [
+            (match.player1.full_name, match.player2.full_name)
+            for match in current_round.matches
+        ]
+        pairs_message = "\n".join(
+            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
+        )
+        return (
+            f"{current_round.name} avec les paires suivantes:\n"
+            f"{pairs_message}"
+        )
