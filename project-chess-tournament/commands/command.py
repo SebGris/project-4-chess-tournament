@@ -12,9 +12,9 @@ class TournamentCommand(Command):
     def __init__(self, tournament, view=None, menu=None):
         self.tournament = tournament
         self.view = view
+        self.menu = menu
         self.tournaments_file_path = get_file_path("tournaments.json")
         self.players_file_path = get_file_path("players.json")
-        self.menu = menu
 
     def save_tournament(self):
         data = self.tournament.to_dict()

@@ -1,3 +1,4 @@
+import re
 from views.base_view import BaseView
 
 
@@ -67,3 +68,45 @@ class View(BaseView):
                 "id_chess": id_chess
             }
         return None
+    
+    def _get_id_chess(self):
+        """
+        Requests and validates the national chess identifier (format XX#####).
+        """
+        while True:
+            id_chess = self.get_input(
+                "Entrez son identifiant national d'échecs (format AB12345) : "
+                )
+            if re.match(r'^[A-Z]{2}\d{5}$', id_chess):
+                return id_chess
+            else:
+                self.display_message(
+                    "Identifiant invalide. "
+                    "Le format doit être composé de deux lettres "
+                    "suivies de cinq chiffres."
+                    )
+    
+    def get_match_result(self):
+        """Asks the user to enter the result of a match."""
+        while True:
+            result = self.get_input(
+                "Résultat (1: Joueur 1 gagne, 2: Joueur 2 gagne, 0: Nul) : "
+            )
+            if result in {"1", "2", "0"}:
+                return result
+            else:
+                print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
+
+    def display_tournament_players(self, tournament):
+        """Displays the list of players in the tournament."""
+        players = tournament.players
+        if not players:
+            self.display_message("Aucun joueur dans le tournoi.")
+        else:
+            self.display_message("Liste des joueurs du tournoi :")
+            for player in players:
+                self.display_message(
+                    f"Nom : {player.last_name} {player.first_name} | "
+                    f"Date de naissance : {player.birth_date} | "
+                    f"ID échecs : {player.id_chess}"
+                )
