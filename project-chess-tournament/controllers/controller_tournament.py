@@ -104,7 +104,7 @@ class ControllerTournament():
     
     # Méthodes privées
     def __load_all_players(self):
-        command = LoadAllPlayersCommand()
+        command = LoadAllPlayersCommand(self.tournament)
         players_data = command.execute()
         all_players = {
             player_data['id']: Player(**player_data)
