@@ -7,13 +7,10 @@ from commands.command import (
 from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
-from utils.file_utils import get_file_path
 
 
 class ControllerTournament():
     def __init__(self, tournament, menu, view):
-        self.players_file_path = get_file_path("players.json")
-        self.tournaments_file_path = get_file_path("tournaments.json")
         self.tournament = tournament
         self.menu = menu
         self.view = view
@@ -22,14 +19,14 @@ class ControllerTournament():
 
     # Méthodes de gestion de l'état
     def new_tournament(self):
-        self.__execute_command(NewTournamentCommand)
+        command=NewTournamentCommand(self.tournament, self.view, menu=self.menu)
+        message = command.execute()
+        self.view.display_message(message)
         if self.view.get_user_confirmation("Voulez-vous ajouter des joueurs ?"):
             self.add_players()
 
     def add_description(self):
-        command = AddDescriptionCommand(
-            self.tournament, self.view, self.tournaments_file_path
-        )
+        command = AddDescriptionCommand(self.tournament, self.view)
         message = command.execute()
         self.view.display_message(message)
 
@@ -43,25 +40,17 @@ class ControllerTournament():
                 self.view.display_message(f"Joueur {player.full_name} ajouté.")
             else:
                 break
-        command = AddPlayersCommand(
-            self.tournament, players, self.tournaments_file_path,
-            self.players_file_path
-        )
+        command = AddPlayersCommand(self.tournament, players)
         message = command.execute()
         self.view.display_message(message)
 
     def update_number_of_rounds(self):
-        command = UpdateNumberOfRoundsCommand(
-            self.tournament, self.view, self.tournaments_file_path
-        )
+        command = UpdateNumberOfRoundsCommand(self.tournament, self.view)
         message = command.execute()
         self.view.display_message(message)
 
     def load_tournament(self):
-        file_path = self.tournaments_file_path
-        command = LoadTournamentCommand(
-            self.tournament, self.menu, file_path, self.all_players
-        )
+        command = LoadTournamentCommand(self.tournament, self.all_players, menu=self.menu)
         message = command.execute()
         self.view.display_message(message)
 
@@ -115,7 +104,7 @@ class ControllerTournament():
     
     # Méthodes privées
     def __load_all_players(self):
-        command = LoadAllPlayersCommand(self.players_file_path)
+        command = LoadAllPlayersCommand()
         players_data = command.execute()
         all_players = {
             player_data['id']: Player(**player_data)
@@ -139,8 +128,7 @@ class ControllerTournament():
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)
-        save_command = SaveTournamentCommand(
-            self.tournament, self.tournaments_file_path)
+        save_command = SaveTournamentCommand(self.tournament)
         save_message = save_command.execute()
         self.view.display_message(f"{round_name} ajouté et {save_message}")
 
@@ -160,7 +148,3 @@ class ControllerTournament():
             f"{pairs_message}"
         )
     
-    def __execute_command(self, command_class, *args):
-        command = command_class(self.tournament, self.menu, self.view, self.tournaments_file_path, *args)
-        message = command.execute()
-        self.view.display_message(message)

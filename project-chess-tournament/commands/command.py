@@ -1,4 +1,5 @@
 from utils.json_file_manager import JsonFileManager
+from utils.file_utils import get_file_path
 
 
 class Command:
@@ -8,12 +9,12 @@ class Command:
 
 
 class TournamentCommand(Command):
-    def __init__(self, tournament, view=None, tournament_file_path=None, players_file_path=None, menu=None):
+    def __init__(self, tournament, view=None, menu=None):
         self.tournament = tournament
         self.view = view
+        self.tournaments_file_path = get_file_path("tournaments.json")
+        self.players_file_path = get_file_path("players.json")
         self.menu = menu
-        self.tournament_file_path = tournament_file_path
-        self.players_file_path = players_file_path
 
     def save_tournament(self):
         data = self.tournament.to_dict()
@@ -22,8 +23,8 @@ class TournamentCommand(Command):
 
 
 class LoadTournamentCommand(TournamentCommand):
-    def __init__(self, tournament, menu, tournament_file_path, all_players):
-        super().__init__(tournament, menu=menu, tournament_file_path=tournament_file_path)
+    def __init__(self, tournament, all_players, menu):
+        super().__init__(tournament, menu=menu)
         self.all_players = all_players
 
     def execute(self):
@@ -104,8 +105,8 @@ class AddDescriptionCommand(TournamentCommand):
 
 
 class AddPlayersCommand(TournamentCommand):
-    def __init__(self, tournament, players, tournament_file_path=None, players_file_path=None):
-        super().__init__(tournament, tournament_file_path=tournament_file_path, players_file_path=players_file_path)
+    def __init__(self, tournament, players):
+        super().__init__(tournament)
         self.players = players
 
     def execute(self):
@@ -138,9 +139,6 @@ class UpdateNumberOfRoundsCommand(TournamentCommand):
 
 
 class LoadAllPlayersCommand(Command):
-    def __init__(self, players_file_path):
-        self.players_file_path = players_file_path
-
     def execute(self):
         try:
             if self.players_file_path is None:
