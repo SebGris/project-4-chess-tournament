@@ -22,12 +22,8 @@ class ControllerTournament():
 
     # Méthodes de gestion de l'état
     def new_tournament(self):
-        command = NewTournamentCommand(
-            self.tournament, self.menu, self.view, self.tournaments_file_path
-        )
-        response = command.execute()
-        self.view.display_message(response)
-        if response.lower() == 'oui':
+        self.__execute_command(NewTournamentCommand)
+        if self.view.get_user_confirmation("Voulez-vous ajouter des joueurs ?"):
             self.add_players()
 
     def add_description(self):
@@ -87,25 +83,6 @@ class ControllerTournament():
         message = self.__get_pairs_message(self.tournament.current_round)
         self.view.display_message(message)
 
-    # def start_tournament_old(self):
-    #     while not self.tournament.is_complete():
-    #         round_instance = Round(
-    #             self.tournament.current_round,
-    #             self.tournament.players,
-    #             self.previous_matches
-    #         )
-    #         self.__record_results(round_instance)
-    #         round_instance.end_round()
-    #         for match in round_instance.matches:
-    #             print(match)
-    #         self.previous_matches.extend(
-    #             round_instance.get_played_matches()
-    #         )
-    #         self.tournament.rounds.append(round_instance)
-    #         self.tournament.current_round += 1
-    #     self.save_tournament(save_with_players=True)
-    #     self.view.display_result(self.tournament.players)
-
     # Méthodes d'accès
     # Méthodes d'affichage
     def display_tournament(self):
@@ -116,20 +93,6 @@ class ControllerTournament():
             for i in range(len(self.tournament.rounds))
          )
         self.view.display_message(message + rounds_data)
-
-    # def display_tournament_result(self):
-    #     """Affiche les résultats du tournoi."""
-    #     self.view.show_message("Résultats du tournoi :")
-    #     self.tournament.display_result()
-
-    # def display_tournament_players(self):
-    #     """Displays the list of players registered for the tournament."""
-    #     if self.tournament is None:
-    #         self.view.display_message(
-    #             "Aucun tournoi en cours. Créez un tournoi d'abord."
-    #             )
-    #         return
-    #     self.view.display_players(self.tournament.players)
 
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
@@ -196,3 +159,8 @@ class ControllerTournament():
             f"{current_round.name} avec les paires suivantes:\n"
             f"{pairs_message}"
         )
+    
+    def __execute_command(self, command_class, *args):
+        command = command_class(self.tournament, self.menu, self.view, self.tournaments_file_path, *args)
+        message = command.execute()
+        self.view.display_message(message)

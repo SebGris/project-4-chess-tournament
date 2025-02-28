@@ -43,10 +43,13 @@ class View(BaseView):
             input("Entrez le nombre de tours du tournoi (par défaut 4): ") or 4
         )
 
-    def ask_to_add_players(self):
-        return input(
-            "Voulez-vous saisir les joueurs maintenant ? (oui/non) : "
-        )
+    def get_user_confirmation(self, prompt):
+        while True:
+            response = input(f"{prompt} (oui/non): ").strip().lower()
+            if response in ["oui", "non"]:
+                return response == "oui"
+            else:
+                self.display_message("Réponse invalide. Veuillez répondre par 'oui' ou 'non'.")
 
     def get_player_data(self):
         player_data = input(
