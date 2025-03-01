@@ -19,16 +19,11 @@ class ControllerTournament():
 
     # Méthodes de gestion de l'état
     def new_tournament(self):
-        command=NewTournamentCommand(self.tournament, self.view, menu=self.menu)
-        message = command.execute()
-        self.view.display_message(message)
-        if self.view.get_user_confirmation("Voulez-vous ajouter des joueurs ?"):
+        self.__execute_command(NewTournamentCommand, self.view, self.menu)
+        if self.view.get_user_confirmation(
+            "Voulez-vous ajouter des joueurs ?"
+        ):
             self.add_players()
-
-    def add_description(self):
-        command = AddDescriptionCommand(self.tournament, self.view)
-        message = command.execute()
-        self.view.display_message(message)
 
     def add_players(self):
         players = []
@@ -40,19 +35,18 @@ class ControllerTournament():
                 self.view.display_message(f"Joueur {player.full_name} ajouté.")
             else:
                 break
-        command = AddPlayersCommand(self.tournament, players)
-        message = command.execute()
-        self.view.display_message(message)
+        self.__execute_command(AddPlayersCommand, players)
+
+    def add_description(self):
+        self.__execute_command(AddDescriptionCommand, self.view)
 
     def update_number_of_rounds(self):
-        command = UpdateNumberOfRoundsCommand(self.tournament, self.view)
-        message = command.execute()
-        self.view.display_message(message)
+        self.__execute_command(UpdateNumberOfRoundsCommand, self.view)
 
     def load_tournament(self):
-        command = LoadTournamentCommand(self.tournament, self.all_players, menu=self.menu)
-        message = command.execute()
-        self.view.display_message(message)
+        self.__execute_command(
+            LoadTournamentCommand, self.all_players, self.menu
+        )
 
     # Méthodes d'action
     def start_tournament(self):
@@ -101,7 +95,7 @@ class ControllerTournament():
                 match.set_score(0.5, 0.5)
                 match.player1[0].update_score(0.5)
                 match.player2[0].update_score(0.5)
-    
+
     # Méthodes privées
     def __load_all_players(self):
         command = LoadAllPlayersCommand(self.tournament)
@@ -111,7 +105,7 @@ class ControllerTournament():
             for player_data in players_data
         }
         return all_players
-    
+
     def __add_round(self):
         round_name = f"Round {len(self.tournament.rounds) + 1}"
         new_round = Round(round_name)
@@ -147,4 +141,8 @@ class ControllerTournament():
             f"{current_round.name} avec les paires suivantes:\n"
             f"{pairs_message}"
         )
-    
+
+    def __execute_command(self, command_class, *args):
+        command = command_class(self.tournament, *args)
+        message = command.execute()
+        self.view.display_message(message)

@@ -1,5 +1,6 @@
 from commands.command import QuitCommand
 
+
 class MenuStateManager:
     def __init__(self, menu, tournament_controller):
         self.menu = menu
@@ -46,4 +47,7 @@ class MenuStateManager:
                     "command": self.tournament_controller.load_tournament
                 }
             ])
-        self.menu.add_group("Menu Général", [{"label": "Quitter", "command": QuitCommand().execute}])
+        self.menu.add_group(
+            "Menu Général",
+            [{"label": "Quitter", "command": QuitCommand().execute}]
+        )
