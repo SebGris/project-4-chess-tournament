@@ -77,6 +77,10 @@ class ControllerTournament():
          )
         self.view.display_message(message + rounds_data)
 
+    def display_players(self):
+        players = [str(player) for player in self.tournament.players]
+        self.view.display_message("\n".join(players))
+
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")

@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 
 class Player:
@@ -10,7 +11,7 @@ class Player:
         self.last_name = last_name
         self.first_name = first_name
         self.full_name = f"{self.first_name} {self.last_name}"
-        self.birth_date = birth_date
+        self.birth_date = datetime.strptime(birth_date, "%Y-%m-%dT%H:%M:%S") if birth_date else None
         self.id_chess = id_chess
         self.score = score
 
@@ -28,10 +29,8 @@ class Player:
     def __str__(self):
         """Returns a string representation of the player."""
         return (f"{self.full_name} | "
-                f"Né(e) le {self.birth_date} | "
-                f"ID échecs {self.id_chess} | "
-                f"Score {self.score} points | "
-                f"ID {self.id}")
+                f"Né(e) le {self.birth_date.strftime("%d/%m/%Y")} | "
+                f"ID échecs {self.id_chess}")
 
     def to_dict(self):
         """Convert Player object to dictionary."""

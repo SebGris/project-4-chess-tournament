@@ -90,3 +90,8 @@ class View(BaseView):
                 return result
             else:
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
+
+    def display_players(self, players):
+        """Display a list of players."""
+        print("Liste des joueurs :")
+        print(players)
