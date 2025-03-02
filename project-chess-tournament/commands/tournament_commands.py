@@ -131,12 +131,13 @@ class DisplayCommand(Command):
         self.view = view
 
 
-class DisplayRoundCommand(DisplayCommand):
+class DisplayCurrentRoundNoCommand(DisplayCommand):
     def execute(self):
-        return (
-            f"Tour actuel : {self.tournament.current_round}/"
-            f"{self.tournament.number_of_rounds}\n"
-        )
+        round_no = {
+            "current_round": self.tournament.current_round,
+            "number_of_rounds": self.tournament.number_of_rounds
+            }
+        self.view.display_current_round_no(round_no)
 
 
 class DisplayPlayersCommand(DisplayCommand):

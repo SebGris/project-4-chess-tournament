@@ -115,4 +115,8 @@ class View(BaseView):
         print(f"Date : du {tournament['start_date']} "
               f"au {tournament['end_date']}")
         print(f"Description : {tournament['description']}")
-        print(f"Nombre de tours: {tournament['number_of_rounds']}")
+        print(f"Nombre de tours : {tournament['number_of_rounds']}")
+
+    def display_current_round_no(self, round_no):
+        print(f"N° tour actuel : {round_no['current_round']}/"
+              f"{round_no['number_of_rounds']}")
