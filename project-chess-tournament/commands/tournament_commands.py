@@ -131,7 +131,7 @@ class DisplayCommand(Command):
         self.view = view
 
 
-class DisplayTournamentCommand(TournamentCommand):
+class DisplayTournamentCommand(DisplayCommand):
     def execute(self):
         players_data = ', '.join(
             player.full_name for player in self.tournament.players

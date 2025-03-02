@@ -69,7 +69,7 @@ class ControllerTournament():
     # Méthodes d'accès
     # Méthodes d'affichage
     def display_tournament(self):
-        command = DisplayTournamentCommand(self.tournament)
+        command = DisplayTournamentCommand(self.tournament, self.view)
         message = command.execute()
         rounds_data = '\n'.join(
             self.__get_pairs_message(i + 1)
