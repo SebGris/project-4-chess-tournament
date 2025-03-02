@@ -86,12 +86,21 @@ class View(BaseView):
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
     # Méthodes d'affichage
-    def display_message(message):
+    def display_message(self, message):
         """Displays a generic message."""
         print(message)
 
     def display_invalid_option_message(self):
         print("Option invalide, veuillez réessayer.")
+
+    def display_tournament_start_error(self):
+        print("Le tournoi ne peut pas commencer sans joueurs.")
+
+    def display_even_players_message(self):
+        print("Le nombre de joueurs doit être pair pour commencer le tournoi.")
+
+    def display_add_player_message(self, name):
+        print(f"Joueur {name} ajouté.")
 
     def display_current_round_no(self, round_no):
         print(f"N° tour actuel : {round_no['current_round']}/"

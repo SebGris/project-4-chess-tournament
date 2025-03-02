@@ -31,7 +31,7 @@ class ControllerTournament():
             if player_data:
                 player = Player(**player_data)
                 players.append(player)
-                self.view.display_message(f"Joueur {player.full_name} ajouté.")
+                self.view.display_add_player_message(player.full_name)
             else:
                 break
         self.__execute_command(AddPlayersCommand, players)
@@ -50,20 +50,19 @@ class ControllerTournament():
     # Méthodes d'action
     def start_tournament(self):
         if not self.tournament.players:
-            self.view.display_message(
-                "Le tournoi ne peut pas commencer sans joueurs."
-            )
+            self.view.display_tournament_start_error()
             return
-        if len(self.tournament.players) % 2 != 0:
-            self.view.display_message(
-                "Le nombre de joueurs doit être pair "
-                "pour commencer le tournoi."
-            )
+        if self.check_players_count(self.tournament.players):
+            self.view.display_even_players_message()
             return
         self.__add_round()
         self.tournament.current_round += 1
         command = DisplayPlayerPairsCommand(self.tournament, self.view)
         command.execute()
+
+    def check_players_count(self, players_count):
+        """Checks if the number of players is odd."""
+        return players_count % 2 != 0
 
     # Méthodes d'accès
     # Méthodes d'affichage

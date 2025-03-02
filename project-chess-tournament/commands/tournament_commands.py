@@ -151,7 +151,7 @@ class DisplayPlayersCommand(DisplayCommand):
         players_data = [
             {
                 "full_name": player.full_name,
-                "birth_date": player.birth_date.strftime("%d/%m/%Y"),
+                "birth_date": player.formatted_birth_date(),
                 "id_chess": player.id_chess
             }
             for player in self.tournament.players
