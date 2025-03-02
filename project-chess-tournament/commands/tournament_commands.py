@@ -142,20 +142,20 @@ class DisplayCurrentRoundNoCommand(DisplayCommand):
 
 class DisplayPlayerPairsCommand(DisplayCommand):
     def execute(self):
-        (round_name, pairs) = self.tournament.get_current_pairs_players()
+        round_name, pairs = self.tournament.get_current_pairs_players()
         self.view.display_player_pairs(round_name, pairs)
 
 
 class DisplayPlayersCommand(DisplayCommand):
     def execute(self):
-        # Transforms Player objects into displayable data for the View.
-        players_data = []
-        for player in self.tournament.players:
-            players_data.append({
+        players_data = [
+            {
                 "full_name": player.full_name,
                 "birth_date": player.birth_date.strftime("%d/%m/%Y"),
                 "id_chess": player.id_chess
-            })
+            }
+            for player in self.tournament.players
+        ]
         self.view.display_players(players_data)
 
 
