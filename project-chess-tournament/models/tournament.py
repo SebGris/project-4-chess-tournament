@@ -44,8 +44,8 @@ class Tournament:
 
     def update_scores(self, match_results):
         for match in match_results:
-            player1_id, player1_score = match[0]
-            player2_id, player2_score = match[1]
+            player1_id, player1_score = match.get_player1()
+            player2_id, player2_score = match.get_player2()
             for player in self.players:
                 if str(player.id) == player1_id:
                     player.score += player1_score
@@ -57,13 +57,13 @@ class Tournament:
         return current_round.get_pairs_players()
 
     def get_current_round_no(self):
-        for index, round in enumerate(self.tournament.rounds):
+        for index, round in enumerate(self.rounds):
             if round.is_round_finished() is False:
                 return index + 1
         return 0
 
     def get_current_round(self):
-        for round in self.tournament.rounds:
+        for round in self.rounds:
             if round.is_round_finished() is False:
                 return round
         return None

@@ -112,6 +112,24 @@ class AddPlayersCommand(TournamentCommand):
         return f"Joueurs ajoutés et {save_message}"
 
 
+class RecordResultsCommand(TournamentCommand):
+    def execute(self):
+        round_instance = self.tournament.get_current_round()
+        self.view.display_record_results_message(round_instance.name)
+        for match in round_instance.matches:
+            self.view.display_match_summary(match.get_player_full_names())
+            result = self.view.get_match_result()
+            if result == "1":
+                match.set_score(1, 0)
+            elif result == "2":
+                match.set_score(0, 1)
+            elif result == "0":
+                match.set_score(0.5, 0.5)
+        self.tournament.update_scores(round_instance.matches)
+        round_instance.end_round()
+        return "Résultats enregistrés"
+
+
 class UpdateNumberOfRoundsCommand(TournamentCommand):
     def execute(self):
         number_of_rounds = self.view.get_tournament_number_of_rounds()
@@ -165,6 +183,17 @@ class DisplayPlayersNamesCommand(DisplayCommand):
             player.full_name for player in self.tournament.players
         ]
         self.view.display_players_full_names(players_names)
+
+
+class DisplayCurrentRound(DisplayCommand):
+    def execute(self):
+        current_round = self.tournament.get_current_round()
+        round = {
+            "name": current_round.name,
+            "start_date": current_round.start_datetime,
+            "end_date": current_round.end_datetime
+        }
+        self.view.display_round_info(round)
 
 
 class DisplayTournamentCommand(DisplayCommand):

@@ -109,6 +109,10 @@ class View(BaseView):
         print(f"N° tour actuel : {round_no['current_round']}/"
               f"{round_no['number_of_rounds']}")
 
+    def display_match_summary(self, match):
+        """Returns a summary of a match."""
+        print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
+
     def display_menu(self, menu):
         """Display a menu with a title and items."""
         index = 1
@@ -144,6 +148,13 @@ class View(BaseView):
 
     def display_record_results_message(self, round_name):
         print(f"Enregistrement des résultats du {round_name}:")
+
+    def display_round_info(self, round):
+        """Display information about a round."""
+        print(f"--- {round['name']} ---")
+        if round['start_date']:
+            print(f"Date de début : {round['start_date']}")
+        print(f"Date de fin : {round['end_date'] or 'tour en cours'}")
 
     def display_tournament(self, tournament):
         """Display tournament information."""

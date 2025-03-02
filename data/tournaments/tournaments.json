@@ -1,5 +1,5 @@
 {
-    "id": "116d2b42-b529-491a-bb0b-2c939b865726",
+    "id": "b37da68e-c87f-41f6-8203-9cdf5946e53b",
     "name": "Tournoi de test",
     "location": "ici",
     "start_date": "15/10/2024",
@@ -25,7 +25,7 @@
                         "last_name": "Holder",
                         "first_name": "Daugherty"
                     },
-                    "player1_score": 0,
+                    "player1_score": 1,
                     "player2": {
                         "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
                         "last_name": "Bartlett",
@@ -39,13 +39,13 @@
                         "last_name": "Herrera",
                         "first_name": "Ivy"
                     },
-                    "player1_score": 0,
+                    "player1_score": 0.5,
                     "player2": {
                         "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
                         "last_name": "Russo",
                         "first_name": "Jacklyn"
                     },
-                    "player2_score": 0
+                    "player2_score": 0.5
                 },
                 {
                     "player1": {
@@ -59,7 +59,7 @@
                         "last_name": "Harvey",
                         "first_name": "Brady"
                     },
-                    "player2_score": 0
+                    "player2_score": 1
                 },
                 {
                     "player1": {
@@ -67,7 +67,7 @@
                         "last_name": "Hull",
                         "first_name": "Geraldine"
                     },
-                    "player1_score": 0,
+                    "player1_score": 1,
                     "player2": {
                         "id": "812160aa-8e0a-453a-a345-80335d77eb59",
                         "last_name": "Thomas",
@@ -77,7 +77,7 @@
                 }
             ],
             "start_datetime": "2025-02-24T16:37:24.669637",
-            "end_datetime": null
+            "end_datetime": "2025-03-03T00:25:32.251234"
         }
     ],
     "number_of_rounds": 4

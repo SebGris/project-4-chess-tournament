@@ -48,7 +48,7 @@ class Round:
 
     def end_round(self):
         """Marks the lap as completed and records the end time."""
-        self.end_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.end_datetime = datetime.now()
 
     def is_round_finished(self):
         """Returns True if the round is completed, False otherwise."""

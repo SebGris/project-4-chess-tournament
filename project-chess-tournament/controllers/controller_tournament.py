@@ -1,9 +1,10 @@
 from commands.tournament_commands import (
-    AddDescriptionCommand, AddPlayersCommand, DisplayCurrentRoundNoCommand,
-    DisplayPlayerPairsCommand, DisplayPlayersCommand,
-    DisplayPlayersNamesCommand, DisplayTournamentCommand,
-    LoadAllPlayersCommand, LoadTournamentCommand, NewTournamentCommand,
-    SaveTournamentCommand, UpdateNumberOfRoundsCommand
+    AddDescriptionCommand, AddPlayersCommand, DisplayCurrentRound,
+    DisplayCurrentRoundNoCommand, DisplayPlayerPairsCommand,
+    DisplayPlayersCommand, DisplayPlayersNamesCommand,
+    DisplayTournamentCommand, LoadAllPlayersCommand, LoadTournamentCommand,
+    NewTournamentCommand, RecordResultsCommand, SaveTournamentCommand,
+    UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
 from models.player import Player
@@ -59,14 +60,8 @@ class ControllerTournament():
         self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def record_results(self):
-        """Records the results of matches in the current round."""
-        round_instance = self.tournament.get_current_round()
-        self.view.display_record_results_message(round_instance.name)
-        for match in round_instance.matches:
-            result = self.view.get_match_result(match)
-            match.set_result(result)
+        self.__execute_command(RecordResultsCommand, self.view)
         self.__save_tournament()
-        self.view.display_message("Résultats enregistrés")
 
     # Méthodes d'accès
     # Méthodes d'affichage
@@ -74,6 +69,7 @@ class ControllerTournament():
         self.__execute_display_commands(
             DisplayTournamentCommand,
             DisplayPlayersNamesCommand,
+            DisplayCurrentRound,
             DisplayCurrentRoundNoCommand,
             DisplayPlayerPairsCommand
         )
