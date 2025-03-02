@@ -52,52 +52,34 @@ class ControllerTournament():
         if not self.tournament.players:
             self.view.display_tournament_start_error()
             return
-        if self.check_players_count(self.tournament.players):
+        if self.__is_odd_number_of_players():
             self.view.display_even_players_message()
             return
         self.__add_round()
         self.tournament.current_round += 1
-        command = DisplayPlayerPairsCommand(self.tournament, self.view)
-        command.execute()
-
-    def check_players_count(self, players_count):
-        """Checks if the number of players is odd."""
-        return players_count % 2 != 0
-
-    # Méthodes d'accès
-    # Méthodes d'affichage
-    def display_tournament(self):
-        command = DisplayTournamentCommand(self.tournament, self.view)
-        command.execute()
-        command = DisplayPlayersNamesCommand(self.tournament, self.view)
-        command.execute()
-        command = DisplayCurrentRoundNoCommand(self.tournament, self.view)
-        command.execute()
-        command = DisplayPlayerPairsCommand(self.tournament, self.view)
-        command.execute()
-
-    def display_players(self):
-        command = DisplayPlayersCommand(self.tournament, self.view)
-        command.execute()
+        self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""
         print(f"\nEnregistrement des résultats du {round_instance.name}:")
         for match in round_instance.matches:
-            player1_name = match.player1[0].full_name()
-            player2_name = match.player2[0].full_name()
-            print(f"\n{player1_name} vs {player2_name}")
-            result = self.view.get_match_result()
-            if result == "1":
-                match.set_score(1, 0)
-                match.player1[0].update_score(1)
-            elif result == "2":
-                match.set_score(0, 1)
-                match.player2[0].update_score(1)
-            elif result == "0":
-                match.set_score(0.5, 0.5)
-                match.player1[0].update_score(0.5)
-                match.player2[0].update_score(0.5)
+            result = self.view.get_match_result(match)
+            match.set_result(result)
+        self.__save_tournament()
+        self.view.display_message("Résultats enregistrés")
+
+    # Méthodes d'accès
+    # Méthodes d'affichage
+    def display_tournament(self):
+        self.__execute_display_commands(
+            DisplayTournamentCommand,
+            DisplayPlayersNamesCommand,
+            DisplayCurrentRoundNoCommand,
+            DisplayPlayerPairsCommand
+        )
+
+    def display_players(self):
+        self.__execute_display_commands(DisplayPlayersCommand)
 
     # Méthodes privées
     def __load_all_players(self):
@@ -125,11 +107,23 @@ class ControllerTournament():
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)
-        save_command = SaveTournamentCommand(self.tournament)
-        save_message = save_command.execute()
-        self.view.display_message(f"{round_name} ajouté et {save_message}")
+        self.__save_tournament()
+        self.view.display_message(f"{round_name} ajouté")
 
     def __execute_command(self, command_class, *args):
         command = command_class(self.tournament, *args)
         message = command.execute()
         self.view.display_message(message)
+
+    def __execute_display_commands(self, *command_classes):
+        for command_class in command_classes:
+            command = command_class(self.tournament, self.view)
+            command.execute()
+
+    def __is_odd_number_of_players(self):
+        return len(self.tournament.players) % 2 != 0
+
+    def __save_tournament(self):
+        save_command = SaveTournamentCommand(self.tournament)
+        save_message = save_command.execute()
+        self.view.display_message(save_message)
