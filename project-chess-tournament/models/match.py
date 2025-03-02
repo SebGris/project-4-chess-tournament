@@ -27,6 +27,10 @@ class Match:
             "player2_score": self.player2_score
         }
 
+    def get_player_full_names(self):
+        """Returns a tuple of the full names of player1 and player2."""
+        return self.player1.full_name, self.player2.full_name
+
     def __str__(self):
         """Returns a text representation of the match."""
         return (

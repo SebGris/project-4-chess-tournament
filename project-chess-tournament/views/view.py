@@ -81,6 +81,10 @@ class View(BaseView):
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
     # Méthodes d'affichage
+    def display_current_round_no(self, round_no):
+        print(f"N° tour actuel : {round_no['current_round']}/"
+              f"{round_no['number_of_rounds']}")
+
     def display_menu(self, menu):
         """Display a menu with a title and items."""
         index = 1
@@ -91,6 +95,12 @@ class View(BaseView):
                 print(f"{index}. {item['label']}")
                 index += 1
             print("=" * len(menu_group_header))
+
+    def display_player_pairs(self, round_name, pairs):
+        """Display pairs of players for a round."""
+        print(f"{round_name} avec les paires suivantes :")
+        for index, pair in enumerate(pairs, start=1):
+            print(f"{index}. {pair[0]} vs {pair[1]}")
 
     def display_players(self, players):
         """Display a list of players."""
@@ -110,13 +120,10 @@ class View(BaseView):
 
     def display_tournament(self, tournament):
         """Display tournament information."""
+        print("--- Informations sur le tournoi ---")
         print(f"Tournoi : {tournament['name']} | "
               f"Lieu : {tournament['location']}")
         print(f"Date : du {tournament['start_date']} "
               f"au {tournament['end_date']}")
         print(f"Description : {tournament['description']}")
         print(f"Nombre de tours : {tournament['number_of_rounds']}")
-
-    def display_current_round_no(self, round_no):
-        print(f"N° tour actuel : {round_no['current_round']}/"
-              f"{round_no['number_of_rounds']}")

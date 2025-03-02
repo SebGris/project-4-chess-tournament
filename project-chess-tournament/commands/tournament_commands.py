@@ -140,6 +140,12 @@ class DisplayCurrentRoundNoCommand(DisplayCommand):
         self.view.display_current_round_no(round_no)
 
 
+class DisplayPlayerPairsCommand(DisplayCommand):
+    def execute(self):
+        (round_name, pairs) = self.tournament.get_current_pairs_players()
+        self.view.display_player_pairs(round_name, pairs)
+
+
 class DisplayPlayersCommand(DisplayCommand):
     def execute(self):
         # Transforms Player objects into displayable data for the View.

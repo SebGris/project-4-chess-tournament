@@ -1,8 +1,9 @@
 from commands.tournament_commands import (
     AddDescriptionCommand, AddPlayersCommand, DisplayCurrentRoundNoCommand,
-    DisplayPlayersCommand, DisplayPlayersNamesCommand,
-    DisplayTournamentCommand, LoadAllPlayersCommand, LoadTournamentCommand,
-    NewTournamentCommand, SaveTournamentCommand, UpdateNumberOfRoundsCommand
+    DisplayPlayerPairsCommand, DisplayPlayersCommand,
+    DisplayPlayersNamesCommand, DisplayTournamentCommand,
+    LoadAllPlayersCommand, LoadTournamentCommand, NewTournamentCommand,
+    SaveTournamentCommand, UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
 from models.player import Player
@@ -63,8 +64,8 @@ class ControllerTournament():
             return
         self.__add_round()
         self.tournament.current_round += 1
-        message = self.__get_pairs_message(self.tournament.current_round)
-        self.view.display_message(message)
+        command = DisplayPlayerPairsCommand(self.tournament, self.view)
+        command.execute()
 
     # Méthodes d'accès
     # Méthodes d'affichage
@@ -75,11 +76,8 @@ class ControllerTournament():
         command.execute()
         command = DisplayCurrentRoundNoCommand(self.tournament, self.view)
         command.execute()
-        rounds_data = '\n'.join(
-            self.__get_pairs_message(i + 1)
-            for i in range(len(self.tournament.rounds))
-         )
-        self.view.display_message(rounds_data)
+        command = DisplayPlayerPairsCommand(self.tournament, self.view)
+        command.execute()
 
     def display_players(self):
         command = DisplayPlayersCommand(self.tournament, self.view)
@@ -133,22 +131,6 @@ class ControllerTournament():
         save_command = SaveTournamentCommand(self.tournament)
         save_message = save_command.execute()
         self.view.display_message(f"{round_name} ajouté et {save_message}")
-
-    def __get_pairs_message(self, round_number):
-        if round_number > len(self.tournament.rounds) or round_number < 1:
-            return "Numéro de round invalide."
-        current_round = self.tournament.rounds[round_number - 1]
-        pairs = [
-            (match.player1.full_name, match.player2.full_name)
-            for match in current_round.matches
-        ]
-        pairs_message = "\n".join(
-            [f"{pair[0]} vs {pair[1]}" for pair in pairs]
-        )
-        return (
-            f"{current_round.name} avec les paires suivantes:\n"
-            f"{pairs_message}"
-        )
 
     def __execute_command(self, command_class, *args):
         command = command_class(self.tournament, *args)

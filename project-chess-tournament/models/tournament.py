@@ -52,6 +52,10 @@ class Tournament:
                 elif str(player.id) == player2_id:
                     player.score += player2_score
 
+    def get_current_pairs_players(self):
+        current_round = self.rounds[self.current_round]
+        return current_round.get_pairs_players()
+
     def is_complete(self):
         """Checks if the tournament is over."""
         return self.current_round > self.number_of_rounds

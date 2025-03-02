@@ -50,6 +50,16 @@ class Round:
         """Marks the lap as completed and records the end time."""
         self.end_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
+    def get_pairs_players(self):
+        """Returns the pairs of players (full name)."""
+        return (
+            self.name,
+            [
+                match.get_player_full_names()
+                for match in self.matches
+            ]
+        )
+
     def to_dict(self):
         """Convert Round object to dictionary."""
         return {
