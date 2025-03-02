@@ -56,12 +56,12 @@ class ControllerTournament():
             self.view.display_even_players_message()
             return
         self.__add_round()
-        self.tournament.current_round += 1
         self.__execute_display_commands(DisplayPlayerPairsCommand)
 
-    def record_results(self, round_instance):
+    def record_results(self):
         """Records the results of matches in the current round."""
-        print(f"\nEnregistrement des résultats du {round_instance.name}:")
+        round_instance = self.tournament.get_current_round()
+        self.view.display_record_results_message(round_instance.name)
         for match in round_instance.matches:
             result = self.view.get_match_result(match)
             match.set_result(result)

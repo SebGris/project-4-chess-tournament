@@ -56,6 +56,18 @@ class Tournament:
         current_round = self.rounds[self.current_round]
         return current_round.get_pairs_players()
 
+    def get_current_round_no(self):
+        for index, round in enumerate(self.tournament.rounds):
+            if round.is_round_finished() is False:
+                return index + 1
+        return 0
+
+    def get_current_round(self):
+        for round in self.tournament.rounds:
+            if round.is_round_finished() is False:
+                return round
+        return None
+
     def is_complete(self):
         """Checks if the tournament is over."""
         return self.current_round > self.number_of_rounds

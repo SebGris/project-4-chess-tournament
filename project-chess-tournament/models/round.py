@@ -50,6 +50,10 @@ class Round:
         """Marks the lap as completed and records the end time."""
         self.end_datetime = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
+    def is_round_finished(self):
+        """Returns True if the round is completed, False otherwise."""
+        return self.end_datetime is not None
+
     def get_pairs_players(self):
         """Returns the pairs of players (full name)."""
         return (

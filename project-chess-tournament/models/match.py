@@ -34,6 +34,6 @@ class Match:
     def __str__(self):
         """Returns a text representation of the match."""
         return (
-            f"{self.player1[0]} vs {self.player2[0]} | "
-            f"Scores: {self.player1[1]} - {self.player2[1]}"
+            f"{self.player1.full_name} vs {self.player2.full_name} | "
+            f"Scores: {self.player1_score} - {self.player1_score}"
         )

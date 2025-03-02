@@ -78,7 +78,10 @@ class View(BaseView):
         """Asks the user to enter the result of a match."""
         while True:
             result = self.input(
-                "Résultat (1: Joueur 1 gagne, 2: Joueur 2 gagne, 0: Nul) :"
+                "Résultat ("
+                "1 si le joueur 1 gagne, "
+                "2 si le joueur 2 gagne, "
+                "0 si match nul) :"
             )
             if result in {"1", "2", "0"}:
                 return result
@@ -138,6 +141,9 @@ class View(BaseView):
         """Display players' full names."""
         print(f"Joueurs : {', '.join(players_names)}")
         print(f"Nombre de joueurs : {len(players_names)}")
+
+    def display_record_results_message(self, round_name):
+        print(f"Enregistrement des résultats du {round_name}:")
 
     def display_tournament(self, tournament):
         """Display tournament information."""
