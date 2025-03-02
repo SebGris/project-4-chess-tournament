@@ -13,7 +13,9 @@ class ControllerMenu():
         self.tournament_controller = ControllerTournament(
             self.tournament, self.menu, self.view
         )
-        self.menu_state_manager = MenuStateManager(self.menu, self.tournament_controller)
+        self.menu_state_manager = MenuStateManager(
+            self.menu, self.tournament_controller
+        )
 
     def run(self):
         while True:
@@ -33,6 +35,4 @@ class ControllerMenu():
                 else:
                     raise ValueError("Invalid choice")
             except (IndexError, ValueError):
-                self.view.display_message(
-                    "Option invalide, veuillez réessayer."
-                )
+                self.view.display_invalid_option_message()

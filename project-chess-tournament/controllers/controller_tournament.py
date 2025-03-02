@@ -21,9 +21,7 @@ class ControllerTournament():
     # Méthodes de gestion de l'état
     def new_tournament(self):
         self.__execute_command(NewTournamentCommand, self.view, self.menu)
-        if self.view.get_user_confirmation(
-            "Voulez-vous ajouter des joueurs ?"
-        ):
+        if self.view.request_player_addition_confirmation():
             self.add_players()
 
     def add_players(self):

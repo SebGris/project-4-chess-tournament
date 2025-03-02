@@ -5,63 +5,68 @@ from views.base_view import BaseView
 class View(BaseView):
     # Méthodes d'accès
     def get_user_choice(self):
-        return input("Choisissez une option : ")
+        return self.input("Choisissez une option :")
 
     def get_tournament_file_path(self):
-        return input("Entrez le chemin du fichier JSON du tournoi: ")
+        return self.input("Entrez le chemin du fichier JSON du tournoi:")
 
     def get_players_file_path(self):
-        return input("Entrez le chemin du fichier JSON des joueurs: ")
+        return self.input("Entrez le chemin du fichier JSON des joueurs:")
 
     def get_tournament_name(self):
-        return input("Entrez le nom du tournoi : ")
+        return self.input("Entrez le nom du tournoi :")
 
     def get_tournament_location(self):
-        return input("Entrez le lieu du tournoi : ")
+        return self.input("Entrez le lieu du tournoi :")
 
     def get_tournament_start_date(self):
-        return input("Entrez la date de début du tournoi : ")
+        return self.input("Entrez la date de début du tournoi :")
 
     def get_tournament_end_date(self):
-        return input("Entrez la date de fin du tournoi : ")
+        return self.input("Entrez la date de fin du tournoi :")
 
     def get_tournament_description(self):
-        return input("Entrez la description du tournoi : ")
+        return self.input("Entrez la description du tournoi :")
 
     def get_tournament_number_of_rounds(self):
         return int(
-            input("Entrez le nombre de tours du tournoi (par défaut 4): ") or 4
+            self.input(
+                "Entrez le nombre de tours du tournoi (par défaut 4):"
+            ) or 4
         )
+
+    def request_player_addition_confirmation(self):
+        return self.get_user_confirmation("Voulez-vous ajouter des joueurs ?")
 
     def get_user_confirmation(self, prompt):
         while True:
-            response = input(f"{prompt} (oui/non): ").strip().lower()
+            response = self.input(f"{prompt} (oui/non):").lower()
             if response in ["oui", "non"]:
                 return response == "oui"
             else:
-                self.display_message(
+                print(
                     "Réponse invalide. Veuillez répondre par 'oui' ou 'non'."
                 )
 
     def get_player_data(self):
         while True:
-            id_chess = input(
+            id_chess = self.input(
                 "Entrez l'ID échecs "
-                "(format: deux lettres suivies de cinq chiffres) : "
-            ).strip()
+                "(format: deux lettres suivies de cinq chiffres) :"
+            )
             if not id_chess:
                 return None
             if re.match(r'^[A-Z]{2}\d{5}$', id_chess):
                 break
             else:
-                self.display_message(
+                print(
                     "Identifiant invalide. "
                     "Le format doit être composé de deux lettres "
                     "suivies de cinq chiffres."
                 )
-        last_name = input("Entrez le nom de famille : ").strip()
-        first_name = input("Entrez le prénom : ").strip()
-        birth_date = input("Entrez la date de naissance : ").strip()
+        last_name = self.input("Entrez le nom de famille :")
+        first_name = self.input("Entrez le prénom :")
+        birth_date = self.input("Entrez la date de naissance :")
         return {
             "last_name": last_name,
             "first_name": first_name,
@@ -72,8 +77,8 @@ class View(BaseView):
     def get_match_result(self):
         """Asks the user to enter the result of a match."""
         while True:
-            result = self.get_input(
-                "Résultat (1: Joueur 1 gagne, 2: Joueur 2 gagne, 0: Nul) : "
+            result = self.input(
+                "Résultat (1: Joueur 1 gagne, 2: Joueur 2 gagne, 0: Nul) :"
             )
             if result in {"1", "2", "0"}:
                 return result
@@ -81,6 +86,13 @@ class View(BaseView):
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
     # Méthodes d'affichage
+    def display_message(message):
+        """Displays a generic message."""
+        print(message)
+
+    def display_invalid_option_message(self):
+        print("Option invalide, veuillez réessayer.")
+
     def display_current_round_no(self, round_no):
         print(f"N° tour actuel : {round_no['current_round']}/"
               f"{round_no['number_of_rounds']}")

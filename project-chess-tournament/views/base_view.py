@@ -11,24 +11,19 @@ class BaseView:
         os.system("cls")
 
     @staticmethod
-    def display_message(message):
-        """Displays a generic message."""
-        print(message)
-
-    @staticmethod
-    def get_input(prompt):
+    def input(prompt):
         """Requests a user input with a specific message."""
         prompt = prompt.rstrip() + " "
         return input(prompt).strip()
 
     @staticmethod
-    def get_input_date(prompt):
+    def input_date(prompt):
         """
         Requests and validates a date in DD/MM/YYYY format.
         Returns a date formatted as text.
         """
         while True:
-            date_input = BaseView.get_input(prompt)
+            date_input = BaseView.input(prompt)
             try:
                 date_object = datetime.strptime(date_input, "%d/%m/%Y")
                 return date_object.strftime("%d/%m/%Y")
