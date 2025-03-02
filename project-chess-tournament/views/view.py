@@ -103,7 +103,16 @@ class View(BaseView):
                       f"Né(e) le {player['birth_date']} | "
                       f"ID échecs {player['id_chess']}")
 
-    def Display_players_full_names(self, players_names):
+    def display_players_full_names(self, players_names):
         """Display players' full names."""
         print(f"Joueurs : {', '.join(players_names)}")
         print(f"Nombre de joueurs : {len(players_names)}")
+
+    def display_tournament(self, tournament):
+        """Display tournament information."""
+        print(f"Tournoi : {tournament['name']} | "
+              f"Lieu : {tournament['location']}")
+        print(f"Date : du {tournament['start_date']} "
+              f"au {tournament['end_date']}")
+        print(f"Description : {tournament['description']}")
+        print(f"Nombre de tours: {tournament['number_of_rounds']}")

@@ -1,6 +1,6 @@
 from commands.tournament_commands import (
     AddDescriptionCommand, AddPlayersCommand, DisplayPlayersCommand,
-    DisplayPlayersNamesCommand, DisplayTournamentCommand,
+    DisplayPlayersNamesCommand, DisplayRoundCommand, DisplayTournamentCommand,
     LoadAllPlayersCommand, LoadTournamentCommand, NewTournamentCommand,
     SaveTournamentCommand, UpdateNumberOfRoundsCommand
 )
@@ -70,9 +70,11 @@ class ControllerTournament():
     # Méthodes d'affichage
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament, self.view)
-        message = command.execute()
+        command.execute()
         command = DisplayPlayersNamesCommand(self.tournament, self.view)
         command.execute()
+        command = DisplayRoundCommand(self.tournament, self.view)
+        message = command.execute()
         rounds_data = '\n'.join(
             self.__get_pairs_message(i + 1)
             for i in range(len(self.tournament.rounds))

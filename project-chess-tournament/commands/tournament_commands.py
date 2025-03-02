@@ -131,15 +131,9 @@ class DisplayCommand(Command):
         self.view = view
 
 
-class DisplayTournamentCommand(DisplayCommand):
+class DisplayRoundCommand(DisplayCommand):
     def execute(self):
         return (
-            f"Tournoi : {self.tournament.name} | Lieu : "
-            f"{self.tournament.location}\n"
-            f"Date : du {self.tournament.start_date} au "
-            f"{self.tournament.end_date}\n"
-            f"Description : {self.tournament.description}\n"
-            f"Nombre de tours: {self.tournament.number_of_rounds}\n"
             f"Tour actuel : {self.tournament.current_round}/"
             f"{self.tournament.number_of_rounds}\n"
         )
@@ -163,4 +157,17 @@ class DisplayPlayersNamesCommand(DisplayCommand):
         players_names = [
             player.full_name for player in self.tournament.players
         ]
-        self.view.Display_players_full_names(players_names)
+        self.view.display_players_full_names(players_names)
+
+
+class DisplayTournamentCommand(DisplayCommand):
+    def execute(self):
+        tournament = {
+            "name": self.tournament.name,
+            "location": self.tournament.location,
+            "start_date": self.tournament.start_date,
+            "end_date": self.tournament.end_date,
+            "description": self.tournament.description,
+            "number_of_rounds": self.tournament.number_of_rounds
+        }
+        self.view.display_tournament(tournament)
