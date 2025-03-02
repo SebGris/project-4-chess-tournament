@@ -102,3 +102,8 @@ class View(BaseView):
                 print(f"{player['full_name']} | "
                       f"Né(e) le {player['birth_date']} | "
                       f"ID échecs {player['id_chess']}")
+
+    def Display_players_full_names(self, players_names):
+        """Display players' full names."""
+        print(f"Joueurs : {', '.join(players_names)}")
+        print(f"Nombre de joueurs : {len(players_names)}")

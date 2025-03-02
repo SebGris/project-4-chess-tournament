@@ -133,16 +133,11 @@ class DisplayCommand(Command):
 
 class DisplayTournamentCommand(DisplayCommand):
     def execute(self):
-        players_data = ', '.join(
-            player.full_name for player in self.tournament.players
-        )
         return (
             f"Tournoi : {self.tournament.name} | Lieu : "
             f"{self.tournament.location}\n"
             f"Date : du {self.tournament.start_date} au "
             f"{self.tournament.end_date}\n"
-            f"Joueurs : {players_data}\n"
-            f"Nombre de joueurs : {len(self.tournament.players)}\n"
             f"Description : {self.tournament.description}\n"
             f"Nombre de tours: {self.tournament.number_of_rounds}\n"
             f"Tour actuel : {self.tournament.current_round}/"
@@ -161,3 +156,11 @@ class DisplayPlayersCommand(DisplayCommand):
                 "id_chess": player.id_chess
             })
         self.view.display_players(players_data)
+
+
+class DisplayPlayersNamesCommand(DisplayCommand):
+    def execute(self):
+        players_names = [
+            player.full_name for player in self.tournament.players
+        ]
+        self.view.Display_players_full_names(players_names)

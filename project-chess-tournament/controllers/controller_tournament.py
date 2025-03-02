@@ -1,8 +1,8 @@
 from commands.tournament_commands import (
-    AddDescriptionCommand, AddPlayersCommand,
-    DisplayPlayersCommand, DisplayTournamentCommand, LoadAllPlayersCommand,
-    LoadTournamentCommand, NewTournamentCommand, SaveTournamentCommand,
-    UpdateNumberOfRoundsCommand
+    AddDescriptionCommand, AddPlayersCommand, DisplayPlayersCommand,
+    DisplayPlayersNamesCommand, DisplayTournamentCommand,
+    LoadAllPlayersCommand, LoadTournamentCommand, NewTournamentCommand,
+    SaveTournamentCommand, UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
 from models.player import Player
@@ -71,6 +71,8 @@ class ControllerTournament():
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament, self.view)
         message = command.execute()
+        command = DisplayPlayersNamesCommand(self.tournament, self.view)
+        command.execute()
         rounds_data = '\n'.join(
             self.__get_pairs_message(i + 1)
             for i in range(len(self.tournament.rounds))
