@@ -67,6 +67,17 @@ class ControllerTournament():
         self.view.display_message(message)
 
     # Méthodes d'accès
+    def get_players_data(self):
+        """Transforms Player objects into displayable data for the View."""
+        players_data = []
+        for player in self.tournament.players:
+            players_data.append({
+                "full_name": player.full_name,
+                "birth_date": player.birth_date.strftime("%d/%m/%Y"),
+                "id_chess": player.id_chess
+            })
+        return players_data
+
     # Méthodes d'affichage
     def display_tournament(self):
         command = DisplayTournamentCommand(self.tournament)
@@ -78,8 +89,8 @@ class ControllerTournament():
         self.view.display_message(message + rounds_data)
 
     def display_players(self):
-        players = [str(player) for player in self.tournament.players]
-        self.view.display_message("\n".join(players))
+        players = self.get_players_data()
+        self.view.display_players(players)
 
     def record_results(self, round_instance):
         """Records the results of matches in the current round."""

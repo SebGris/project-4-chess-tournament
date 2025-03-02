@@ -3,18 +3,7 @@ from views.base_view import BaseView
 
 
 class View(BaseView):
-    def display_menu(self, menu):
-        """Display a menu with a title and items."""
-        # self.clear_console()
-        index = 1
-        for group in menu.get_groups():
-            menu_group_header = f"=== {group['title']} ==="
-            print(menu_group_header)
-            for item in group['items']:
-                print(f"{index}. {item['label']}")
-                index += 1
-            print("=" * len(menu_group_header))
-
+    # Méthodes d'accès
     def get_user_choice(self):
         return input("Choisissez une option : ")
 
@@ -91,7 +80,25 @@ class View(BaseView):
             else:
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
+    # Méthodes d'affichage
+    def display_menu(self, menu):
+        """Display a menu with a title and items."""
+        index = 1
+        for group in menu.get_groups():
+            menu_group_header = f"=== {group['title']} ==="
+            print(menu_group_header)
+            for item in group['items']:
+                print(f"{index}. {item['label']}")
+                index += 1
+            print("=" * len(menu_group_header))
+
     def display_players(self, players):
         """Display a list of players."""
-        print("Liste des joueurs :")
-        print(players)
+        print("--- Liste des joueurs ---")
+        if not players:
+            print("Aucun joueur enregistré.")
+        else:
+            for player in players:
+                print(f"{player['full_name']} | "
+                      f"Né(e) le {player['birth_date']} | "
+                      f"ID échecs {player['id_chess']}")

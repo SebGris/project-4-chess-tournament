@@ -11,7 +11,8 @@ class Player:
         self.last_name = last_name
         self.first_name = first_name
         self.full_name = f"{self.first_name} {self.last_name}"
-        self.birth_date = datetime.strptime(birth_date, "%Y-%m-%dT%H:%M:%S") if birth_date else None
+        self.birth_date = (datetime.strptime(birth_date, "%Y-%m-%dT%H:%M:%S")
+                           if birth_date else None)
         self.id_chess = id_chess
         self.score = score
 
