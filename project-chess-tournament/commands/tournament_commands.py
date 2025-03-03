@@ -117,7 +117,7 @@ class RecordResultsCommand(TournamentCommand):
         round_instance = self.tournament.get_current_round()
         self.view.display_record_results_message(round_instance.name)
         for match in round_instance.matches:
-            self.view.display_match_summary(match.get_player_full_names())
+            self.view.display_match_summary(match.get_player_names())
             result = self.view.get_match_result()
             if result == "1":
                 match.set_score(1, 0)

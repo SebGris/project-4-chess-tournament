@@ -78,10 +78,10 @@ class View(BaseView):
         """Asks the user to enter the result of a match."""
         while True:
             result = self.input(
-                "Résultat ("
+                "Entrez "
                 "1 si le joueur 1 gagne, "
-                "2 si le joueur 2 gagne, "
-                "0 si match nul) :"
+                "2 si le joueur 2 gagne ou "
+                "0 si match nul :"
             )
             if result in {"1", "2", "0"}:
                 return result
