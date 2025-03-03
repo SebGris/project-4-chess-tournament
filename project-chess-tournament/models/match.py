@@ -40,6 +40,6 @@ class Match:
     def __str__(self):
         """Returns a text representation of the match."""
         return (
-            f"{" vs ".join(self.get_player_full_names())} Scores: "
+            f"{' vs '.join(self.get_player_full_names())} Scores: "
             f"{self.player1_score} - {self.player2_score}"
         )
