@@ -59,7 +59,7 @@ class Round:
         return (
             self.name,
             [
-                match.get_player_full_names()
+                match.get_player_names_and_scores()
                 for match in self.matches
             ]
         )

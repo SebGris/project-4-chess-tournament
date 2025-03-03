@@ -128,7 +128,8 @@ class View(BaseView):
         """Display pairs of players for a round."""
         print(f"{round_name} avec les paires suivantes :")
         for index, pair in enumerate(pairs, start=1):
-            print(f"{index}. {pair[0]} vs {pair[1]}")
+            print(f"{index}. {pair[0]} score {pair[2]} vs "
+                  f"{pair[1]} score {pair[3]}")
 
     def display_players(self, players):
         """Display a list of players."""

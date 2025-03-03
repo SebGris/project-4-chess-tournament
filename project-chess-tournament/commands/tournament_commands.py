@@ -60,8 +60,8 @@ class LoadAllPlayersCommand(TournamentCommand):
 
 class SaveTournamentCommand(TournamentCommand):
     def execute(self):
-            return self.save_tournament()
-        
+        return self.save_tournament()
+
 
 class NewTournamentCommand(TournamentCommand):
     def execute(self):

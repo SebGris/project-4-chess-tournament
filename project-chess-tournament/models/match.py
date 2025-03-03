@@ -27,9 +27,14 @@ class Match:
             "player2_score": self.player2_score
         }
 
-    def get_player_full_names(self):
-        """Returns a tuple of the full names of player1 and player2."""
-        return self.player1.full_name, self.player2.full_name
+    def get_player_names_and_scores(self):
+        """Returns a tuple of the full names of player1, player2 and score."""
+        return (
+            self.player1.full_name,
+            self.player2.full_name,
+            self.player1_score,
+            self.player2_score
+        )
 
     def get_player1(self):
         return self.player1.id, self.player1_score
@@ -40,6 +45,6 @@ class Match:
     def __str__(self):
         """Returns a text representation of the match."""
         return (
-            f"{' vs '.join(self.get_player_full_names())} Scores: "
-            f"{self.player1_score} - {self.player2_score}"
+            f"{' vs '.join(self.player1.full_name, self.player2.full_name)}"
+            f" Scores: {self.player1_score} - {self.player2_score}"
         )
