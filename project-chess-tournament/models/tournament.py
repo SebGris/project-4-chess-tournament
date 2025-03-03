@@ -47,12 +47,13 @@ class Tournament:
             player1_id, player1_score = match.get_player1()
             player2_id, player2_score = match.get_player2()
             for player in self.players:
-                if str(player.id) == player1_id:
+                if player.id == player1_id:
                     player.score += player1_score
-                elif str(player.id) == player2_id:
+                elif player.id == player2_id:
                     player.score += player2_score
 
     def get_current_pairs_players(self):
+        print(self.rounds)
         current_round = self.rounds[self.current_round]
         return current_round.get_pairs_players()
 

@@ -77,9 +77,10 @@ class ControllerTournament():
             DisplayTournamentCommand,
             DisplayPlayersNamesCommand,
             DisplayCurrentRound,
-            DisplayCurrentRoundNoCommand,
-            DisplayPlayerPairsCommand
+            DisplayCurrentRoundNoCommand
         )
+        # if not self.tournament.rounds:
+        #     self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def display_players(self):
         self.__execute_display_commands(DisplayPlayersCommand)

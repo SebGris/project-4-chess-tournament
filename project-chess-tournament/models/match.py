@@ -1,7 +1,7 @@
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(self, player1, player2, player1_score=-1, player2_score=-1):
+    def __init__(self, player1, player2, player1_score=0, player2_score=0):
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score

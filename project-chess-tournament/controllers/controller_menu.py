@@ -29,10 +29,12 @@ class ControllerMenu():
                     item for group in self.menu.get_groups()
                     for item in group['items']
                 ]
+                # print(flat_menu)
                 if 0 <= choice_index < len(flat_menu):
                     command = flat_menu[choice_index]["command"]
-                    command()
                 else:
                     raise ValueError("Invalid choice")
             except (IndexError, ValueError):
                 self.view.display_invalid_option_message()
+            else:
+                command()
