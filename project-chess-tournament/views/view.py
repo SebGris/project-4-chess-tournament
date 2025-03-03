@@ -128,8 +128,11 @@ class View(BaseView):
         """Display pairs of players for a round."""
         print(f"{round_name} avec les paires suivantes :")
         for index, pair in enumerate(pairs, start=1):
-            print(f"{index}. {pair[0]} score {pair[2]} vs "
-                  f"{pair[1]} score {pair[3]}")
+            if len(pair) == 2:
+                print(f"{index}. {pair[0]} vs {pair[1]}")
+            else:
+                print(f"{index}. {pair[0]} score {pair[2]} vs "
+                      f"{pair[1]} score {pair[3]}")
 
     def display_players(self, players):
         """Display a list of players."""
@@ -149,6 +152,9 @@ class View(BaseView):
 
     def display_record_results_message(self, round_name):
         print(f"Enregistrement des résultats du {round_name}:")
+
+    def display_no_round(self):
+        print("Aucun tour en cours.")
 
     def display_round_info(self, round):
         """Display information about a round."""

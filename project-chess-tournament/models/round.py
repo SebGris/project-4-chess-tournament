@@ -50,7 +50,7 @@ class Round:
         """Marks the lap as completed and records the end time."""
         self.end_datetime = datetime.now()
 
-    def is_round_finished(self):
+    def is_finished(self):
         """Returns True if the round is completed, False otherwise."""
         return self.end_datetime is not None
 
@@ -60,6 +60,8 @@ class Round:
             self.name,
             [
                 match.get_player_names_and_scores()
+                if match.is_finished()
+                else match.get_player_names()
                 for match in self.matches
             ]
         )

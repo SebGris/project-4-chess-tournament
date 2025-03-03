@@ -58,13 +58,13 @@ class Tournament:
 
     def get_current_round_no(self):
         for index, round in enumerate(self.rounds):
-            if round.is_round_finished() is False:
+            if round.is_finished() is False:
                 return index + 1
         return 0
 
     def get_current_round(self):
         for round in self.rounds:
-            if round.is_round_finished() is False:
+            if round.is_finished() is False:
                 return round
         return None
 

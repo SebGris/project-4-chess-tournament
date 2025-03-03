@@ -56,7 +56,15 @@ class ControllerTournament():
         if self.__is_odd_number_of_players():
             self.view.display_even_players_message()
             return
-        self.__add_round()
+        for round in self.tournament.rounds:
+            self.tournament.update_scores(round.matches)
+        print(self.tournament.players)
+        if self.tournament.number_of_rounds > len(self.tournament.rounds):
+            current_round = self.tournament.get_current_round()
+            if current_round is None:
+                self.__add_round()
+            elif current_round.is_finished():
+                self.__add_round()
         self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def record_results(self):
@@ -95,10 +103,14 @@ class ControllerTournament():
             for match in round.matches
         }
         if len(self.tournament.rounds) == 0:
+            # TODO: vérifier si random.shuffle() est bien utilisé
+            print("First round")
             pairs = Pairing.generate_first_round_pairs(self.tournament.players)
         else:
+            print("Next round")
             pairs = Pairing.generate_next_round_pairs(
                 self.tournament.players, previous_matches)
+            print(pairs)
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)

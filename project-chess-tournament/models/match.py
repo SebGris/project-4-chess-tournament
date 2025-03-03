@@ -1,7 +1,7 @@
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(self, player1, player2, player1_score=0, player2_score=0):
+    def __init__(self, player1, player2, player1_score=-1, player2_score=-1):
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
@@ -10,6 +10,10 @@ class Match:
     def set_score(self, player1_score, player2_score):
         self.player1_score = player1_score
         self.player2_score = player2_score
+
+    def is_finished(self):
+        """Returns True if player score 1 is not negative, False otherwise."""
+        return self.player1_score >= 0
 
     def to_dict(self):
         return {
@@ -33,12 +37,9 @@ class Match:
 
     def get_player_names_and_scores(self):
         """Returns a tuple of the full names of player1, player2 and score."""
-        return (
-            self.player1.full_name,
-            self.player2.full_name,
-            self.player1_score,
-            self.player2_score
-        )
+        names = self.get_player_names()
+        scores = self.player1_score, self.player2_score
+        return names + scores
 
     def get_player1(self):
         return self.player1.id, self.player1_score

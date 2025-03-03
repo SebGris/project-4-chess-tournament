@@ -1,18 +1,18 @@
 {
-    "id": "b37da68e-c87f-41f6-8203-9cdf5946e53b",
+    "id": "dd2a5f6a-2cf1-4063-8d49-366cad75e48d",
     "name": "Tournoi de test",
     "location": "ici",
     "start_date": "15/10/2024",
     "end_date": "20/10/2024",
     "players": [
-        "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-        "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-        "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-        "52995956-a29c-471d-aa81-e393c16c3ce5",
-        "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
         "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+        "52995956-a29c-471d-aa81-e393c16c3ce5",
+        "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+        "812160aa-8e0a-453a-a345-80335d77eb59",
         "350cf9b5-75db-4703-94c1-7c633ae1c490",
-        "812160aa-8e0a-453a-a345-80335d77eb59"
+        "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
+        "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+        "c48fa7d1-17e9-45ae-bc91-fd147d511bc5"
     ],
     "description": "zut",
     "rounds": [
@@ -21,43 +21,29 @@
             "matches": [
                 {
                     "player1": {
-                        "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-                        "last_name": "Holder",
-                        "first_name": "Daugherty"
+                        "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+                        "last_name": "Harvey",
+                        "first_name": "Brady"
                     },
-                    "player1_score": 0,
-                    "player2": {
-                        "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-                        "last_name": "Bartlett",
-                        "first_name": "Gayle"
-                    },
-                    "player2_score": 0
-                },
-                {
-                    "player1": {
-                        "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-                        "last_name": "Herrera",
-                        "first_name": "Ivy"
-                    },
-                    "player1_score": 0,
+                    "player1_score": 0.5,
                     "player2": {
                         "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
                         "last_name": "Russo",
                         "first_name": "Jacklyn"
                     },
-                    "player2_score": 0
+                    "player2_score": 0.5
                 },
                 {
                     "player1": {
-                        "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-                        "last_name": "Graham",
-                        "first_name": "Fitzgerald"
+                        "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+                        "last_name": "Bartlett",
+                        "first_name": "Gayle"
                     },
-                    "player1_score": 0,
+                    "player1_score": 1,
                     "player2": {
-                        "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-                        "last_name": "Harvey",
-                        "first_name": "Brady"
+                        "id": "812160aa-8e0a-453a-a345-80335d77eb59",
+                        "last_name": "Thomas",
+                        "first_name": "Hayes"
                     },
                     "player2_score": 0
                 },
@@ -69,15 +55,92 @@
                     },
                     "player1_score": 0,
                     "player2": {
+                        "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
+                        "last_name": "Herrera",
+                        "first_name": "Ivy"
+                    },
+                    "player2_score": 1
+                },
+                {
+                    "player1": {
+                        "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+                        "last_name": "Holder",
+                        "first_name": "Daugherty"
+                    },
+                    "player1_score": 0,
+                    "player2": {
+                        "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+                        "last_name": "Graham",
+                        "first_name": "Fitzgerald"
+                    },
+                    "player2_score": 1
+                }
+            ],
+            "start_datetime": "2025-03-03T17:54:17.907204",
+            "end_datetime": "2025-03-03T17:54:17.907204"
+        },
+        {
+            "name": "Round 2",
+            "matches": [
+                {
+                    "player1": {
+                        "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+                        "last_name": "Harvey",
+                        "first_name": "Brady"
+                    },
+                    "player1_score": -1,
+                    "player2": {
+                        "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
+                        "last_name": "Russo",
+                        "first_name": "Jacklyn"
+                    },
+                    "player2_score": -1
+                },
+                {
+                    "player1": {
+                        "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+                        "last_name": "Bartlett",
+                        "first_name": "Gayle"
+                    },
+                    "player1_score": -1,
+                    "player2": {
                         "id": "812160aa-8e0a-453a-a345-80335d77eb59",
                         "last_name": "Thomas",
                         "first_name": "Hayes"
                     },
-                    "player2_score": 0
+                    "player2_score": -1
+                },
+                {
+                    "player1": {
+                        "id": "350cf9b5-75db-4703-94c1-7c633ae1c490",
+                        "last_name": "Hull",
+                        "first_name": "Geraldine"
+                    },
+                    "player1_score": -1,
+                    "player2": {
+                        "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
+                        "last_name": "Herrera",
+                        "first_name": "Ivy"
+                    },
+                    "player2_score": -1
+                },
+                {
+                    "player1": {
+                        "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+                        "last_name": "Holder",
+                        "first_name": "Daugherty"
+                    },
+                    "player1_score": -1,
+                    "player2": {
+                        "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+                        "last_name": "Graham",
+                        "first_name": "Fitzgerald"
+                    },
+                    "player2_score": -1
                 }
             ],
-            "start_datetime": "2025-02-24T16:37:24.669637"
-            
+            "start_datetime": "2025-03-03T18:47:18.385049",
+            "end_datetime": null
         }
     ],
     "number_of_rounds": 4
