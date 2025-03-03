@@ -13,8 +13,11 @@ class TournamentCommand(Command):
 
     def save_tournament(self):
         data = self.tournament.to_dict()
-        JsonFileManager.write(self.tournaments_file_path, data)
-        return f"Tournoi {self.tournament.name} sauvegardé."
+        try:
+            JsonFileManager.write(self.tournaments_file_path, data)
+            return f"Tournoi {self.tournament.name} sauvegardé."
+        except ValueError as e:
+            return str(e)
 
 
 class LoadTournamentCommand(TournamentCommand):
@@ -57,11 +60,8 @@ class LoadAllPlayersCommand(TournamentCommand):
 
 class SaveTournamentCommand(TournamentCommand):
     def execute(self):
-        try:
             return self.save_tournament()
-        except ValueError as e:
-            return str(e)
-
+        
 
 class NewTournamentCommand(TournamentCommand):
     def execute(self):
@@ -125,9 +125,10 @@ class RecordResultsCommand(TournamentCommand):
                 match.set_score(0, 1)
             elif result == "0":
                 match.set_score(0.5, 0.5)
+            save_message = self.save_tournament()
         self.tournament.update_scores(round_instance.matches)
         round_instance.end_round()
-        return "Résultats enregistrés"
+        return f"Résultats enregistrés et {save_message}"
 
 
 class UpdateNumberOfRoundsCommand(TournamentCommand):

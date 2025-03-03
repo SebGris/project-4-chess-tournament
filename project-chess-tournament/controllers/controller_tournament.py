@@ -61,7 +61,6 @@ class ControllerTournament():
 
     def record_results(self):
         self.__execute_command(RecordResultsCommand, self.view)
-        self.__save_tournament()
 
     # Méthodes d'accès
     # Méthodes d'affichage
@@ -103,7 +102,9 @@ class ControllerTournament():
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)
-        self.__save_tournament()
+        save_command = SaveTournamentCommand(self.tournament)
+        save_message = save_command.execute()
+        self.view.display_message(save_message)
         self.view.display_message(f"{round_name} ajouté")
 
     def __execute_command(self, command_class, *args):
@@ -118,8 +119,3 @@ class ControllerTournament():
 
     def __is_odd_number_of_players(self):
         return len(self.tournament.players) % 2 != 0
-
-    def __save_tournament(self):
-        save_command = SaveTournamentCommand(self.tournament)
-        save_message = save_command.execute()
-        self.view.display_message(save_message)
