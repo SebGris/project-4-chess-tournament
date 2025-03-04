@@ -5,9 +5,6 @@ class InputHandler:
     def input(self, prompt):
         return input(prompt)
 
-    def get_user_choice(self):
-        return self.input("Choisissez une option :")
-
     def get_tournament_file_path(self):
         return self.input("Entrez le chemin du fichier JSON du tournoi:")
 

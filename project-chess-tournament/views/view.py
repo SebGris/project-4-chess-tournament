@@ -7,9 +7,6 @@ class View(BaseView):
         """Displays a generic message."""
         print(message)
 
-    def display_invalid_option_message(self):
-        print("Option invalide, veuillez réessayer.")
-
     def display_tournament_start_error(self):
         print("Le tournoi ne peut pas commencer sans joueurs.")
 
@@ -26,17 +23,6 @@ class View(BaseView):
     def display_match_summary(self, match):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
-
-    def display_menu(self, menu):
-        """Display a menu with a title and items."""
-        index = 1
-        for group in menu.get_groups():
-            menu_group_header = f"=== {group['title']} ==="
-            print(menu_group_header)
-            for item in group['items']:
-                print(f"{index}. {item['label']}")
-                index += 1
-            print("=" * len(menu_group_header))
 
     def display_player_pairs(self, round_name, pairs):
         """Display pairs of players for a round."""

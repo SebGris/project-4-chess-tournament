@@ -1,14 +1,16 @@
 from controllers.controller_tournament import ControllerTournament
 from controllers.menu_state_manager import MenuStateManager
 from models.tournament import Tournament
+from views.view import View
 
 
 class ControllerMenu():
     """Contrôleur principal de l'application"""
 
-    def __init__(self, menu, view):
+    def __init__(self, menu, menuview):
         self.menu = menu
-        self.view = view
+        self.menuview = menuview
+        self.view = View()
         self.tournament = Tournament()
         self.tournament_controller = ControllerTournament(
             self.tournament, self.menu, self.view
@@ -20,8 +22,8 @@ class ControllerMenu():
     def run(self):
         while True:
             self.menu_state_manager.update_menu()
-            self.view.display_menu(self.menu)
-            choice = self.view.get_user_choice()
+            self.menuview.display_menu(self.menu)
+            choice = self.menuview.get_user_choice()
 
             try:
                 choice_index = int(choice) - 1
@@ -34,6 +36,6 @@ class ControllerMenu():
                 else:
                     raise ValueError("Invalid choice")
             except (IndexError, ValueError):
-                self.view.display_invalid_option_message()
+                self.menuview.display_invalid_option_message()
             else:
                 command()
