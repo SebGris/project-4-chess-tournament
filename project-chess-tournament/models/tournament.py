@@ -53,7 +53,6 @@ class Tournament:
                     player.score += player2_score
 
     def get_current_pairs_players(self):
-        print(self.rounds)
         current_round = self.rounds[self.current_round]
         return current_round.get_pairs_players()
 

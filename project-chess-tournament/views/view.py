@@ -145,8 +145,9 @@ class View(BaseView):
                       f"Né(e) le {player['birth_date']} | "
                       f"ID échecs {player['id_chess']}")
 
-    def display_players_full_names(self, players_names):
-        """Display players' full names."""
+    def display_tournament_players(self, players_names):
+        """Display the players of a tournament."""
+        print("--- Joueurs du tournoi ---")
         print(f"Joueurs : {', '.join(players_names)}")
         print(f"Nombre de joueurs : {len(players_names)}")
 
@@ -158,12 +159,15 @@ class View(BaseView):
 
     def display_round_info(self, round):
         """Display information about a round."""
-        print(f"--- {round['name']} ---")
+        round_name = round['name']
+        if round_name == "Round 1":
+            print("--- Liste des rounds ---")
+        print(f"--- {round_name} ---")
         if round['start_date']:
             print(f"Date de début : {round['start_date']}")
         print(f"Date de fin : {round['end_date'] or 'tour en cours'}")
 
-    def display_tournament(self, tournament):
+    def display_tournament_details(self, tournament):
         """Display tournament information."""
         print("--- Informations sur le tournoi ---")
         print(f"Tournoi : {tournament['name']} | "

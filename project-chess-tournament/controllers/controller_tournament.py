@@ -1,14 +1,15 @@
+# Imports de modules locaux
+from models.player import Player
+from models.round import Round
 from commands.tournament_commands import (
     AddDescriptionCommand, AddPlayersCommand, DisplayCurrentRound,
     DisplayCurrentRoundNoCommand, DisplayPlayerPairsCommand,
-    DisplayPlayersCommand, DisplayPlayersNamesCommand,
-    DisplayTournamentCommand, LoadAllPlayersCommand, LoadTournamentCommand,
-    NewTournamentCommand, RecordResultsCommand, SaveTournamentCommand,
-    UpdateNumberOfRoundsCommand
+    DisplayPlayersCommand, DisplayTournamentDetailsCommand,
+    DisplayTournamentPlayersCommand, LoadAllPlayersCommand,
+    LoadTournamentCommand, NewTournamentCommand, RecordResultsCommand,
+    SaveTournamentCommand, UpdateNumberOfRoundsCommand
 )
 from controllers.pairing import Pairing
-from models.player import Player
-from models.round import Round
 
 
 class ControllerTournament():
@@ -72,17 +73,18 @@ class ControllerTournament():
 
     # Méthodes d'accès
     # Méthodes d'affichage
-    def display_tournament(self):
+    def show_tournament_details(self):
         self.__execute_display_commands(
-            DisplayTournamentCommand,
-            DisplayPlayersNamesCommand,
+            DisplayTournamentDetailsCommand,
+            DisplayTournamentPlayersCommand,
             DisplayCurrentRound,
-            DisplayCurrentRoundNoCommand
+            DisplayCurrentRoundNoCommand,
+            DisplayPlayerPairsCommand
         )
         # if not self.tournament.rounds:
         #     self.__execute_display_commands(DisplayPlayerPairsCommand)
 
-    def display_players(self):
+    def show_players(self):
         self.__execute_display_commands(DisplayPlayersCommand)
 
     # Méthodes privées

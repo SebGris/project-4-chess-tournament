@@ -180,12 +180,12 @@ class DisplayPlayersCommand(DisplayCommand):
         self.view.display_players(players_data)
 
 
-class DisplayPlayersNamesCommand(DisplayCommand):
+class DisplayTournamentPlayersCommand(DisplayCommand):
     def execute(self):
         players_names = [
             player.full_name for player in self.tournament.players
         ]
-        self.view.display_players_full_names(players_names)
+        self.view.display_tournament_players(players_names)
 
 
 class DisplayCurrentRound(DisplayCommand):
@@ -202,7 +202,7 @@ class DisplayCurrentRound(DisplayCommand):
             self.view.display_no_round()
 
 
-class DisplayTournamentCommand(DisplayCommand):
+class DisplayTournamentDetailsCommand(DisplayCommand):
     def execute(self):
         tournament = {
             "name": self.tournament.name,
@@ -212,4 +212,4 @@ class DisplayTournamentCommand(DisplayCommand):
             "description": self.tournament.description,
             "number_of_rounds": self.tournament.number_of_rounds
         }
-        self.view.display_tournament(tournament)
+        self.view.display_tournament_details(tournament)

@@ -1,6 +1,6 @@
-from models.tournament import Tournament
 from controllers.controller_tournament import ControllerTournament
 from controllers.menu_state_manager import MenuStateManager
+from models.tournament import Tournament
 
 
 class ControllerMenu():
@@ -29,7 +29,6 @@ class ControllerMenu():
                     item for group in self.menu.get_groups()
                     for item in group['items']
                 ]
-                # print(flat_menu)
                 if 0 <= choice_index < len(flat_menu):
                     command = flat_menu[choice_index]["command"]
                 else:

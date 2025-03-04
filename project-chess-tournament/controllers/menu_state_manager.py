@@ -12,11 +12,12 @@ class MenuStateManager:
             self.menu.add_group("Menu Tournoi", [
                 {
                     "label": "Afficher le tournoi",
-                    "command": self.tournament_controller.display_tournament
+                    "command": self.tournament_controller
+                    .show_tournament_details
                 },
                 {
                     "label": "Afficher les joueurs",
-                    "command": self.tournament_controller.display_players
+                    "command": self.tournament_controller.show_players
                 },
                 {
                     "label": "Ajouter une description",
