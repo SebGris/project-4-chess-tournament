@@ -7,9 +7,9 @@ from views.view import View
 class ControllerMenu():
     """Contrôleur principal de l'application"""
 
-    def __init__(self, menu, menuview):
+    def __init__(self, menu, menu_view):
         self.menu = menu
-        self.menuview = menuview
+        self.menu_view = menu_view
         self.view = View()
         self.tournament = Tournament()
         self.tournament_controller = ControllerTournament(
@@ -22,8 +22,8 @@ class ControllerMenu():
     def run(self):
         while True:
             self.menu_state_manager.update_menu()
-            self.menuview.display_menu(self.menu)
-            choice = self.menuview.get_user_choice()
+            self.menu_view.display_menu(self.menu)
+            choice = self.menu_view.get_user_choice()
 
             try:
                 choice_index = int(choice) - 1
@@ -36,6 +36,6 @@ class ControllerMenu():
                 else:
                     raise ValueError("Invalid choice")
             except (IndexError, ValueError):
-                self.menuview.display_invalid_option_message()
+                self.menu_view.display_invalid_option_message()
             else:
                 command()

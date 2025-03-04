@@ -5,6 +5,6 @@ from views.menu_view import MenuView
 
 if __name__ == "__main__":
     menu = Menu()
-    menuview = MenuView()
-    controller = ControllerMenu(menu, menuview)
+    menu_view = MenuView()
+    controller = ControllerMenu(menu, menu_view)
     controller.run()
