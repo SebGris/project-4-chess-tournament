@@ -1,7 +1,12 @@
 from utils.file_utils import get_file_path
 from utils.json_file_manager import JsonFileManager
 
+
 class TournamentFileManager:
+    """La classe `TournamentFileManager` gère la sauvegarde et le chargement
+    des tournois et des joueurs. Elle semble avoir plusieurs responsabilités
+    (gestion des tournois et des joueurs).
+    Il pourrait être utile de séparer ces responsabilités en deux classes."""
     def __init__(self):
         self.tournaments_file_path = get_file_path("tournaments.json")
         self.players_file_path = get_file_path("players.json")

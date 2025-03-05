@@ -4,6 +4,8 @@ from controllers.pairing import Pairing
 
 
 class RoundController:
+    """Ne respecte pas le principe DIP : Dependency Inversion Principle
+    Voir https://techblog.deepki.com/SOLID-in-python/"""
     def __init__(self, tournament, view):
         self.tournament = tournament
         self.view = view
