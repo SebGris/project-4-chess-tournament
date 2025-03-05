@@ -1,15 +1,15 @@
 # Imports de modules locaux
 from models.player import Player
-from models.round import Round
 from commands.tournament_commands import (
-    AddDescriptionCommand, AddPlayersCommand, DisplayCurrentRound,
+    AddDescriptionCommand, DisplayCurrentRound,
     DisplayCurrentRoundNoCommand, DisplayPlayerPairsCommand,
     DisplayPlayersCommand, DisplayTournamentDetailsCommand,
     DisplayTournamentPlayersCommand, LoadAllPlayersCommand,
     LoadTournamentCommand, NewTournamentCommand, RecordResultsCommand,
-    SaveTournamentCommand, UpdateNumberOfRoundsCommand
+    UpdateNumberOfRoundsCommand
 )
-from controllers.pairing import Pairing
+from controllers.player_controller import PlayerController
+from controllers.round_controller import RoundController
 
 
 class ControllerTournament():
@@ -17,6 +17,8 @@ class ControllerTournament():
         self.tournament = tournament
         self.menu = menu
         self.view = view
+        self.player_controller = PlayerController(tournament, view)
+        self.round_controller = RoundController(tournament, view)
         self.all_players = self.__load_all_players()
         self.previous_matches = []
 
@@ -24,19 +26,7 @@ class ControllerTournament():
     def new_tournament(self):
         self.__execute_command(NewTournamentCommand, self.view, self.menu)
         if self.view.request_player_addition_confirmation():
-            self.add_players()
-
-    def add_players(self):
-        players = []
-        while True:
-            player_data = self.view.get_player_data()
-            if player_data:
-                player = Player(**player_data)
-                players.append(player)
-                self.view.display_add_player_message(player.full_name)
-            else:
-                break
-        self.__execute_command(AddPlayersCommand, players)
+            self.player_controller.add_players()
 
     def add_description(self):
         self.__execute_command(AddDescriptionCommand, self.view)
@@ -63,15 +53,14 @@ class ControllerTournament():
         if self.tournament.number_of_rounds > len(self.tournament.rounds):
             current_round = self.tournament.get_current_round()
             if current_round is None:
-                self.__add_round()
+                self.round_controller.add_round()
             elif current_round.is_finished():
-                self.__add_round()
+                self.round_controller.add_round()
         self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def record_results(self):
         self.__execute_command(RecordResultsCommand, self.view)
 
-    # Méthodes d'accès
     # Méthodes d'affichage
     def show_tournament_details(self):
         self.__execute_display_commands(
@@ -81,8 +70,6 @@ class ControllerTournament():
             DisplayCurrentRoundNoCommand,
             DisplayPlayerPairsCommand
         )
-        # if not self.tournament.rounds:
-        #     self.__execute_display_commands(DisplayPlayerPairsCommand)
 
     def show_players(self):
         self.__execute_display_commands(DisplayPlayersCommand)
@@ -96,31 +83,6 @@ class ControllerTournament():
             for player_data in players_data
         }
         return all_players
-
-    def __add_round(self):
-        round_name = f"Round {len(self.tournament.rounds) + 1}"
-        new_round = Round(round_name)
-        previous_matches = {
-            (match.player1.id, match.player2.id)
-            for round in self.tournament.rounds
-            for match in round.matches
-        }
-        if len(self.tournament.rounds) == 0:
-            # TODO: vérifier si random.shuffle() est bien utilisé
-            print("First round")
-            pairs = Pairing.generate_first_round_pairs(self.tournament.players)
-        else:
-            print("Next round")
-            pairs = Pairing.generate_next_round_pairs(
-                self.tournament.players, previous_matches)
-            print(pairs)
-        for player1, player2 in pairs:
-            new_round.add_match(player1, player2)
-        self.tournament.rounds.append(new_round)
-        save_command = SaveTournamentCommand(self.tournament)
-        save_message = save_command.execute()
-        self.view.display_message(save_message)
-        self.view.display_message(f"{round_name} ajouté")
 
     def __execute_command(self, command_class, *args):
         command = command_class(self.tournament, *args)
