@@ -2,10 +2,17 @@ import json
 
 
 class JsonFileReceiver:
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         self.filename = filename
 
-    def read(self):
+    def open(self):
+        """Open a JSON file."""
+        try:
+            open(self.filename, 'r')
+        except FileNotFoundError:
+            raise ValueError("Fichier non trouvé")
+
+    def read(self) -> dict:
         """Read data from a JSON file."""
         try:
             with open(self.filename, 'r') as file:
@@ -15,7 +22,7 @@ class JsonFileReceiver:
         except json.JSONDecodeError:
             raise ValueError("Erreur de décodage JSON")
 
-    def write(self, data):
+    def write(self, data: dict):
         """Write data to a JSON file."""
         try:
             with open(self.filename, 'w') as file:

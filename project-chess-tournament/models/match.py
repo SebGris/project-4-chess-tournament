@@ -1,7 +1,11 @@
+from .player import Player
+
+
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(self, player1, player2, player1_score=0, player2_score=0):
+    def __init__(self, player1: Player, player2: Player,
+                 player1_score=0, player2_score=0):
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
@@ -46,6 +50,13 @@ class Match:
 
     def get_player2(self):
         return self.player2.id, self.player2_score
+
+    def __repr__(self):
+        return (
+            f"Match(player1={self.player1}, player2={self.player2}, "
+            f"player1_score={self.player1_score}, "
+            f"player2_score={self.player2_score})"
+        )
 
     def __str__(self):
         """Returns a text representation of the match."""

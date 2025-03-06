@@ -1,11 +1,18 @@
 from models.player import Player
 from commands.tournament_commands import AddPlayersCommand
+from views.player_view import PlayerView
 
 
 class PlayerController:
     def __init__(self, tournament, view):
         self.tournament = tournament
         self.view = view
+
+    @staticmethod
+    def create_player(nom, prenom, date_naissance):
+        joueur = Player(nom, prenom, date_naissance)
+        PlayerView.afficher_joueur(joueur)
+        return joueur
 
     def add_players(self):
         players = []

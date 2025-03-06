@@ -1,4 +1,4 @@
-from commands.command import QuitCommand
+from menu_commands.quit_command import QuitCommand
 
 
 class MenuStateManager:

@@ -1,8 +1,8 @@
 # Imports de modules locaux
 from models.file_paths import players_file_path, tournaments_file_path
-from models.json_file_receiver import JsonFileReceiver
+from commands.json_file_receiver import JsonFileReceiver
 from models.player import Player
-from commands.json_commands import (FileOperation, ReadFileJsonCommand, WriteFileJsonCommand)
+from models.tournament import Tournament
 from commands.tournament_commands import (
     AddDescriptionCommand, DisplayCurrentRound,
     DisplayCurrentRoundNoCommand, DisplayPlayerPairsCommand,
@@ -13,6 +13,7 @@ from commands.tournament_commands import (
 )
 from controllers.player_controller import PlayerController
 from controllers.round_controller import RoundController
+from views.tournament_view import TournamentView
 
 
 class TournamentController():
@@ -20,6 +21,13 @@ class TournamentController():
     La classe `ControllerTournament` gère la logique de l'application."""
     json_file_receiver_tournaments = JsonFileReceiver(tournaments_file_path())
     json_file_receiver_players = JsonFileReceiver(players_file_path())
+
+    @staticmethod
+    def create_tournament(nom, joueurs, rounds):
+        tournoi = Tournament(name=nom, players=joueurs, rounds=rounds)
+        TournamentView.afficher_tournoi(tournoi)
+        return tournoi
+
     def __init__(self, tournament, menu, view):
         self.tournament = tournament
         self.menu = menu

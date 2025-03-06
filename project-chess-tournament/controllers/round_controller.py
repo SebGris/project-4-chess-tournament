@@ -1,5 +1,6 @@
 from models.round import Round
 from controllers.pairing import Pairing
+from views.round_view import RoundView
 
 
 class RoundController:
@@ -8,6 +9,12 @@ class RoundController:
     def __init__(self, tournament, view):
         self.tournament = tournament
         self.view = view
+
+    @staticmethod
+    def create_round(nom, matchs):
+        round = Round(nom, matchs)
+        RoundView.afficher_round(round)
+        return round
 
     def add_round(self):
         round_name = f"Round {len(self.tournament.rounds) + 1}"

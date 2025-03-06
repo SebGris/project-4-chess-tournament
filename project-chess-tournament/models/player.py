@@ -18,9 +18,12 @@ class Player:
     def formatted_birth_date(self):
         """Returns the birth date in dd/mm/yyyy format."""
         if self.birth_date:
-            birth_date = datetime.strptime(
-                self.birth_date, "%Y-%m-%dT%H:%M:%S")
-            return birth_date.strftime("%d/%m/%Y")
+            try:
+                birth_date = datetime.strptime(
+                    self.birth_date, "%Y-%m-%dT%H:%M:%S")
+                return birth_date.strftime("%d/%m/%Y")
+            except ValueError:
+                return self.birth_date
         return None
 
     def update_score(self, points):
@@ -32,7 +35,7 @@ class Player:
         self.score = 0.0
 
     def __repr__(self):
-        return (f"{self.full_name} score: {self.score}")
+        return f"Player(full_name={self.full_name}, score={self.score})"
 
     def __str__(self):
         """Returns a string representation of the player."""

@@ -10,10 +10,11 @@ class Round:
         self, name, matches=None, start_datetime=None, end_datetime=None
     ):
         self.name = name
-        self.matches = (
-            self.convert_dict_to_matches(matches)
-            if matches is not None else []
-        )
+        self.matches = matches if matches is not None else []
+        # self.matches = (
+        #     self.convert_dict_to_matches(matches)
+        #     if matches is not None else []
+        # )
         self.start_datetime = (
             datetime.fromisoformat(start_datetime)
             if start_datetime
@@ -76,6 +77,9 @@ class Round:
                 self.end_datetime.isoformat() if self.end_datetime else None
             )
         }
+
+    def __repr__(self):
+        return f"Round(matches={self.matches})"
 
     def __str__(self):
         """Returns a string representation of the round."""

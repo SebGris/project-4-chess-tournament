@@ -3,7 +3,6 @@ from controllers.menu_state_manager import MenuStateManager
 from models.tournament import Tournament
 from views.view import View
 
-
 class MenuController():
     """Contrôleur principal de l'application"""
 
