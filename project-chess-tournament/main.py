@@ -1,4 +1,4 @@
-from controllers.controller_menu import ControllerMenu
+from controllers.menu_controller import MenuController
 from models.menu import Menu
 from views.menu_view import MenuView
 
@@ -6,5 +6,5 @@ from views.menu_view import MenuView
 if __name__ == "__main__":
     menu = Menu()
     menu_view = MenuView()
-    controller = ControllerMenu(menu, menu_view)
+    controller = MenuController(menu, menu_view)
     controller.run()

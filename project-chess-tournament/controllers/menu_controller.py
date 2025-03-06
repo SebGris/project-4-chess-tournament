@@ -1,10 +1,10 @@
-from controllers.controller_tournament import ControllerTournament
+from controllers.tournament_controller import TournamentController
 from controllers.menu_state_manager import MenuStateManager
 from models.tournament import Tournament
 from views.view import View
 
 
-class ControllerMenu():
+class MenuController():
     """Contrôleur principal de l'application"""
 
     def __init__(self, menu, menu_view):
@@ -12,7 +12,7 @@ class ControllerMenu():
         self.menu_view = menu_view
         self.view = View()
         self.tournament = Tournament()
-        self.tournament_controller = ControllerTournament(
+        self.tournament_controller = TournamentController(
             self.tournament, self.menu, self.view
         )
         self.menu_state_manager = MenuStateManager(

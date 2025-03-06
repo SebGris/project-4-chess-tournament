@@ -12,7 +12,7 @@ from controllers.player_controller import PlayerController
 from controllers.round_controller import RoundController
 
 
-class ControllerTournament():
+class TournamentController():
     """Ne respecte pas le principe de responsabilité unique.
     La classe `ControllerTournament` gère la logique de l'application."""
     def __init__(self, tournament, menu, view):
