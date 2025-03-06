@@ -1,4 +1,6 @@
 # Imports de modules locaux
+from models.file_paths import players_file_path, tournaments_file_path
+from models.json_file_receiver import JsonFileReceiver
 from models.player import Player
 from commands.json_commands import (FileOperation, ReadFileJsonCommand, WriteFileJsonCommand)
 from commands.tournament_commands import (
@@ -11,8 +13,6 @@ from commands.tournament_commands import (
 )
 from controllers.player_controller import PlayerController
 from controllers.round_controller import RoundController
-from utils.file_paths import players_file_path, tournaments_file_path
-from utils.json_file_receiver import JsonFileReceiver
 
 
 class TournamentController():
