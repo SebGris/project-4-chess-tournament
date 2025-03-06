@@ -1,5 +1,4 @@
 from models.round import Round
-from commands.tournament_commands import SaveTournamentCommand
 from controllers.pairing import Pairing
 
 
@@ -29,7 +28,4 @@ class RoundController:
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.tournament.rounds.append(new_round)
-        save_command = SaveTournamentCommand(self.tournament)
-        save_message = save_command.execute()
-        self.view.display_message(save_message)
         self.view.display_message(f"{round_name} ajouté")

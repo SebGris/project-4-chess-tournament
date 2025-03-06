@@ -1,5 +1,4 @@
 from commands.command import Command
-from utils.tournament_file_manager import TournamentFileManager
 
 
 class TournamentCommand(Command):
@@ -7,55 +6,15 @@ class TournamentCommand(Command):
         self.tournament = tournament
         self.view = view
         self.menu = menu
-        self.file_manager = TournamentFileManager()
-
-    def save_tournament(self):
-        try:
-            self.file_manager.save_tournament(self.tournament)
-            return f"Tournoi {self.tournament.name} sauvegardé."
-        except ValueError as e:
-            return str(e)
 
 
 class LoadTournamentCommand(TournamentCommand):
-    def __init__(self, tournament, all_players, menu):
+    def __init__(self, tournament, menu):
         super().__init__(tournament, menu=menu)
-        self.all_players = all_players
 
     def execute(self):
-        try:
-            data = self.file_manager.load_tournament()
-            name = data.get('name')
-            location = data.get('location')
-            start_date = data.get('start_date')
-            end_date = data.get('end_date')
-            player_ids = data.get('players', [])
-            description = data.get('description')
-            rounds = data.get('rounds', [])
-            number_of_rounds = data.get('number_of_rounds', 4)
-            players = [self.all_players[player_id] for player_id in player_ids]
-            self.tournament.set_tournament(
-                name, location, start_date, end_date, number_of_rounds,
-                players, description, rounds
-            )
-            self.menu.set_tournament_loaded(True)
-            return f"Tournoi {name} chargé."
-        except ValueError as e:
-            return str(e)
-
-
-class LoadAllPlayersCommand(TournamentCommand):
-    def execute(self):
-        try:
-            players_data = self.file_manager.load_all_players()
-            return players_data
-        except ValueError as e:
-            return str(e)
-
-
-class SaveTournamentCommand(TournamentCommand):
-    def execute(self):
-        return self.save_tournament()
+        self.menu.set_tournament_loaded(True)
+        return f"Tournoi {self.tournament.name} chargé."
 
 
 class NewTournamentCommand(TournamentCommand):
