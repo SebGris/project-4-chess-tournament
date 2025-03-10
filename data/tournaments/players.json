@@ -61,5 +61,12 @@
         "birth_date": "15/08/2020",
         "id_chess": "DD12345",
         "id": "6d02bc33-dd01-40dd-a53e-fb995d442773"
+    },
+    {
+        "last_name": "Dad",
+        "first_name": "B",
+        "birth_date": "",
+        "id_chess": "AA12345",
+        "id": "3971f481-f354-4b48-81a9-6143bfed65c1"
     }
 ]

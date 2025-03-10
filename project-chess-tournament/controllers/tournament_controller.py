@@ -66,10 +66,10 @@ class TournamentController():
         ]
 
     def start_tournament(self):
-        for round in self.active_tournament.rounds:
+        for index in range(1,self.active_tournament.number_of_rounds):
             self.active_tournament.update_scores(round.matches)
-        print(self.active_tournament.players)
-        if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
+            print(self.active_tournament.players)
+            # if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
             current_round = self.active_tournament.get_current_round()
             if (current_round is None):
                 self.add_round()
@@ -104,10 +104,10 @@ class TournamentController():
         self.active_tournament.set_description(description)
 
     def enter_scores(self):
-        round_instance = self.tournament.get_current_round()
+        round_instance = self.active_tournament.get_current_round()
         self.view.display_record_results_message(round_instance.name)
         for match in round_instance.matches:
-            if match.is_finished():
+            if round_instance.is_finished():
                 continue
             self.view.display_match_summary(match.get_player_names())
             result = self.view.get_match_result()

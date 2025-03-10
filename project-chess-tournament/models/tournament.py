@@ -18,18 +18,6 @@ class Tournament:
         self.rounds = rounds if rounds is not None else []
         self.number_of_rounds = number_of_rounds
 
-    def set_tournament(self, name, location, start_date, end_date,
-                       number_of_rounds, description=None, players= None,
-                       rounds=None):
-        self.name = name
-        self.location = location
-        self.start_date = start_date
-        self.end_date = end_date
-        self.players = players
-        self.description = description
-        self.rounds = [Round(**round) for round in rounds] if rounds else []
-        self.number_of_rounds = number_of_rounds
-
     def set_description(self, description):
         """Define the tournament description."""
         self.description = description
@@ -53,6 +41,8 @@ class Tournament:
                     player.score += player2_score
 
     def get_current_round(self):
+        if len(self.rounds) == 0:
+            return None
         return self.rounds[self.current_round]
 
     def get_current_round_no(self):
