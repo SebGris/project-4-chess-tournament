@@ -1,14 +1,15 @@
-from commands.write_file_json_command import WriteFileJsonCommand
-from commands.file_operation import FileOperation
-from commands.json_file_receiver import JsonFileReceiver
+from commands.command import Command
+from services.json_file_service import JsonFileService, tournaments_file_path
 
-
-class SaveTournamentCommand:
-    def __init__(self, tournoi):
-        self.tournoi = tournoi
+class SaveTournamentCommand(Command):
+    def __init__(self, tournament_controller):
+        self.tournament_controller = tournament_controller
 
     def execute(self):
-        json_receiver = JsonFileReceiver("tournoi.json")
-        write_command = WriteFileJsonCommand(json_receiver, self.tournoi.to_dict())
-        file_operation = FileOperation(write_command)
-        file_operation.execute_commands()
+        if self.tournament_controller.tournaments:
+            data = [tournament.to_dict() for tournament in self.tournament_controller.tournaments]
+            filename = tournaments_file_path()
+            JsonFileService.save_to_file(data, filename)
+            self.tournament_controller.view.display_save_success_message(filename)
+        else:
+            self.tournament_controller.view.display_no_tournament_message()

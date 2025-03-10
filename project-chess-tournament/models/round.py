@@ -10,11 +10,10 @@ class Round:
         self, name, matches=None, start_datetime=None, end_datetime=None
     ):
         self.name = name
-        self.matches = matches if matches is not None else []
-        # self.matches = (
-        #     self.convert_dict_to_matches(matches)
-        #     if matches is not None else []
-        # )
+        self.matches = (
+            self.convert_dict_to_matches(matches)
+            if matches is not None else []
+        )
         self.start_datetime = (
             datetime.fromisoformat(start_datetime)
             if start_datetime

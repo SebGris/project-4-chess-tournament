@@ -1,4 +1,188 @@
-class TournamentView:
-    @staticmethod
-    def afficher_tournoi(tournoi):
-        print(tournoi)
+import re
+from views.base_view import BaseView
+
+class TournamentView(BaseView):
+    def __init__(self, menu):
+        super().__init__()
+        self.menu = menu
+
+    def get_tournament_name(self):
+        return self.input("Entrez le nom du tournoi :")
+
+    def get_tournament_location(self):
+        return self.input("Entrez le lieu du tournoi :")
+
+    def get_tournament_start_date(self):
+        return self.input("Entrez la date de début du tournoi :")
+
+    def get_tournament_end_date(self):
+        return self.input("Entrez la date de fin du tournoi :")
+
+    def get_tournament_description(self):
+        return self.input("Entrez la description du tournoi :")
+
+    def get_tournament_number_of_rounds(self):
+        while True:
+            try:
+                rounds = self.input("Entrez le nombre de tours du tournoi (par défaut 4):")
+                if rounds == "":
+                    return 4
+                rounds = int(rounds)
+                if rounds > 0:
+                    return rounds
+                else:
+                    print("Le nombre de tours doit être un chiffre positif.")
+            except ValueError:
+                print("Entrée invalide. Veuillez entrer un chiffre.")
+
+    def request_player_addition_confirmation(self):
+        return self.get_user_confirmation("Voulez-vous ajouter des joueurs ?")
+
+    def get_user_confirmation(self, prompt):
+        while True:
+            response = self.input(f"{prompt} (oui/non):").lower()
+            if response in ["oui", "non"]:
+                return response == "oui"
+            else:
+                print("Réponse invalide. Veuillez répondre par 'oui' ou 'non'.")
+
+    def get_player_data(self):
+        while True:
+            self.write_line("Entrez l'ID échecs (format: deux lettres suivies de cinq chiffres),")
+            id_chess = self.input("ou appuyer sur Entrée pour arrêter l'ajout des joueurs :")
+            if not id_chess:
+                return None
+            if re.match(r'^[A-Z]{2}\d{5}$', id_chess):
+                break
+            else:
+                print("Identifiant invalide. Le format doit être composé de deux lettres suivies de cinq chiffres.")
+        last_name = self.input("Entrez le nom de famille :")
+        first_name = self.input("Entrez le prénom :")
+        birth_date = self.input("Entrez la date de naissance :")
+        return {
+            "last_name": last_name,
+            "first_name": first_name,
+            "birth_date": birth_date,
+            "id_chess": id_chess
+        }
+
+    def get_match_result(self):
+        """Asks the user to enter the result of a match."""
+        while True:
+            result = self.input("Entrez 1 si le joueur 1 gagne, 2 si le joueur 2 gagne ou 0 si match nul :")
+            if result in {"1", "2", "0"}:
+                return result
+            else:
+                print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
+
+    def get_tournament_selection(self, tournaments):
+        print("Sélectionnez un tournoi :")
+        for index, tournament in enumerate(tournaments):
+            print(f"{index + 1}. {tournament.name} à {tournament.location}")
+        while True:
+            try:
+                choice = int(self.input("Entrez le numéro du tournoi :")) - 1
+                if 0 <= choice < len(tournaments):
+                    return choice
+                else:
+                    print("Choix invalide, veuillez réessayer.")
+            except ValueError:
+                print("Entrée invalide, veuillez entrer un numéro.")
+
+    def display_tournament_details(self, tournament):
+        """Display tournament information."""
+        print("--- Informations sur le tournoi ---")
+        print(f"Tournoi : {tournament['name']} | Lieu : {tournament['location']}")
+        print(f"Date : du {tournament['start_date']} au {tournament['end_date']}")
+        print(f"Description : {tournament['description'] if tournament['description'] else 'Aucune'}")
+        print(f"Nombre de tours : {tournament['number_of_rounds']}")
+
+    def display_current_round_no(self, round_no):
+        print(f"N° round actuel : {round_no['current_round']}/{round_no['number_of_rounds']}")
+
+    def display_match_summary(self, match):
+        """Returns a summary of a match."""
+        print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
+
+    def display_player_pairs(self, round_name, pairs):
+        """Display pairs of players for a round."""
+        print(f"{round_name} avec les paires suivantes :")
+        for index, pair in enumerate(pairs, start=1):
+            if len(pair) == 2:
+                print(f"{index}. {pair[0]} vs {pair[1]}")
+            else:
+                print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
+
+    def display_players(self, players):
+        """Display a list of players."""
+        print("--- Joueurs du tournoi ---")
+        if not players:
+            print("Aucun joueur enregistré.")
+        else:
+            for player in players:
+                print(f"{player['full_name']} | Né(e) le {player['birth_date']} | ID échecs {player['id_chess']}")
+
+    def display_tournament_players(self, players_names):
+        """Display the players of a tournament."""
+        print("--- Joueurs du tournoi ---")
+        print(f"Joueurs : {', '.join(players_names)}")
+        print(f"Nombre de joueurs : {len(players_names)}")
+
+    def display_round_info(self, round):
+        """Display information about a round."""
+        round_name = round['name']
+        if round_name == "Round 1":
+            print("--- Liste des rounds ---")
+        print(f"--- {round_name} ---")
+        if round['start_date']:
+            print(f"Date de début : {round['start_date']}")
+        print(f"Date de fin : {round['end_date'] or 'round en cours'}")
+
+    def write_line(self, message):
+        """Display a generic message."""
+        print(message)
+    
+    def display_record_results_message(self, round_name):
+        self.write_line(f"Enregistrement des résultats du {round_name}:")
+
+    def display_updated_number_rounds_message(self, number):
+        self.write_line(f"Le nombre de tours a été mis à jour à {number}.")
+
+    def display_added_round_message(self, round_name):
+        self.write_line(f"Nom du round ajouté : {round_name}")
+
+    def display_no_tournament_message(self):
+        self.write_line("Aucun tournoi n'est chargé.")
+
+    def display_no_round_message(self):
+        self.write_line("Aucun round en cours.")
+
+    def display_for_file_not_found(self, error):
+        self.write_line(f"=== Information ===\n{error}\nVeuillez créer un nouveau tournoi.")
+
+    def display_new_tournament_created(self, name):
+        self.write_line(f"Nouveau tournoi {name} créé.")
+
+    def display_save_success_message(self, filename):
+        self.write_line(f"Tournoi sauvegardé avec succès dans le fichier {filename}")
+
+    def display_save_error_message(self, error):
+        self.write_line(f"Erreur lors de la sauvegarde du tournoi : {error}")
+
+    def display_tournament_start_error(self):
+        self.write_line("Le tournoi ne peut pas commencer sans joueurs.")
+
+    def display_even_players_message(self):
+        self.write_line("Le nombre de joueurs doit être pair pour commencer le tournoi.")
+
+    def display_add_player_message(self, name):
+        self.write_line(f"Joueur {name} ajouté.")
+
+    def display_successful_description_message(self):
+        self.write_line("Description ajoutée avec succès.")
+
+    def display_tournament_closed_message(self):
+        self.write_line("Le tournoi a été fermé avec succès.")
+
+    def display_tournament_selected(self, name):
+        self.write_line(f"Tournoi sélectionné : {name}")

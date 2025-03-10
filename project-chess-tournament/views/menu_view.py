@@ -13,6 +13,8 @@ class MenuView(BaseView):
         index = 1
         for group in menu.get_groups():
             menu_group_header = f"=== {group['title']} ==="
+            if group['items'] == []:
+                print("=" * len(menu_group_header))
             print(menu_group_header)
             for item in group['items']:
                 print(f"{index}. {item['label']}")

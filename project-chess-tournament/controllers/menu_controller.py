@@ -1,26 +1,15 @@
-from controllers.tournament_controller import TournamentController
-from controllers.menu_state_manager import MenuStateManager
-from models.tournament import Tournament
-from views.view import View
-
 class MenuController():
     """Contrôleur principal de l'application"""
 
-    def __init__(self, menu, menu_view):
+    def __init__(self, menu, menu_view, tournament_controller, menu_state_updater):
         self.menu = menu
         self.menu_view = menu_view
-        self.view = View()
-        self.tournament = Tournament()
-        self.tournament_controller = TournamentController(
-            self.tournament, self.menu, self.view
-        )
-        self.menu_state_manager = MenuStateManager(
-            self.menu, self.tournament_controller
-        )
+        self.tournament_controller = tournament_controller
+        self.menu_state_updater = menu_state_updater
 
     def run(self):
         while True:
-            self.menu_state_manager.update_menu()
+            self.menu_state_updater.refresh_menu()
             self.menu_view.display_menu(self.menu)
             choice = self.menu_view.get_user_choice()
 
