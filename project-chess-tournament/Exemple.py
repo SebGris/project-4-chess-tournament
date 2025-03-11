@@ -320,3 +320,108 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+import cmd
+from models import PlayerModel, TournamentModel
+from views import PlayerView, TournamentView
+from controllers import PlayerController, TournamentController
+
+class ConsoleMenu(cmd.Cmd):
+    intro = 'Bienvenue dans le menu de test. Tapez help ou ? pour lister les commandes.\n'
+    prompt = '(menu) '
+
+    def __init__(self):
+        super().__init__()
+        self.player_controller = PlayerController(PlayerModel(), PlayerView())
+        self.tournament_controller = TournamentController(TournamentModel(), TournamentView())
+
+    def do_create_player(self, arg):
+        'Crée un joueur : create_player <nom> <âge>'
+        args = arg.split()
+        if len(args) == 2:
+            name, age = args
+            self.player_controller.create_player(name, int(age))
+        else:
+            print("Usage: create_player <nom> <âge>")
+
+    def do_get_all_players(self, arg):
+        'Affiche tous les joueurs : get_all_players'
+        self.player_controller.get_all_players()
+
+    def do_update_player(self, arg):
+        'Met à jour un joueur : update_player <id> <nom> <âge>'
+        args = arg.split()
+        if len(args) == 3:
+            player_id, name, age = args
+            self.player_controller.update_player(int(player_id), name, int(age))
+        else:
+            print("Usage: update_player <id> <nom> <âge>")
+
+    def do_get_player_by_id(self, arg):
+        'Affiche un joueur par ID : get_player_by_id <id>'
+        args = arg.split()
+        if len(args) == 1:
+            player_id = int(args[0])
+            self.player_controller.get_player_by_id(player_id)
+        else:
+            print("Usage: get_player_by_id <id>")
+
+    def do_delete_player(self, arg):
+        'Supprime un joueur par ID : delete_player <id>'
+        args = arg.split()
+        if len(args) == 1:
+            player_id = int(args[0])
+            self.player_controller.delete_player(player_id)
+        else:
+            print("Usage: delete_player <id>")
+
+    def do_create_tournament(self, arg):
+        'Crée un tournoi : create_tournament <nom> <date>'
+        args = arg.split()
+        if len(args) == 2:
+            name, date = args
+            self.tournament_controller.create_tournament(name, date)
+        else:
+            print("Usage: create_tournament <nom> <date>")
+
+    def do_get_all_tournaments(self, arg):
+        'Affiche tous les tournois : get_all_tournaments'
+        self.tournament_controller.get_all_tournaments()
+
+    def do_update_tournament(self, arg):
+        'Met à jour un tournoi : update_tournament <id> <nom> <date>'
+        args = arg.split()
+        if len(args) == 3:
+            tournament_id, name, date = args
+            self.tournament_controller.update_tournament(int(tournament_id), name, date)
+        else:
+            print("Usage: update_tournament <id> <nom> <date>")
+
+    def do_get_tournament_by_id(self, arg):
+        'Affiche un tournoi par ID : get_tournament_by_id <id>'
+        args = arg.split()
+        if len(args) == 1:
+            tournament_id = int(args[0])
+            self.tournament_controller.get_tournament_by_id(tournament_id)
+        else:
+            print("Usage: get_tournament_by_id <id>")
+
+    def do_delete_tournament(self, arg):
+        'Supprime un tournoi par ID : delete_tournament <id>'
+        args = arg.split()
+        if len(args) == 1:
+            tournament_id = int(args[0])
+            self.tournament_controller.delete_tournament(tournament_id)
+        else:
+            print("Usage: delete_tournament <id>")
+
+    def do_quit(self, arg):
+        'Quitte le menu : quit'
+        print("Au revoir!")
+        return True
+
+def main():
+    ConsoleMenu().cmdloop()
+
+if __name__ == "__main__":
+    main()

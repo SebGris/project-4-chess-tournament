@@ -1,10 +1,9 @@
 class MenuController():
     """Contrôleur principal de l'application"""
 
-    def __init__(self, menu, menu_view, tournament_controller, menu_state_updater):
+    def __init__(self, menu, menu_view, menu_state_updater):
         self.menu = menu
         self.menu_view = menu_view
-        self.tournament_controller = tournament_controller
         self.menu_state_updater = menu_state_updater
 
     def run(self):

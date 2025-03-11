@@ -8,12 +8,32 @@ from menu_commands.save_tournament_command import SaveTournamentCommand
 
 class TournamentController():
 
-    def __init__(self, view):
+    def __init__(self, model, view):
+        self.model = model
         self.view = view
         self.tournaments = []
         self.active_tournament = None
         self.all_players = self.load_all_players()
         self.load_tournaments()
+
+    def get_all_tournaments(self):
+        tournaments = self.model.get_all_tournaments()
+        self.view.display_all_tournaments(tournaments)
+
+    def get_tournament_by_id(self, tournament_id):
+        tournament = self.model.find_tournament_by_id(tournament_id)
+        self.view.display_tournament(tournament)
+
+    def create_tournament(self, name, date):
+        tournament_id = len(self.model.get_all_tournaments()) + 1
+        tournament = Tournament(tournament_id, name, date)
+        created_tournament = self.model.create_tournament(tournament)
+        self.view.display_tournament_created(created_tournament)
+
+    def update_tournament(self, tournament_id, name, date):
+        updated_data = {"name": name, "date": date}
+        tournament = self.model.update_tournament(tournament_id, updated_data)
+        self.view.display_tournament_updated(tournament)
     
     def create_tournament(self, name, location, start_date, end_date, number_of_rounds, description=None, player_ids=None, rounds=None, id=None):
         players = [self.all_players[player_id] for player_id in player_ids] if player_ids else []

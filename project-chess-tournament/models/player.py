@@ -5,15 +5,14 @@ from datetime import datetime
 class Player:
     """Class representing a chess player."""
 
-    def __init__(self, last_name, first_name, birth_date=None, id_chess=None,
-                 score=0.0, id=None):
-        self.id = uuid.UUID(id) if id else uuid.uuid4()
+    def __init__(self, last_name, first_name, birth_date, id_chess):
+        self.id = uuid.uuid4()
         self.last_name = last_name
         self.first_name = first_name
         self.full_name = f"{self.first_name} {self.last_name}"
         self.birth_date = birth_date
         self.id_chess = id_chess
-        self.score = score
+        self.score = 0.0
 
     def formatted_birth_date(self):
         """Returns the birth date in dd/mm/yyyy format."""
@@ -52,3 +51,15 @@ class Player:
             "birth_date": self.birth_date,
             "id_chess": self.id_chess
         }
+
+    @staticmethod
+    def from_dict(player_dict):
+        """Create a Player instance from a dictionary."""
+        return Player(
+            last_name=player_dict["last_name"],
+            first_name=player_dict["first_name"],
+            birth_date=player_dict.get("birth_date"),
+            id_chess=player_dict.get("id_chess"),
+            id=player_dict.get("id"),
+            score=player_dict.get("score", 0.0)
+        )

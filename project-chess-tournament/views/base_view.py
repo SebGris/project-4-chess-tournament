@@ -32,3 +32,8 @@ class BaseView:
                     "Format invalide. "
                     "Veuillez entrer une date au format JJ/MM/AAAA."
                     )
+
+    @staticmethod
+    def write_line(message):
+        """Display a generic message."""
+        print(message)

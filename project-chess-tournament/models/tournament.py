@@ -5,8 +5,8 @@ class Tournament:
 
     def __init__(
         self,
-        name=None,
-        location=None,
+        name,
+        location,
         start_date=None,
         end_date=None,
         number_of_rounds=4,
@@ -81,3 +81,17 @@ class Tournament:
             "rounds": [round.to_dict() for round in self.rounds],
             "number_of_rounds": self.number_of_rounds,
         }
+
+    @staticmethod
+    def from_dict(tournament_dict):
+        """Create a Tournament object from a dictionary."""
+        return Tournament(
+            name=tournament_dict["name"],
+            location=tournament_dict["location"],
+            start_date=tournament_dict.get("start_date"),
+            end_date=tournament_dict.get("end_date"),
+            number_of_rounds=tournament_dict.get("number_of_rounds", 4),
+            description=tournament_dict.get("description"),
+            players=tournament_dict.get("players", []),
+            rounds=tournament_dict.get("rounds", []),
+        )
