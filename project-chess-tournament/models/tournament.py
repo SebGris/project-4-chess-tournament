@@ -1,12 +1,19 @@
 import uuid
-from models.round import Round
 
 
 class Tournament:
-    """Class representing a chess tournament. La classe représente un tournoi de manière assez complète. Elle pourrait être divisée pour séparer la gestion des joueurs, des scores et des rounds, mais elle reste cohérente dans sa responsabilité de représenter un tournoi."""
-    def __init__(self, name=None, location=None, start_date=None,
-                 end_date=None, number_of_rounds=4, description=None,
-                 players=None, rounds=None):
+
+    def __init__(
+        self,
+        name=None,
+        location=None,
+        start_date=None,
+        end_date=None,
+        number_of_rounds=4,
+        description=None,
+        players=None,
+        rounds=None,
+    ):
         self.id = uuid.uuid4()
         self.name = name
         self.location = location
@@ -72,5 +79,5 @@ class Tournament:
             "player_ids": [str(player.id) for player in self.players],
             "description": self.description,
             "rounds": [round.to_dict() for round in self.rounds],
-            "number_of_rounds": self.number_of_rounds
+            "number_of_rounds": self.number_of_rounds,
         }
