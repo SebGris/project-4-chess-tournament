@@ -1,8 +1,8 @@
-# models.py
 import json
 import os
+from abc import ABC, abstractmethod
 
-
+# Modèles
 class Player:
     def __init__(self, player_id, name, age):
         self.id = player_id
@@ -15,7 +15,6 @@ class Player:
     @staticmethod
     def from_dict(player_dict):
         return Player(player_dict["id"], player_dict["name"], player_dict["age"])
-
 
 class Tournament:
     def __init__(self, tournament_id, name, date):
@@ -32,8 +31,8 @@ class Tournament:
             tournament_dict["id"], tournament_dict["name"], tournament_dict["date"]
         )
 
-
-class PlayerModel:
+# Dépôts de données
+class PlayerRepository:
     FILE_PATH = "players.json"
 
     def __init__(self):
@@ -78,8 +77,7 @@ class PlayerModel:
             json.dump([player.to_dict() for player in players], file, indent=4)
         return True
 
-
-class TournamentModel:
+class TournamentRepository:
     FILE_PATH = "tournaments.json"
 
     def __init__(self):
@@ -103,9 +101,7 @@ class TournamentModel:
         tournaments = self.get_all_tournaments()
         tournaments.append(tournament)
         with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [tournament.to_dict() for tournament in tournaments], file, indent=4
-            )
+            json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
         return tournament
 
     def update_tournament(self, tournament_id, updated_data):
@@ -115,313 +111,308 @@ class TournamentModel:
                 tournament.name = updated_data["name"]
                 tournament.date = updated_data["date"]
                 with open(self.FILE_PATH, "w") as file:
-                    json.dump(
-                        [tournament.to_dict() for tournament in tournaments],
-                        file,
-                        indent=4,
-                    )
+                    json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
                 return tournament
         return None
 
     def delete_tournament(self, tournament_id):
         tournaments = self.get_all_tournaments()
-        tournaments = [
-            tournament for tournament in tournaments if tournament.id != tournament_id
-        ]
+        tournaments = [tournament for tournament in tournaments if tournament.id != tournament_id]
         with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [tournament.to_dict() for tournament in tournaments], file, indent=4
-            )
+            json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
         return True
 
-
-# views.py
+# Vues
 class PlayerView:
-    def display_all_players(self, players):
-        for player in players:
-            print(f"ID: {player.id}, Name: {player.name}, Age: {player.age}")
-
     def display_player(self, player):
-        if player:
-            print(f"ID: {player.id}, Name: {player.name}, Age: {player.age}")
-        else:
-            print("Player not found.")
+        print(f"Player ID: {player.id}, Name: {player.name}, Age: {player.age}")
+
+    def display_players(self, players):
+        for player in players:
+            self.display_player(player)
 
     def display_player_created(self, player):
-        print(
-            f"Player created: ID: {player.id}, Name: {player.name}, Age: {player.age}"
-        )
+        print(f"Player created: ID: {player.id}, Name: {player.name}, Age: {player.age}")
 
     def display_player_updated(self, player):
-        if player:
-            print(
-                f"Player updated: ID: {player.id}, Name: {player.name}, Age: {player.age}"
-            )
-        else:
-            print("Player not found.")
+        print(f"Player updated: ID: {player.id}, Name: {player.name}, Age: {player.age}")
 
     def display_player_deleted(self, success):
-        if success:
-            print("Player deleted.")
-        else:
-            print("Player not found.")
-
+        print(f"Player deleted: {success}")
 
 class TournamentView:
-    def display_all_tournaments(self, tournaments):
-        for tournament in tournaments:
-            print(
-                f"ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}"
-            )
-
     def display_tournament(self, tournament):
-        if tournament:
-            print(
-                f"ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}"
-            )
-        else:
-            print("Tournament not found.")
+        print(f"Tournament ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
+
+    def display_tournaments(self, tournaments):
+        for tournament in tournaments:
+            self.display_tournament(tournament)
 
     def display_tournament_created(self, tournament):
-        print(
-            f"Tournament created: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}"
-        )
+        print(f"Tournament created: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
 
     def display_tournament_updated(self, tournament):
-        if tournament:
-            print(
-                f"Tournament updated: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}"
-            )
-        else:
-            print("Tournament not found.")
+        print(f"Tournament updated: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
 
     def display_tournament_deleted(self, success):
-        if success:
-            print("Tournament deleted.")
-        else:
-            print("Tournament not found.")
+        print(f"Tournament deleted: {success}")
 
-
-# controllers.py
+# Contrôleurs
 class PlayerController:
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, repository, view):
+        self.repository = repository
         self.view = view
 
     def get_all_players(self):
-        players = self.model.get_all_players()
-        self.view.display_all_players(players)
+        players = self.repository.get_all_players()
+        self.view.display_players(players)
 
     def get_player_by_id(self, player_id):
-        player = self.model.find_player_by_id(player_id)
-        self.view.display_player(player)
+        player = self.repository.find_player_by_id(player_id)
+        if player:
+            self.view.display_player(player)
+        else:
+            print("Player not found.")
 
     def create_player(self, name, age):
-        player_id = len(self.model.get_all_players()) + 1
+        player_id = len(self.repository.get_all_players()) + 1
         player = Player(player_id, name, age)
-        created_player = self.model.create_player(player)
-        self.view.display_player_created(created_player)
+        self.repository.create_player(player)
+        self.view.display_player_created(player)
 
     def update_player(self, player_id, name, age):
-        updated_data = {"name": name, "age": age}
-        player = self.model.update_player(player_id, updated_data)
-        self.view.display_player_updated(player)
+        player = self.repository.update_player(player_id, {"name": name, "age": age})
+        if player:
+            self.view.display_player_updated(player)
+        else:
+            print("Player not found.")
 
     def delete_player(self, player_id):
-        success = self.model.delete_player(player_id)
+        success = self.repository.delete_player(player_id)
         self.view.display_player_deleted(success)
 
-
 class TournamentController:
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, repository, view):
+        self.repository = repository
         self.view = view
 
     def get_all_tournaments(self):
-        tournaments = self.model.get_all_tournaments()
-        self.view.display_all_tournaments(tournaments)
+        tournaments = self.repository.get_all_tournaments()
+        self.view.display_tournaments(tournaments)
 
     def get_tournament_by_id(self, tournament_id):
-        tournament = self.model.find_tournament_by_id(tournament_id)
-        self.view.display_tournament(tournament)
+        tournament = self.repository.find_tournament_by_id(tournament_id)
+        if tournament:
+            self.view.display_tournament(tournament)
+        else:
+            print("Tournament not found.")
 
     def create_tournament(self, name, date):
-        tournament_id = len(self.model.get_all_tournaments()) + 1
+        tournament_id = len(self.repository.get_all_tournaments()) + 1
         tournament = Tournament(tournament_id, name, date)
-        created_tournament = self.model.create_tournament(tournament)
-        self.view.display_tournament_created(created_tournament)
+        self.repository.create_tournament(tournament)
+        self.view.display_tournament_created(tournament)
 
     def update_tournament(self, tournament_id, name, date):
-        updated_data = {"name": name, "date": date}
-        tournament = self.model.update_tournament(tournament_id, updated_data)
-        self.view.display_tournament_updated(tournament)
+        tournament = self.repository.update_tournament(tournament_id, {"name": name, "date": date})
+        if tournament:
+            self.view.display_tournament_updated(tournament)
+        else:
+            print("Tournament not found.")
 
     def delete_tournament(self, tournament_id):
-        success = self.model.delete_tournament(tournament_id)
+        success = self.repository.delete_tournament(tournament_id)
         self.view.display_tournament_deleted(success)
 
+# Interface de commande
+class Command(ABC):
+    @abstractmethod
+    def execute(self):
+        pass
 
-# main.py
-from models import PlayerModel, TournamentModel
-from views import PlayerView, TournamentView
-from controllers import PlayerController, TournamentController
+# Commandes concrètes
+class CreatePlayerCommand(Command):
+    def __init__(self, controller, name, age):
+        self.controller = controller
+        self.name = name
+        self.age = age
 
+    def execute(self):
+        self.controller.create_player(self.name, self.age)
+
+class GetAllPlayersCommand(Command):
+    def __init__(self, controller):
+        self.controller = controller
+
+    def execute(self):
+        self.controller.get_all_players()
+
+class UpdatePlayerCommand(Command):
+    def __init__(self, controller, player_id, name, age):
+        self.controller = controller
+        self.player_id = player_id
+        self.name = name
+        self.age = age
+
+    def execute(self):
+        self.controller.update_player(self.player_id, self.name, self.age)
+
+class GetPlayerByIdCommand(Command):
+    def __init__(self, controller, player_id):
+        self.controller = controller
+        self.player_id = player_id
+
+    def execute(self):
+        self.controller.get_player_by_id(self.player_id)
+
+class DeletePlayerCommand(Command):
+    def __init__(self, controller, player_id):
+        self.controller = controller
+        self.player_id = player_id
+
+    def execute(self):
+        self.controller.delete_player(self.player_id)
+
+class CreateTournamentCommand(Command):
+    def __init__(self, controller, name, date):
+        self.controller = controller
+        self.name = name
+        self.date = date
+
+    def execute(self):
+        self.controller.create_tournament(self.name, self.date)
+
+class GetAllTournamentsCommand(Command):
+    def __init__(self, controller):
+        self.controller = controller
+
+    def execute(self):
+        self.controller.get_all_tournaments()
+
+class UpdateTournamentCommand(Command):
+    def __init__(self, controller, tournament_id, name, date):
+        self.controller = controller
+        self.tournament_id = tournament_id
+        self.name = name
+        self.date = date
+
+    def execute(self):
+        self.controller.update_tournament(self.tournament_id, self.name, self.date)
+
+class GetTournamentByIdCommand(Command):
+    def __init__(self, controller, tournament_id):
+        self.controller = controller
+        self.tournament_id = tournament_id
+
+    def execute(self):
+        self.controller.get_tournament_by_id(self.tournament_id)
+
+class DeleteTournamentCommand(Command):
+    def __init__(self, controller, tournament_id):
+        self.controller = controller
+        self.tournament_id = tournament_id
+
+    def execute(self):
+        self.controller.delete_tournament(self.tournament_id)
+
+# Vue du menu
+class MenuView:
+    def display_menu(self, tournament_loaded):
+        print("\nMenu:")
+        print("1. Create Player")
+        print("2. Get All Players")
+        print("3. Update Player")
+        print("4. Get Player by ID")
+        print("5. Delete Player")
+        print("6. Create Tournament")
+        print("7. Get All Tournaments")
+
+        if tournament_loaded:
+            print("8. Update Tournament")
+            print("9. Get Tournament by ID")
+            print("10. Delete Tournament")
+
+        print("11. Quit")
+
+    def get_user_choice(self):
+        return input("Choose an option: ")
+
+    def display_message(self, message):
+        print(message)
+
+# Contrôleur du menu
+class MenuController:
+    def __init__(self, view, player_controller, tournament_controller):
+        self.view = view
+        self.player_controller = player_controller
+        self.tournament_controller = tournament_controller
+        self.tournament_loaded = False
+
+    def execute_choice(self, choice):
+        if choice == "1":
+            name = input("Enter player name: ")
+            age = int(input("Enter player age: "))
+            command = CreatePlayerCommand(self.player_controller, name, age)
+        elif choice == "2":
+            command = GetAllPlayersCommand(self.player_controller)
+        elif choice == "3":
+            player_id = int(input("Enter player ID to update: "))
+            name = input("Enter new name: ")
+            age = int(input("Enter new age: "))
+            command = UpdatePlayerCommand(self.player_controller, player_id, name, age)
+        elif choice == "4":
+            player_id = int(input("Enter player ID: "))
+            command = GetPlayerByIdCommand(self.player_controller, player_id)
+        elif choice == "5":
+            player_id = int(input("Enter player ID to delete: "))
+            command = DeletePlayerCommand(self.player_controller, player_id)
+        elif choice == "6":
+            name = input("Enter tournament name: ")
+            date = input("Enter tournament date (YYYY-MM-DD): ")
+            command = CreateTournamentCommand(self.tournament_controller, name, date)
+            self.tournament_loaded = True  # Tournament is loaded after creation
+        elif choice == "7":
+            command = GetAllTournamentsCommand(self.tournament_controller)
+            self.tournament_loaded = True  # Tournament is loaded after retrieval
+        elif choice == "8" and self.tournament_loaded:
+            tournament_id = int(input("Enter tournament ID to update: "))
+            name = input("Enter new name: ")
+            date = input("Enter new date (YYYY-MM-DD): ")
+            command = UpdateTournamentCommand(self.tournament_controller, tournament_id, name, date)
+        elif choice == "9" and self.tournament_loaded:
+            tournament_id = int(input("Enter tournament ID: "))
+            command = GetTournamentByIdCommand(self.tournament_controller, tournament_id)
+        elif choice == "10" and self.tournament_loaded:
+            tournament_id = int(input("Enter tournament ID to delete: "))
+            command = DeleteTournamentCommand(self.tournament_controller, tournament_id)
+            self.tournament_loaded = False  # Tournament is unloaded after deletion
+        elif choice == "11":
+            self.view.display_message("Goodbye!")
+            return None
+        else:
+            self.view.display_message("Invalid choice. Please try again.")
+            return self.execute_choice(self.view.get_user_choice())
+
+        return command
 
 def main():
-    # Initialize models, views, and controllers
-    player_model = PlayerModel()
-    player_view = PlayerView()
-    player_controller = PlayerController(player_model, player_view)
+    # Initialisation des contrôleurs
+    player_controller = PlayerController(PlayerRepository(), PlayerView())
+    tournament_controller = TournamentController(TournamentRepository(), TournamentView())
 
-    tournament_model = TournamentModel()
-    tournament_view = TournamentView()
-    tournament_controller = TournamentController(tournament_model, tournament_view)
+    # Initialisation du contrôleur de menu
+    menu_view = MenuView()
+    menu_controller = MenuController(menu_view, player_controller, tournament_controller)
 
-    # Test PlayerController
-    print("Creating players...")
-    player_controller.create_player("Alice", 25)
-    player_controller.create_player("Bob", 30)
+    while True:
+        menu_view.display_menu(menu_controller.tournament_loaded)
+        choice = menu_view.get_user_choice()
+        command = menu_controller.execute_choice(choice)
 
-    print("\nDisplaying all players...")
-    player_controller.get_all_players()
+        if command is None:
+            break
 
-    print("\nUpdating player with ID 1...")
-    player_controller.update_player(1, "Alice Smith", 26)
-
-    print("\nDisplaying player with ID 1...")
-    player_controller.get_player_by_id(1)
-
-    print("\nDeleting player with ID 2...")
-    player_controller.delete_player(2)
-
-    print("\nDisplaying all players...")
-    player_controller.get_all_players()
-
-    # Test TournamentController
-    print("\nCreating tournaments...")
-    tournament_controller.create_tournament("Tournament 1", "2023-10-01")
-    tournament_controller.create_tournament("Tournament 2", "2023-11-01")
-
-    print("\nDisplaying all tournaments...")
-    tournament_controller.get_all_tournaments()
-
-    print("\nUpdating tournament with ID 1...")
-    tournament_controller.update_tournament(1, "Tournament 1 Updated", "2023-10-15")
-
-    print("\nDisplaying tournament with ID 1...")
-    tournament_controller.get_tournament_by_id(1)
-
-    print("\nDeleting tournament with ID 2...")
-    tournament_controller.delete_tournament(2)
-
-    print("\nDisplaying all tournaments...")
-    tournament_controller.get_all_tournaments()
-
-
-if __name__ == "__main__":
-    main()
-
-import cmd
-from models import PlayerModel, TournamentModel
-from views import PlayerView, TournamentView
-from controllers import PlayerController, TournamentController
-
-class ConsoleMenu(cmd.Cmd):
-    intro = 'Bienvenue dans le menu de test. Tapez help ou ? pour lister les commandes.\n'
-    prompt = '(menu) '
-
-    def __init__(self):
-        super().__init__()
-        self.player_controller = PlayerController(PlayerModel(), PlayerView())
-        self.tournament_controller = TournamentController(TournamentModel(), TournamentView())
-
-    def do_create_player(self, arg):
-        'Crée un joueur : create_player <nom> <âge>'
-        args = arg.split()
-        if len(args) == 2:
-            name, age = args
-            self.player_controller.create_player(name, int(age))
-        else:
-            print("Usage: create_player <nom> <âge>")
-
-    def do_get_all_players(self, arg):
-        'Affiche tous les joueurs : get_all_players'
-        self.player_controller.get_all_players()
-
-    def do_update_player(self, arg):
-        'Met à jour un joueur : update_player <id> <nom> <âge>'
-        args = arg.split()
-        if len(args) == 3:
-            player_id, name, age = args
-            self.player_controller.update_player(int(player_id), name, int(age))
-        else:
-            print("Usage: update_player <id> <nom> <âge>")
-
-    def do_get_player_by_id(self, arg):
-        'Affiche un joueur par ID : get_player_by_id <id>'
-        args = arg.split()
-        if len(args) == 1:
-            player_id = int(args[0])
-            self.player_controller.get_player_by_id(player_id)
-        else:
-            print("Usage: get_player_by_id <id>")
-
-    def do_delete_player(self, arg):
-        'Supprime un joueur par ID : delete_player <id>'
-        args = arg.split()
-        if len(args) == 1:
-            player_id = int(args[0])
-            self.player_controller.delete_player(player_id)
-        else:
-            print("Usage: delete_player <id>")
-
-    def do_create_tournament(self, arg):
-        'Crée un tournoi : create_tournament <nom> <date>'
-        args = arg.split()
-        if len(args) == 2:
-            name, date = args
-            self.tournament_controller.create_tournament(name, date)
-        else:
-            print("Usage: create_tournament <nom> <date>")
-
-    def do_get_all_tournaments(self, arg):
-        'Affiche tous les tournois : get_all_tournaments'
-        self.tournament_controller.get_all_tournaments()
-
-    def do_update_tournament(self, arg):
-        'Met à jour un tournoi : update_tournament <id> <nom> <date>'
-        args = arg.split()
-        if len(args) == 3:
-            tournament_id, name, date = args
-            self.tournament_controller.update_tournament(int(tournament_id), name, date)
-        else:
-            print("Usage: update_tournament <id> <nom> <date>")
-
-    def do_get_tournament_by_id(self, arg):
-        'Affiche un tournoi par ID : get_tournament_by_id <id>'
-        args = arg.split()
-        if len(args) == 1:
-            tournament_id = int(args[0])
-            self.tournament_controller.get_tournament_by_id(tournament_id)
-        else:
-            print("Usage: get_tournament_by_id <id>")
-
-    def do_delete_tournament(self, arg):
-        'Supprime un tournoi par ID : delete_tournament <id>'
-        args = arg.split()
-        if len(args) == 1:
-            tournament_id = int(args[0])
-            self.tournament_controller.delete_tournament(tournament_id)
-        else:
-            print("Usage: delete_tournament <id>")
-
-    def do_quit(self, arg):
-        'Quitte le menu : quit'
-        print("Au revoir!")
-        return True
-
-def main():
-    ConsoleMenu().cmdloop()
+        command.execute()
 
 if __name__ == "__main__":
     main()
