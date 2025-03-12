@@ -1,14 +1,16 @@
-import json
 from models.tournament import Tournament
 from models.base_repository import BaseRepository
+from services.file_service import FileService
 
 
 class TournamentRepository(BaseRepository):
     FILE_PATH = "tournaments.json"
 
+    def __init__(self):
+        self.file_service = FileService(self.get_file_path())
+
     def get_all_tournaments(self):
-        with open(self.FILE_PATH, "r") as file:
-            tournaments_dict = json.load(file)
+        tournaments_dict = self.file_service.read_from_file()
         return [Tournament.from_dict(tournament) for tournament in tournaments_dict]
 
     def find_tournament_by_id(self, tournament_id):
@@ -21,10 +23,9 @@ class TournamentRepository(BaseRepository):
     def create_tournament(self, tournament):
         tournaments = self.get_all_tournaments()
         tournaments.append(tournament)
-        with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [tournament.to_dict() for tournament in tournaments], file, indent=4
-            )
+        self.file_service.write_to_file(
+            [tournament.to_dict() for tournament in tournaments]
+        )
         return tournament
 
     def update_tournament(self, tournament_id, updated_data):
@@ -33,11 +34,8 @@ class TournamentRepository(BaseRepository):
             if tournament.id == tournament_id:
                 tournament.name = updated_data["name"]
                 tournament.date = updated_data["date"]
-                with open(self.FILE_PATH, "w") as file:
-                    json.dump(
-                        [tournament.to_dict() for tournament in tournaments],
-                        file,
-                        indent=4,
-                    )
+                self.file_service.write_to_file(
+                    [tournament.to_dict() for tournament in tournaments]
+                )
                 return tournament
         return None
