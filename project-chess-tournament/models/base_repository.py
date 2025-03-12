@@ -11,7 +11,6 @@ class BaseRepository:
                 json.dump([], file)
 
     def get_file_path(self, folder="data/tournaments"):
-        """Get the full file path for the given filename and folder."""
         data_folder = os.path.join(os.getcwd(), folder)
         os.makedirs(data_folder, exist_ok=True)
         return os.path.join(data_folder, self.FILE_PATH)

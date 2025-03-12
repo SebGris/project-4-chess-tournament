@@ -3,27 +3,17 @@ import uuid
 
 class Tournament:
 
-    def __init__(
-        self,
-        name,
-        location,
-        start_date=None,
-        end_date=None,
-        number_of_rounds=4,
-        description=None,
-        players=None,
-        rounds=None,
-    ):
+    def __init__(self, name, location, start_date=None, end_date=None, description=None, players_list=None, rounds_list=None, number_of_rounds=4):
         self.id = uuid.uuid4()
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.current_round = 0
-        self.players = players if players is not None else []
         self.description = description
-        self.rounds = rounds if rounds is not None else []
+        self.players = players_list if players_list is not None else []
+        self.rounds = rounds_list if rounds_list is not None else []
         self.number_of_rounds = number_of_rounds
+        self.current_round = 0
 
     def set_description(self, description):
         """Define the tournament description."""

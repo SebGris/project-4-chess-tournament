@@ -3,8 +3,6 @@ from datetime import datetime
 
 
 class Player:
-    """Class representing a chess player."""
-
     def __init__(self, last_name, first_name, birth_date, id_chess):
         self.id = uuid.uuid4()
         self.last_name = last_name
@@ -36,14 +34,7 @@ class Player:
     def __repr__(self):
         return f"Player(full_name={self.full_name}, score={self.score})"
 
-    def __str__(self):
-        """Returns a string representation of the player."""
-        return (f"{self.full_name} | "
-                f"Né(e) le {self.formatted_birth_date()} | "
-                f"ID échecs {self.id_chess}")
-
     def to_dict(self):
-        """Convert Player object to dictionary."""
         return {
             "id": str(self.id),
             "last_name": self.last_name,
@@ -54,12 +45,11 @@ class Player:
 
     @staticmethod
     def from_dict(player_dict):
-        """Create a Player instance from a dictionary."""
-        return Player(
-            last_name=player_dict["last_name"],
-            first_name=player_dict["first_name"],
-            birth_date=player_dict.get("birth_date"),
-            id_chess=player_dict.get("id_chess"),
-            id=player_dict.get("id"),
-            score=player_dict.get("score", 0.0)
+        player = Player(
+            player_dict["last_name"],
+            player_dict["first_name"],
+            player_dict["birth_date"],
+            player_dict["id_chess"]
         )
+        player.id = uuid.UUID(player_dict["id"])
+        return player

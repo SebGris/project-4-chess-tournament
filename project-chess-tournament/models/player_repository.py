@@ -29,17 +29,14 @@ class PlayerRepository(BaseRepository):
     def update_player(self, player_id, updated_data):
         players = self.get_all_players()
         for player in players:
-            if player.id == player_id:
-                player.name = updated_data["name"]
-                player.age = updated_data["age"]
+            if str(player.id) == player_id:
+                player.last_name = updated_data["last_name"]
+                player.first_name = updated_data["first_name"]
+                player.birth_date = updated_data["birth_date"]
+                player.id_chess = updated_data["id_chess"]
+                player.score = updated_data["score"]
                 self.file_service.write_to_file(
                     [player.to_dict() for player in players]
                 )
                 return player
         return None
-
-    def delete_player(self, player_id):
-        players = self.get_all_players()
-        players = [player for player in players if player.id != player_id]
-        self.file_service.write_to_file([player.to_dict() for player in players])
-        return True
