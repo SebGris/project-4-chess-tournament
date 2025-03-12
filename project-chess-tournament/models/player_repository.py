@@ -1,15 +1,10 @@
 import json
-import os
+from models.base_repository import BaseRepository
 from models.player import Player
 
 
-class PlayerRepository:
+class PlayerRepository(BaseRepository):
     FILE_PATH = "players.json"
-
-    def __init__(self):
-        if not os.path.exists(self.FILE_PATH):
-            with open(self.FILE_PATH, "w") as file:
-                json.dump([], file)
 
     def get_all_players(self):
         with open(self.FILE_PATH, "r") as file:
@@ -27,11 +22,7 @@ class PlayerRepository:
         players = self.get_all_players()
         players.append(player)
         with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [player.to_dict() for player in players],
-                file,
-                indent=4
-            )
+            json.dump([player.to_dict() for player in players], file, indent=4)
         return player
 
     def update_player(self, player_id, updated_data):
@@ -41,10 +32,6 @@ class PlayerRepository:
                 player.name = updated_data["name"]
                 player.age = updated_data["age"]
                 with open(self.FILE_PATH, "w") as file:
-                    json.dump(
-                        [player.to_dict() for player in players],
-                        file,
-                        indent=4
-                    )
+                    json.dump([player.to_dict() for player in players], file, indent=4)
                 return player
         return None
