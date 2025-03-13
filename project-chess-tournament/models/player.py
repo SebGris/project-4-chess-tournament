@@ -1,17 +1,18 @@
 import uuid
 from datetime import datetime
+from typing import Optional, Dict
 
 
 class Player:
-    def __init__(self, last_name, first_name, birth_date, id_chess):
-        self.id = uuid.uuid4()
+    def __init__(self, player_id: uuid.UUID, last_name: str, first_name: str, birth_date: str, id_chess: str):
+        self.id = player_id
         self.last_name = last_name
         self.first_name = first_name
-        self.full_name = f"{self.first_name} {self.last_name}"
         self.birth_date = birth_date
         self.id_chess = id_chess
+        self.full_name = f"{self.first_name} {self.last_name}"
 
-    def formatted_birth_date(self):
+    def formatted_birth_date(self) -> Optional[str]:
         """Returns the birth date in dd/mm/yyyy format."""
         if self.birth_date:
             try:
@@ -21,7 +22,7 @@ class Player:
                 return self.birth_date
         return None
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, str]:
         return {
             "id": str(self.id),
             "last_name": self.last_name,
@@ -31,12 +32,13 @@ class Player:
         }
 
     @staticmethod
-    def from_dict(player_dict):
+    def from_dict(player_dict: Dict[str, str]) -> 'Player':
         player = Player(
+            uuid.UUID(player_dict["id"]),
             player_dict["last_name"],
             player_dict["first_name"],
             player_dict["birth_date"],
             player_dict["id_chess"],
         )
-        player.id = uuid.UUID(player_dict["id"])
+        player.full_name = f"{player.first_name} {player.last_name}"
         return player

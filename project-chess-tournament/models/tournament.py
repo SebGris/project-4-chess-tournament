@@ -1,20 +1,13 @@
 import uuid
+from typing import List
+from models.player import Player
+from models.round import Round
 
 
 class Tournament:
 
-    def __init__(
-        self,
-        name,
-        location,
-        start_date=None,
-        end_date=None,
-        description=None,
-        players=None,
-        rounds=None,
-        number_of_rounds=4,
-    ):
-        self.id = uuid.uuid4()
+    def __init__(self, tournament_id: uuid.UUID, name: str, location: str, start_date: str, end_date: str, description: str, players: List[Player], rounds: List[Round], number_of_rounds: int):
+        self.id = tournament_id
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -25,15 +18,7 @@ class Tournament:
         self.number_of_rounds = number_of_rounds
         self.current_round = 0
 
-    def set_description(self, description):
-        """Define the tournament description."""
-        self.description = description
-
-    def set_number_of_rounds(self, number_of_rounds):
-        """Define the number of rounds."""
-        self.number_of_rounds = number_of_rounds
-
-    def add_player(self, player):
+    def add_player(self, player: Player):
         """Add a player to the tournament."""
         self.players.append(player)
 
@@ -76,22 +61,23 @@ class Tournament:
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "player_ids": [player_id for player_id in self.players],
             "description": self.description,
-            "rounds": [round for round in self.rounds],
+            "player_ids": [str(player.id) for player in self.players],
+            "round_ids": [str(round.id) for round in self.rounds],
             "number_of_rounds": self.number_of_rounds,
         }
 
     @staticmethod
-    def from_dict(tournament_dict):
+    def from_dict(tournament: dict):
         """Create a Tournament object from a dictionary."""
         return Tournament(
-            name=tournament_dict["name"],
-            location=tournament_dict["location"],
-            start_date=tournament_dict.get("start_date"),
-            end_date=tournament_dict.get("end_date"),
-            number_of_rounds=tournament_dict.get("number_of_rounds", 4),
-            description=tournament_dict.get("description"),
-            players=tournament_dict.get("player_ids", []),
-            rounds=tournament_dict.get("rounds", []),
+            uuid.UUID(tournament["id"]),
+            tournament["name"],
+            tournament["location"],
+            tournament["start_date"],
+            tournament["end_date"],
+            tournament["description"],
+            tournament["player_ids"],
+            tournament["rounds"],
+            tournament["number_of_rounds"],
         )

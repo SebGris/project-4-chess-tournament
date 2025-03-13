@@ -2,35 +2,27 @@ from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
+from models.tournament_repository import TournamentRepository
+from views.tournament_view import TournamentView
 
 
 class TournamentController:
 
-    def __init__(self, repository, view):
+    def __init__(self, repository: TournamentRepository, view: TournamentView):
         self.repository = repository
         self.view = view
 
     def get_all_tournaments(self):
         tournaments = self.repository.get_all_tournaments()
         self.view.display_tournaments(
-            [tournament.to_dict() for tournament in tournaments]
+            [tournament for tournament in tournaments]
         )
 
     def get_tournament_by_id(self, tournament_id):
         tournament = self.repository.find_tournament_by_id(tournament_id)
         self.view.display_tournament(tournament)
 
-    def create_tournament(
-        self,
-        name,
-        location,
-        start_date,
-        end_date,
-        number_of_rounds,
-        description=None,
-        player_ids=None,
-        rounds_list=None,
-    ):
+    def create_tournament(self, name, location, start_date, end_date, number_of_rounds, description, player_ids, rounds_list ):
         players_list = (
             [self.all_players[player_id] for player_id in player_ids]
             if player_ids
@@ -49,8 +41,8 @@ class TournamentController:
         )
         self.active_tournament = tournament
         self.tournaments.append(tournament)
-        created_tournament = self.repository.create_tournament(tournament)
-        self.view.display_tournament_created(created_tournament)
+        self.repository.create_tournament(tournament)
+        self.view.display_tournament_created(tournament)
 
     def update_tournament(self, tournament_id, name, date):
         updated_data = {"name": name, "date": date}
@@ -136,7 +128,3 @@ class TournamentController:
             elif result == "0":
                 match.set_score(0.5, 0.5)
         round_instance.end_round()
-
-    def save_players_data(self, players_data):
-        """Sauvegarder les données des joueurs dans un fichier JSON."""
-        TournamentLoaderService.save_players(players_data)

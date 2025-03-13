@@ -1,4 +1,7 @@
 from views.base_view import BaseView
+from models.tournament import Tournament
+from models.round import Round
+from typing import List
 
 
 class TournamentView(BaseView):
@@ -45,11 +48,11 @@ class TournamentView(BaseView):
             else:
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
-    def get_tournament_selection(self, tournaments):
+    def get_tournament_selection(self, tournaments: List[Tournament]) -> int:
         print("Sélectionnez un tournoi :")
         for index, tournament in enumerate(tournaments):
             print(
-                f"{index + 1}. {tournament['name']} à {tournament['location']} du {tournament['start_date']} au {tournament['end_date']}"
+                f"{index + 1}. {tournament.name} à {tournament.location} du {tournament.start_date} au {tournament.end_date}"
             )
         while True:
             try:
@@ -61,15 +64,15 @@ class TournamentView(BaseView):
             except ValueError:
                 print("Entrée invalide, veuillez entrer un numéro.")
 
-    def display_tournament_details(self, tournament):
+    def display_tournament_details(self, tournament: Tournament):
         """Display tournament information."""
         print("--- Informations sur le tournoi ---")
-        print(f"Tournoi : {tournament['name']} | Lieu : {tournament['location']}")
-        print(f"Date : du {tournament['start_date']} au {tournament['end_date']}")
+        print(f"Tournoi : {tournament.name} | Lieu : {tournament.location}")
+        print(f"Date : du {tournament.start_date} au {tournament.end_date}")
         print(
-            f"Description : {tournament['description'] if tournament['description'] else 'Aucune'}"
+            f"Description : {tournament.description if tournament.description else 'Aucune'}"
         )
-        print(f"Nombre de tours : {tournament['number_of_rounds']}")
+        print(f"Nombre de tours : {tournament.number_of_rounds}")
 
     def display_tournaments(self, tournaments):
         for tournament in tournaments:
@@ -84,7 +87,7 @@ class TournamentView(BaseView):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
 
-    def display_round_info(self, round):
+    def display_round_info(self, round: Round):
         """Display information about a round."""
         round_name = round["name"]
         if round_name == "Round 1":

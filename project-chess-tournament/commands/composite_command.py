@@ -1,5 +1,6 @@
 from commands.command import Command
 
+
 class CompositeCommand(Command):
     def __init__(self):
         self.commands = []

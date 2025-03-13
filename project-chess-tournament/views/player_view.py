@@ -1,4 +1,6 @@
 import re
+from models.player import Player
+from typing import List
 from views.base_view import BaseView
 
 
@@ -46,14 +48,14 @@ class PlayerView(BaseView):
             else:
                 print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
 
-    def display_players(self, players):
+    def display_players(self, players: List[Player]):
         """Display a list of players."""
         print("--- Joueurs du tournoi ---")
         if not players:
             print("Aucun joueur enregistré.")
         else:
             for player in players:
-                print(f"{player['full_name']} | Né(e) le {player['birth_date']} | ID échecs {player['id_chess']}")
+                print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.id_chess}")
 
     def display_tournament_players(self, players_names):
         """Display the players of a tournament."""
