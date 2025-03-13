@@ -21,7 +21,9 @@ class TournamentView(BaseView):
     def get_tournament_number_of_rounds(self):
         while True:
             try:
-                rounds = self.input("Entrez le nombre de tours du tournoi (par défaut 4):")
+                rounds = self.input(
+                    "Entrez le nombre de tours du tournoi (par défaut 4):"
+                )
                 if rounds == "":
                     return 4
                 rounds = int(rounds)
@@ -35,7 +37,9 @@ class TournamentView(BaseView):
     def get_match_result(self):
         """Asks the user to enter the result of a match."""
         while True:
-            result = self.input("Entrez 1 si le joueur 1 gagne, 2 si le joueur 2 gagne ou 0 si match nul :")
+            result = self.input(
+                "Entrez 1 si le joueur 1 gagne, 2 si le joueur 2 gagne ou 0 si match nul :"
+            )
             if result in {"1", "2", "0"}:
                 return result
             else:
@@ -44,7 +48,9 @@ class TournamentView(BaseView):
     def get_tournament_selection(self, tournaments):
         print("Sélectionnez un tournoi :")
         for index, tournament in enumerate(tournaments):
-            print(f"{index + 1}. {tournament.name} à {tournament.location}")
+            print(
+                f"{index + 1}. {tournament['name']} à {tournament['location']} du {tournament['start_date']} au {tournament['end_date']}"
+            )
         while True:
             try:
                 choice = int(self.input("Entrez le numéro du tournoi :")) - 1
@@ -60,11 +66,19 @@ class TournamentView(BaseView):
         print("--- Informations sur le tournoi ---")
         print(f"Tournoi : {tournament['name']} | Lieu : {tournament['location']}")
         print(f"Date : du {tournament['start_date']} au {tournament['end_date']}")
-        print(f"Description : {tournament['description'] if tournament['description'] else 'Aucune'}")
+        print(
+            f"Description : {tournament['description'] if tournament['description'] else 'Aucune'}"
+        )
         print(f"Nombre de tours : {tournament['number_of_rounds']}")
 
+    def display_tournaments(self, tournaments):
+        for tournament in tournaments:
+            self.display_tournament_details(tournament)
+
     def display_current_round_no(self, round_no):
-        print(f"N° round actuel : {round_no['current_round']}/{round_no['number_of_rounds']}")
+        print(
+            f"N° round actuel : {round_no['current_round']}/{round_no['number_of_rounds']}"
+        )
 
     def display_match_summary(self, match):
         """Returns a summary of a match."""
@@ -72,11 +86,11 @@ class TournamentView(BaseView):
 
     def display_round_info(self, round):
         """Display information about a round."""
-        round_name = round['name']
+        round_name = round["name"]
         if round_name == "Round 1":
             print("--- Liste des rounds ---")
         print(f"--- {round_name} ---")
-        if round['start_date']:
+        if round["start_date"]:
             print(f"Date de début : {round['start_date']}")
         print(f"Date de fin : {round['end_date'] or 'round en cours'}")
 
@@ -96,7 +110,9 @@ class TournamentView(BaseView):
         self.write_line("Aucun round en cours.")
 
     def display_for_file_not_found(self, error):
-        self.write_line(f"=== Information ===\n{error}\nVeuillez créer un nouveau tournoi.")
+        self.write_line(
+            f"=== Information ===\n{error}\nVeuillez créer un nouveau tournoi."
+        )
 
     def display_new_tournament_created(self, name):
         self.write_line(f"Nouveau tournoi {name} créé.")
@@ -111,7 +127,9 @@ class TournamentView(BaseView):
         self.write_line("Le tournoi ne peut pas commencer sans joueurs.")
 
     def display_start_error_tournament_even_players(self):
-        self.write_line("Le nombre de joueurs doit être pair pour commencer le tournoi.")
+        self.write_line(
+            "Le nombre de joueurs doit être pair pour commencer le tournoi."
+        )
 
     def display_successful_description_message(self):
         self.write_line("Description ajoutée avec succès.")

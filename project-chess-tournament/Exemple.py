@@ -2,6 +2,7 @@ import json
 import os
 from abc import ABC, abstractmethod
 
+
 # Modèles
 class Player:
     def __init__(self, player_id, name, age):
@@ -15,6 +16,7 @@ class Player:
     @staticmethod
     def from_dict(player_dict):
         return Player(player_dict["id"], player_dict["name"], player_dict["age"])
+
 
 class Tournament:
     def __init__(self, tournament_id, name, date):
@@ -30,6 +32,7 @@ class Tournament:
         return Tournament(
             tournament_dict["id"], tournament_dict["name"], tournament_dict["date"]
         )
+
 
 # Dépôts de données
 class PlayerRepository:
@@ -77,6 +80,7 @@ class PlayerRepository:
             json.dump([player.to_dict() for player in players], file, indent=4)
         return True
 
+
 class TournamentRepository:
     FILE_PATH = "tournaments.json"
 
@@ -101,7 +105,9 @@ class TournamentRepository:
         tournaments = self.get_all_tournaments()
         tournaments.append(tournament)
         with open(self.FILE_PATH, "w") as file:
-            json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
+            json.dump(
+                [tournament.to_dict() for tournament in tournaments], file, indent=4
+            )
         return tournament
 
     def update_tournament(self, tournament_id, updated_data):
@@ -111,51 +117,74 @@ class TournamentRepository:
                 tournament.name = updated_data["name"]
                 tournament.date = updated_data["date"]
                 with open(self.FILE_PATH, "w") as file:
-                    json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
+                    json.dump(
+                        [tournament.to_dict() for tournament in tournaments],
+                        file,
+                        indent=4,
+                    )
                 return tournament
         return None
 
     def delete_tournament(self, tournament_id):
         tournaments = self.get_all_tournaments()
-        tournaments = [tournament for tournament in tournaments if tournament.id != tournament_id]
+        tournaments = [
+            tournament for tournament in tournaments if tournament.id != tournament_id
+        ]
         with open(self.FILE_PATH, "w") as file:
-            json.dump([tournament.to_dict() for tournament in tournaments], file, indent=4)
+            json.dump(
+                [tournament.to_dict() for tournament in tournaments], file, indent=4
+            )
         return True
+
 
 # Vues
 class PlayerView:
-    def display_player(self, player):
-        print(f"Player ID: {player.id}, Name: {player.name}, Age: {player.age}")
+    def display_player(self, player_dict):
+        print(
+            f"Player ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
+        )
 
-    def display_players(self, players):
-        for player in players:
-            self.display_player(player)
+    def display_players(self, players_dict_list):
+        for player_dict in players_dict_list:
+            self.display_player(player_dict)
 
-    def display_player_created(self, player):
-        print(f"Player created: ID: {player.id}, Name: {player.name}, Age: {player.age}")
+    def display_player_created(self, player_dict):
+        print(
+            f"Player created: ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
+        )
 
-    def display_player_updated(self, player):
-        print(f"Player updated: ID: {player.id}, Name: {player.name}, Age: {player.age}")
+    def display_player_updated(self, player_dict):
+        print(
+            f"Player updated: ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
+        )
 
     def display_player_deleted(self, success):
         print(f"Player deleted: {success}")
 
+
 class TournamentView:
-    def display_tournament(self, tournament):
-        print(f"Tournament ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
+    def display_tournament(self, tournament_dict):
+        print(
+            f"Tournament ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
+        )
 
-    def display_tournaments(self, tournaments):
-        for tournament in tournaments:
-            self.display_tournament(tournament)
+    def display_tournaments(self, tournaments_dict_list):
+        for tournament_dict in tournaments_dict_list:
+            self.display_tournament(tournament_dict)
 
-    def display_tournament_created(self, tournament):
-        print(f"Tournament created: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
+    def display_tournament_created(self, tournament_dict):
+        print(
+            f"Tournament created: ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
+        )
 
-    def display_tournament_updated(self, tournament):
-        print(f"Tournament updated: ID: {tournament.id}, Name: {tournament.name}, Date: {tournament.date}")
+    def display_tournament_updated(self, tournament_dict):
+        print(
+            f"Tournament updated: ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
+        )
 
     def display_tournament_deleted(self, success):
         print(f"Tournament deleted: {success}")
+
 
 # Contrôleurs
 class PlayerController:
@@ -165,12 +194,12 @@ class PlayerController:
 
     def get_all_players(self):
         players = self.repository.get_all_players()
-        self.view.display_players(players)
+        self.view.display_players([player.to_dict() for player in players])
 
     def get_player_by_id(self, player_id):
         player = self.repository.find_player_by_id(player_id)
         if player:
-            self.view.display_player(player)
+            self.view.display_player(player.to_dict())
         else:
             print("Player not found.")
 
@@ -178,18 +207,19 @@ class PlayerController:
         player_id = len(self.repository.get_all_players()) + 1
         player = Player(player_id, name, age)
         self.repository.create_player(player)
-        self.view.display_player_created(player)
+        self.view.display_player_created(player.to_dict())
 
     def update_player(self, player_id, name, age):
         player = self.repository.update_player(player_id, {"name": name, "age": age})
         if player:
-            self.view.display_player_updated(player)
+            self.view.display_player_updated(player.to_dict())
         else:
             print("Player not found.")
 
     def delete_player(self, player_id):
         success = self.repository.delete_player(player_id)
         self.view.display_player_deleted(success)
+
 
 class TournamentController:
     def __init__(self, repository, view):
@@ -198,12 +228,14 @@ class TournamentController:
 
     def get_all_tournaments(self):
         tournaments = self.repository.get_all_tournaments()
-        self.view.display_tournaments(tournaments)
+        self.view.display_tournaments(
+            [tournament.to_dict() for tournament in tournaments]
+        )
 
     def get_tournament_by_id(self, tournament_id):
         tournament = self.repository.find_tournament_by_id(tournament_id)
         if tournament:
-            self.view.display_tournament(tournament)
+            self.view.display_tournament(tournament.to_dict())
         else:
             print("Tournament not found.")
 
@@ -211,12 +243,14 @@ class TournamentController:
         tournament_id = len(self.repository.get_all_tournaments()) + 1
         tournament = Tournament(tournament_id, name, date)
         self.repository.create_tournament(tournament)
-        self.view.display_tournament_created(tournament)
+        self.view.display_tournament_created(tournament.to_dict())
 
     def update_tournament(self, tournament_id, name, date):
-        tournament = self.repository.update_tournament(tournament_id, {"name": name, "date": date})
+        tournament = self.repository.update_tournament(
+            tournament_id, {"name": name, "date": date}
+        )
         if tournament:
-            self.view.display_tournament_updated(tournament)
+            self.view.display_tournament_updated(tournament.to_dict())
         else:
             print("Tournament not found.")
 
@@ -224,11 +258,13 @@ class TournamentController:
         success = self.repository.delete_tournament(tournament_id)
         self.view.display_tournament_deleted(success)
 
+
 # Interface de commande
 class Command(ABC):
     @abstractmethod
     def execute(self):
         pass
+
 
 # Commandes concrètes
 class CreatePlayerCommand(Command):
@@ -240,12 +276,14 @@ class CreatePlayerCommand(Command):
     def execute(self):
         self.controller.create_player(self.name, self.age)
 
+
 class GetAllPlayersCommand(Command):
     def __init__(self, controller):
         self.controller = controller
 
     def execute(self):
         self.controller.get_all_players()
+
 
 class UpdatePlayerCommand(Command):
     def __init__(self, controller, player_id, name, age):
@@ -257,6 +295,7 @@ class UpdatePlayerCommand(Command):
     def execute(self):
         self.controller.update_player(self.player_id, self.name, self.age)
 
+
 class GetPlayerByIdCommand(Command):
     def __init__(self, controller, player_id):
         self.controller = controller
@@ -265,6 +304,7 @@ class GetPlayerByIdCommand(Command):
     def execute(self):
         self.controller.get_player_by_id(self.player_id)
 
+
 class DeletePlayerCommand(Command):
     def __init__(self, controller, player_id):
         self.controller = controller
@@ -272,6 +312,7 @@ class DeletePlayerCommand(Command):
 
     def execute(self):
         self.controller.delete_player(self.player_id)
+
 
 class CreateTournamentCommand(Command):
     def __init__(self, controller, name, date):
@@ -282,12 +323,14 @@ class CreateTournamentCommand(Command):
     def execute(self):
         self.controller.create_tournament(self.name, self.date)
 
-class GetAllTournamentsCommand(Command):
+
+class ShowAllTournamentsCommand(Command):
     def __init__(self, controller):
         self.controller = controller
 
     def execute(self):
         self.controller.get_all_tournaments()
+
 
 class UpdateTournamentCommand(Command):
     def __init__(self, controller, tournament_id, name, date):
@@ -299,6 +342,7 @@ class UpdateTournamentCommand(Command):
     def execute(self):
         self.controller.update_tournament(self.tournament_id, self.name, self.date)
 
+
 class GetTournamentByIdCommand(Command):
     def __init__(self, controller, tournament_id):
         self.controller = controller
@@ -307,6 +351,7 @@ class GetTournamentByIdCommand(Command):
     def execute(self):
         self.controller.get_tournament_by_id(self.tournament_id)
 
+
 class DeleteTournamentCommand(Command):
     def __init__(self, controller, tournament_id):
         self.controller = controller
@@ -314,6 +359,7 @@ class DeleteTournamentCommand(Command):
 
     def execute(self):
         self.controller.delete_tournament(self.tournament_id)
+
 
 # Vue du menu
 class MenuView:
@@ -339,6 +385,7 @@ class MenuView:
 
     def display_message(self, message):
         print(message)
+
 
 # Contrôleur du menu
 class MenuController:
@@ -372,16 +419,20 @@ class MenuController:
             command = CreateTournamentCommand(self.tournament_controller, name, date)
             self.tournament_loaded = True  # Tournament is loaded after creation
         elif choice == "7":
-            command = GetAllTournamentsCommand(self.tournament_controller)
+            command = ShowAllTournamentsCommand(self.tournament_controller)
             self.tournament_loaded = True  # Tournament is loaded after retrieval
         elif choice == "8" and self.tournament_loaded:
             tournament_id = int(input("Enter tournament ID to update: "))
             name = input("Enter new name: ")
             date = input("Enter new date (YYYY-MM-DD): ")
-            command = UpdateTournamentCommand(self.tournament_controller, tournament_id, name, date)
+            command = UpdateTournamentCommand(
+                self.tournament_controller, tournament_id, name, date
+            )
         elif choice == "9" and self.tournament_loaded:
             tournament_id = int(input("Enter tournament ID: "))
-            command = GetTournamentByIdCommand(self.tournament_controller, tournament_id)
+            command = GetTournamentByIdCommand(
+                self.tournament_controller, tournament_id
+            )
         elif choice == "10" and self.tournament_loaded:
             tournament_id = int(input("Enter tournament ID to delete: "))
             command = DeleteTournamentCommand(self.tournament_controller, tournament_id)
@@ -395,14 +446,19 @@ class MenuController:
 
         return command
 
+
 def main():
     # Initialisation des contrôleurs
     player_controller = PlayerController(PlayerRepository(), PlayerView())
-    tournament_controller = TournamentController(TournamentRepository(), TournamentView())
+    tournament_controller = TournamentController(
+        TournamentRepository(), TournamentView()
+    )
 
     # Initialisation du contrôleur de menu
     menu_view = MenuView()
-    menu_controller = MenuController(menu_view, player_controller, tournament_controller)
+    menu_controller = MenuController(
+        menu_view, player_controller, tournament_controller
+    )
 
     while True:
         menu_view.display_menu(menu_controller.tournament_loaded)
@@ -413,6 +469,7 @@ def main():
             break
 
         command.execute()
+
 
 if __name__ == "__main__":
     main()

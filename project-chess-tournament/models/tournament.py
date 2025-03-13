@@ -3,15 +3,25 @@ import uuid
 
 class Tournament:
 
-    def __init__(self, name, location, start_date=None, end_date=None, description=None, players_list=None, rounds_list=None, number_of_rounds=4):
+    def __init__(
+        self,
+        name,
+        location,
+        start_date=None,
+        end_date=None,
+        description=None,
+        players=None,
+        rounds=None,
+        number_of_rounds=4,
+    ):
         self.id = uuid.uuid4()
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
         self.description = description
-        self.players = players_list if players_list is not None else []
-        self.rounds = rounds_list if rounds_list is not None else []
+        self.players = players if players is not None else []
+        self.rounds = rounds if rounds is not None else []
         self.number_of_rounds = number_of_rounds
         self.current_round = 0
 
@@ -66,9 +76,9 @@ class Tournament:
             "location": self.location,
             "start_date": self.start_date,
             "end_date": self.end_date,
-            "player_ids": [str(player.id) for player in self.players],
+            "player_ids": [player_id for player_id in self.players],
             "description": self.description,
-            "rounds": [round.to_dict() for round in self.rounds],
+            "rounds": [round for round in self.rounds],
             "number_of_rounds": self.number_of_rounds,
         }
 
@@ -82,6 +92,6 @@ class Tournament:
             end_date=tournament_dict.get("end_date"),
             number_of_rounds=tournament_dict.get("number_of_rounds", 4),
             description=tournament_dict.get("description"),
-            players=tournament_dict.get("players", []),
+            players=tournament_dict.get("player_ids", []),
             rounds=tournament_dict.get("rounds", []),
         )

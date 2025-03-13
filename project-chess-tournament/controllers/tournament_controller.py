@@ -2,31 +2,51 @@ from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
-from menu_commands.save_tournament_command import SaveTournamentCommand
 
 
-class TournamentController():
+class TournamentController:
 
     def __init__(self, repository, view):
         self.repository = repository
         self.view = view
-        self.tournaments = []
-        self.active_tournament = None
-        self.all_players = self.load_all_players()
-        self.load_tournaments()
 
     def get_all_tournaments(self):
         tournaments = self.repository.get_all_tournaments()
-        self.view.display_all_tournaments(tournaments)
+        self.view.display_tournaments(
+            [tournament.to_dict() for tournament in tournaments]
+        )
 
     def get_tournament_by_id(self, tournament_id):
         tournament = self.repository.find_tournament_by_id(tournament_id)
         self.view.display_tournament(tournament)
 
-    def create_tournament(self, name, location, start_date, end_date, number_of_rounds, description=None, player_ids=None, rounds_list=None):
-        players_list = [self.all_players[player_id] for player_id in player_ids] if player_ids else []
+    def create_tournament(
+        self,
+        name,
+        location,
+        start_date,
+        end_date,
+        number_of_rounds,
+        description=None,
+        player_ids=None,
+        rounds_list=None,
+    ):
+        players_list = (
+            [self.all_players[player_id] for player_id in player_ids]
+            if player_ids
+            else []
+        )
         rounds_list = [Round(**round) for round in rounds_list] if rounds_list else []
-        tournament = Tournament(name, location, start_date, end_date, number_of_rounds, description, players_list, rounds_list)
+        tournament = Tournament(
+            name,
+            location,
+            start_date,
+            end_date,
+            number_of_rounds,
+            description,
+            players_list,
+            rounds_list,
+        )
         self.active_tournament = tournament
         self.tournaments.append(tournament)
         created_tournament = self.repository.create_tournament(tournament)
@@ -36,30 +56,15 @@ class TournamentController():
         updated_data = {"name": name, "date": date}
         tournament = self.repository.update_tournament(tournament_id, updated_data)
         self.view.display_tournament_updated(tournament)
-    
+
     def select_tournament(self, tournament_index):
         self.active_tournament = self.tournaments[tournament_index]
         self.view.menu.set_tournament_loaded(True)
 
-    def load_tournaments(self):
-        """Charger les tournois depuis un fichier JSON."""
-        try:
-            tournaments_data = TournamentLoaderService.load_tournaments()
-            for tournament_data in tournaments_data:
-                if isinstance(tournament_data, dict):
-                    self.create_tournament(**tournament_data)
-                else:
-                    print(f"Invalid data format: {tournament_data}")
-        except FileNotFoundError as e:
-            self.view.display_for_file_not_found(str(e))
-
-    def load_players_data(self):
-        return TournamentLoaderService.load_players()
-
     def load_all_players(self):
         try:
             all_players = {
-                player_data['id']: Player(**player_data)
+                player_data["id"]: Player(**player_data)
                 for player_data in self.load_players_data()
             }
             return all_players
@@ -70,27 +75,24 @@ class TournamentController():
         player = Player(**player_data)
         self.active_tournament.players.append(player)
         return str(player.id)
-    
+
     def get_players(self):
         return [
-            {
-                **player.to_dict(),
-                "full_name": player.full_name
-            }
+            {**player.to_dict(), "full_name": player.full_name}
             for player in self.active_tournament.players
         ]
 
     def start_tournament(self):
-        for index in range(1,self.active_tournament.number_of_rounds):
+        for index in range(1, self.active_tournament.number_of_rounds):
             self.active_tournament.update_scores(round.matches)
             print(self.active_tournament.players)
             # if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
             current_round = self.active_tournament.get_current_round()
-            if (current_round is None):
+            if current_round is None:
                 self.add_round()
             elif current_round.is_finished():
                 self.add_round()
-    
+
     def add_round(self):
         round_name = f"Round {len(self.active_tournament.rounds) + 1}"
         new_round = Round(round_name)
@@ -105,13 +107,14 @@ class TournamentController():
         else:
             print("Next round")
             pairs = Pairing.generate_next_round_pairs(
-                self.active_tournament.players, previous_matches)
+                self.active_tournament.players, previous_matches
+            )
             print(pairs)
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.active_tournament.rounds.append(new_round)
         self.view.display_added_round_message(round_name)
-    
+
     def update_number_of_rounds(self, new_number_of_rounds):
         self.active_tournament.set_number_of_rounds(new_number_of_rounds)
 
@@ -132,9 +135,7 @@ class TournamentController():
                 match.set_score(0, 1)
             elif result == "0":
                 match.set_score(0.5, 0.5)
-            SaveTournamentCommand(self).execute()
         round_instance.end_round()
-        SaveTournamentCommand(self).execute()
 
     def save_players_data(self, players_data):
         """Sauvegarder les données des joueurs dans un fichier JSON."""

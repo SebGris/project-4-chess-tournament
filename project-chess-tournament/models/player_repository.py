@@ -34,7 +34,6 @@ class PlayerRepository(BaseRepository):
                 player.first_name = updated_data["first_name"]
                 player.birth_date = updated_data["birth_date"]
                 player.id_chess = updated_data["id_chess"]
-                player.score = updated_data["score"]
                 self.file_service.write_to_file(
                     [player.to_dict() for player in players]
                 )
