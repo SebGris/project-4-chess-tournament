@@ -73,7 +73,7 @@ class TournamentView(BaseView):
         )
         print(f"Nombre de tours : {tournament.number_of_rounds}")
 
-    def display_tournaments(self, tournaments):
+    def display_tournaments(self, tournaments: List[Tournament]):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
