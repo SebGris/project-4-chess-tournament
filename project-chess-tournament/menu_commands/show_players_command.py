@@ -3,12 +3,12 @@ from controllers.tournament_controller import TournamentController
 
 
 class ShowPlayersCommand(Command):
-    def __init__(self, tournament_controller: TournamentController):
-        self.tournament_controller = tournament_controller
+    def __init__(self, controller: TournamentController):
+        self.controller = controller
 
     def execute(self):
-        if self.tournament_controller.active_tournament:
-            players = self.tournament_controller.get_players()
-            self.tournament_controller.view.display_players(players)
+        if self.controller.active_tournament:
+            players = self.controller.get_players()
+            self.controller.view.display_players(players)
         else:
-            self.tournament_controller.view.display_no_tournament_message()
+            self.controller.view.display_no_tournament_message()

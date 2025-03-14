@@ -3,26 +3,20 @@ from controllers.tournament_controller import TournamentController
 
 
 class CreateTournamentCommand(Command):
-    """Command to create a new tournament without players."""
-
-    def __init__(self, tournament_controller: TournamentController):
-        self.tournament_controller = tournament_controller
+    def __init__(self, controller: TournamentController):
+        self.controller = controller
 
     def execute(self):
         tournament_info = self.collect_tournament_info()
-        self.tournament_controller.create_tournament(**tournament_info)
-        self.tournament_controller.view.display_new_tournament_created(
-            tournament_info["name"]
-        )
+        self.controller.create_tournament(**tournament_info)
+        self.controller.view.display_new_tournament_created(tournament_info["name"])
 
     def collect_tournament_info(self):
-        name = self.tournament_controller.view.get_tournament_name()
-        location = self.tournament_controller.view.get_tournament_location()
-        start_date = self.tournament_controller.view.get_tournament_start_date()
-        end_date = self.tournament_controller.view.get_tournament_end_date()
-        number_of_rounds = (
-            self.tournament_controller.view.get_tournament_number_of_rounds()
-        )
+        name = self.controller.view.get_tournament_name()
+        location = self.controller.view.get_tournament_location()
+        start_date = self.controller.view.get_tournament_start_date()
+        end_date = self.controller.view.get_tournament_end_date()
+        number_of_rounds = self.controller.view.get_tournament_number_of_rounds()
         return {
             "name": name,
             "location": location,

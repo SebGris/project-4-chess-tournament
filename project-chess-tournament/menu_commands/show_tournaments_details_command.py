@@ -3,12 +3,12 @@ from controllers.tournament_controller import TournamentController
 
 
 class ShowTournamentsDetailsCommand(Command):
-    def __init__(self, tournament_controller: TournamentController):
-        self.tournament_controller = tournament_controller
+    def __init__(self, controller: TournamentController):
+        self.controller = controller
 
     def execute(self):
-        if self.tournament_controller.tournaments:
-            for tournament in self.tournament_controller.tournaments:
+        if self.controller.tournaments:
+            for tournament in self.controller.tournaments:
                 tournament_dic = {
                     "name": tournament.name,
                     "location": tournament.location,
@@ -17,8 +17,6 @@ class ShowTournamentsDetailsCommand(Command):
                     "description": tournament.description,
                     "number_of_rounds": tournament.number_of_rounds,
                 }
-                self.tournament_controller.view.display_tournament_details(
-                    tournament_dic
-                )
+                self.controller.view.display_tournament_details(tournament_dic)
         else:
-            self.tournament_controller.view.display_no_tournament_message()
+            self.controller.view.display_no_tournament_message()

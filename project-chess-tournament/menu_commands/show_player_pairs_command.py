@@ -3,18 +3,16 @@ from controllers.tournament_controller import TournamentController
 
 
 class ShowPlayerPairsCommand(Command):
-    def __init__(self, tournament_controller: TournamentController):
-        self.tournament_controller = tournament_controller
+    def __init__(self, controller: TournamentController):
+        self.controller = controller
 
     def execute(self):
-        if self.tournament_controller.active_tournament:
+        if self.controller.active_tournament:
             try:
-                current_round = (
-                    self.tournament_controller.active_tournament.get_current_round()
-                )
+                current_round = self.controller.active_tournament.get_current_round()
                 round_name, pairs = current_round.get_pairs_players()
-                self.tournament_controller.view.display_player_pairs(round_name, pairs)
-            except Exception as e:
-                self.tournament_controller.view.display_no_round_message()
+                self.controller.view.display_player_pairs(round_name, pairs)
+            except Exception:
+                self.controller.view.display_no_round_message()
         else:
-            self.tournament_controller.view.display_no_tournament_message()
+            self.controller.view.display_no_tournament_message()

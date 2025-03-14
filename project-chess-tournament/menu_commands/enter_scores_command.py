@@ -3,8 +3,8 @@ from controllers.tournament_controller import TournamentController
 
 
 class EnterScoresCommand(Command):
-    def __init__(self, tournament_controller: TournamentController):
-        self.tournament_controller = tournament_controller
+    def __init__(self, controller: TournamentController):
+        self.controller = controller
 
     def execute(self):
-        self.tournament_controller.enter_scores()
+        self.controller.enter_scores()
