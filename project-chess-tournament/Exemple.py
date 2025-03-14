@@ -1,97 +1,39 @@
 import json
-import os
-from abc import ABC, abstractmethod
+from typing import List
 
 
-# Modèles
-class Player:
-    def __init__(self, player_id, name, age):
-        self.id = player_id
-        self.name = name
-        self.age = age
-
-    def to_dict(self):
-        return {"id": self.id, "name": self.name, "age": self.age}
-
-    @staticmethod
-    def from_dict(player_dict):
-        return Player(player_dict["id"], player_dict["name"], player_dict["age"])
+class BaseRepository:
+    def get_file_path(self):
+        raise NotImplementedError("Subclasses should implement this method.")
 
 
-class Tournament:
-    def __init__(self, tournament_id, name, date):
-        self.id = tournament_id
-        self.name = name
-        self.date = date
+class FileService:
+    def __init__(self, file_path):
+        self.file_path = file_path
 
-    def to_dict(self):
-        return {"id": self.id, "name": self.name, "date": self.date}
+    def read_from_file(self):
+        try:
+            with open(self.file_path, "r") as file:
+                return json.load(file)
+        except FileNotFoundError:
+            return []
 
-    @staticmethod
-    def from_dict(tournament_dict):
-        return Tournament(
-            tournament_dict["id"], tournament_dict["name"], tournament_dict["date"]
-        )
-
-
-# Dépôts de données
-class PlayerRepository:
-    FILE_PATH = "players.json"
-
-    def __init__(self):
-        if not os.path.exists(self.FILE_PATH):
-            with open(self.FILE_PATH, "w") as file:
-                json.dump([], file)
-
-    def get_all_players(self):
-        with open(self.FILE_PATH, "r") as file:
-            players_dict = json.load(file)
-        return [Player.from_dict(player) for player in players_dict]
-
-    def find_player_by_id(self, player_id):
-        players = self.get_all_players()
-        for player in players:
-            if player.id == player_id:
-                return player
-        return None
-
-    def create_player(self, player):
-        players = self.get_all_players()
-        players.append(player)
-        with open(self.FILE_PATH, "w") as file:
-            json.dump([player.to_dict() for player in players], file, indent=4)
-        return player
-
-    def update_player(self, player_id, updated_data):
-        players = self.get_all_players()
-        for player in players:
-            if player.id == player_id:
-                player.name = updated_data["name"]
-                player.age = updated_data["age"]
-                with open(self.FILE_PATH, "w") as file:
-                    json.dump([player.to_dict() for player in players], file, indent=4)
-                return player
-        return None
-
-    def delete_player(self, player_id):
-        players = self.get_all_players()
-        players = [player for player in players if player.id != player_id]
-        with open(self.FILE_PATH, "w") as file:
-            json.dump([player.to_dict() for player in players], file, indent=4)
-        return True
+    def write_to_file(self, data):
+        with open(self.file_path, "w") as file:
+            json.dump(data, file, indent=4)
 
 
-class TournamentRepository:
+class TournamentRepository(BaseRepository):
     FILE_PATH = "tournaments.json"
 
     def __init__(self):
-        if not os.path.exists(self.FILE_PATH):
-            with open(self.FILE_PATH, "w") as file:
-                json.dump([], file)
+        self.file_service = FileService(self.get_file_path())
 
-    def get_all_tournaments(self):
-        with open(self.FILE_PATH, "r") as file:
-            tournaments_dict = json.load(file)
+    def get_file_path(self):
+        return self.FILE_PATH
+
+    def get_all_tournaments(self) -> List["Tournament"]:
+        tournaments_dict = self.file_service.read_from_file()
         return [Tournament.from_dict(tournament) for tournament in tournaments_dict]
 
     def find_tournament_by_id(self, tournament_id):
@@ -101,375 +43,253 @@ class TournamentRepository:
                 return tournament
         return None
 
-    def create_tournament(self, tournament):
-        tournaments = self.get_all_tournaments()
-        tournaments.append(tournament)
-        with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [tournament.to_dict() for tournament in tournaments], file, indent=4
-            )
+    def save_tournaments(self, tournaments: List["Tournament"]):
+        tournaments_dict = [tournament.to_dict() for tournament in tournaments]
+        self.file_service.write_to_file(tournaments_dict)
+
+
+class Tournament:
+    def __init__(self, id, nom, date, lieu):
+        self.id = id
+        self.nom = nom
+        self.date = date
+        self.lieu = lieu
+        self.parties = []
+
+    @classmethod
+    def from_dict(cls, dict_):
+        tournament = cls(dict_["id"], dict_["nom"], dict_["date"], dict_["lieu"])
+        tournament.parties = [
+            Partie.from_dict(partie) for partie in dict_.get("parties", [])
+        ]
         return tournament
 
-    def update_tournament(self, tournament_id, updated_data):
-        tournaments = self.get_all_tournaments()
-        for tournament in tournaments:
-            if tournament.id == tournament_id:
-                tournament.name = updated_data["name"]
-                tournament.date = updated_data["date"]
-                with open(self.FILE_PATH, "w") as file:
-                    json.dump(
-                        [tournament.to_dict() for tournament in tournaments],
-                        file,
-                        indent=4,
-                    )
-                return tournament
-        return None
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nom": self.nom,
+            "date": self.date,
+            "lieu": self.lieu,
+            "parties": [partie.to_dict() for partie in self.parties],
+        }
 
-    def delete_tournament(self, tournament_id):
-        tournaments = self.get_all_tournaments()
-        tournaments = [
-            tournament for tournament in tournaments if tournament.id != tournament_id
-        ]
-        with open(self.FILE_PATH, "w") as file:
-            json.dump(
-                [tournament.to_dict() for tournament in tournaments], file, indent=4
-            )
-        return True
+    def ajouter_partie(self, partie):
+        self.parties.append(partie)
 
 
-# Vues
-class PlayerView:
-    def display_player(self, player_dict):
-        print(
-            f"Player ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
-        )
+class Partie:
+    def __init__(self, joueur1, joueur2, resultat=None):
+        self.joueur1 = joueur1
+        self.joueur2 = joueur2
+        self.resultat = resultat
 
-    def display_players(self, players_dict_list):
-        for player_dict in players_dict_list:
-            self.display_player(player_dict)
+    @classmethod
+    def from_dict(cls, dict_):
+        joueur1 = Joueur(**dict_["joueur1"])
+        joueur2 = Joueur(**dict_["joueur2"])
+        return cls(joueur1, joueur2, dict_.get("resultat"))
 
-    def display_player_created(self, player_dict):
-        print(
-            f"Player created: ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
-        )
-
-    def display_player_updated(self, player_dict):
-        print(
-            f"Player updated: ID: {player_dict['id']}, Name: {player_dict['name']}, Age: {player_dict['age']}"
-        )
-
-    def display_player_deleted(self, success):
-        print(f"Player deleted: {success}")
+    def to_dict(self):
+        return {
+            "joueur1": self.joueur1.to_dict(),
+            "joueur2": self.joueur2.to_dict(),
+            "resultat": self.resultat,
+        }
 
 
-class TournamentView:
-    def display_tournament(self, tournament_dict):
-        print(
-            f"Tournament ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
-        )
+class Joueur:
+    def __init__(self, nom, classement):
+        self.nom = nom
+        self.classement = classement
 
-    def display_tournaments(self, tournaments_dict_list):
-        for tournament_dict in tournaments_dict_list:
-            self.display_tournament(tournament_dict)
-
-    def display_tournament_created(self, tournament_dict):
-        print(
-            f"Tournament created: ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
-        )
-
-    def display_tournament_updated(self, tournament_dict):
-        print(
-            f"Tournament updated: ID: {tournament_dict['id']}, Name: {tournament_dict['name']}, Date: {tournament_dict['date']}"
-        )
-
-    def display_tournament_deleted(self, success):
-        print(f"Tournament deleted: {success}")
+    def to_dict(self):
+        return {"nom": self.nom, "classement": self.classement}
 
 
-# Contrôleurs
-class PlayerController:
-    def __init__(self, repository, view):
+class Modele:
+    def __init__(self, repository):
         self.repository = repository
-        self.view = view
+        self.tournois = self.repository.get_all_tournaments()
+        self.tournoi_actif = None
 
-    def get_all_players(self):
-        players = self.repository.get_all_players()
-        self.view.display_players([player.to_dict() for player in players])
+    def ajouter_tournoi(self, tournoi):
+        self.tournois.append(tournoi)
+        self.repository.save_tournaments(self.tournois)
 
-    def get_player_by_id(self, player_id):
-        player = self.repository.find_player_by_id(player_id)
-        if player:
-            self.view.display_player(player.to_dict())
-        else:
-            print("Player not found.")
+    def selectionner_tournoi(self, nom):
+        for tournoi in self.tournois:
+            if tournoi.nom == nom:
+                self.tournoi_actif = tournoi
+                print(f"Tournoi actif : {tournoi.nom}")
+                return
+        print("Tournoi non trouvé.")
 
-    def create_player(self, name, age):
-        player_id = len(self.repository.get_all_players()) + 1
-        player = Player(player_id, name, age)
-        self.repository.create_player(player)
-        self.view.display_player_created(player.to_dict())
+    def obtenir_tournoi_actif(self):
+        return self.tournoi_actif
 
-    def update_player(self, player_id, name, age):
-        player = self.repository.update_player(player_id, {"name": name, "age": age})
-        if player:
-            self.view.display_player_updated(player.to_dict())
-        else:
-            print("Player not found.")
-
-    def delete_player(self, player_id):
-        success = self.repository.delete_player(player_id)
-        self.view.display_player_deleted(success)
+    def lister_tournois(self):
+        return [tournoi.nom for tournoi in self.tournois]
 
 
-class TournamentController:
-    def __init__(self, repository, view):
-        self.repository = repository
-        self.view = view
-
-    def get_all_tournaments(self):
-        tournaments = self.repository.get_all_tournaments()
-        self.view.display_tournaments(
-            [tournament.to_dict() for tournament in tournaments]
-        )
-
-    def get_tournament_by_id(self, tournament_id):
-        tournament = self.repository.find_tournament_by_id(tournament_id)
-        if tournament:
-            self.view.display_tournament(tournament.to_dict())
-        else:
-            print("Tournament not found.")
-
-    def create_tournament(self, name, date):
-        tournament_id = len(self.repository.get_all_tournaments()) + 1
-        tournament = Tournament(tournament_id, name, date)
-        self.repository.create_tournament(tournament)
-        self.view.display_tournament_created(tournament.to_dict())
-
-    def update_tournament(self, tournament_id, name, date):
-        tournament = self.repository.update_tournament(
-            tournament_id, {"name": name, "date": date}
-        )
-        if tournament:
-            self.view.display_tournament_updated(tournament.to_dict())
-        else:
-            print("Tournament not found.")
-
-    def delete_tournament(self, tournament_id):
-        success = self.repository.delete_tournament(tournament_id)
-        self.view.display_tournament_deleted(success)
-
-
-# Interface de commande
-class Command(ABC):
-    @abstractmethod
-    def execute(self):
-        pass
-
-
-# Commandes concrètes
-class CreatePlayerCommand(Command):
-    def __init__(self, controller, name, age):
-        self.controller = controller
-        self.name = name
-        self.age = age
-
-    def execute(self):
-        self.controller.create_player(self.name, self.age)
-
-
-class GetAllPlayersCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.get_all_players()
-
-
-class UpdatePlayerCommand(Command):
-    def __init__(self, controller, player_id, name, age):
-        self.controller = controller
-        self.player_id = player_id
-        self.name = name
-        self.age = age
-
-    def execute(self):
-        self.controller.update_player(self.player_id, self.name, self.age)
-
-
-class GetPlayerByIdCommand(Command):
-    def __init__(self, controller, player_id):
-        self.controller = controller
-        self.player_id = player_id
-
-    def execute(self):
-        self.controller.get_player_by_id(self.player_id)
-
-
-class DeletePlayerCommand(Command):
-    def __init__(self, controller, player_id):
-        self.controller = controller
-        self.player_id = player_id
-
-    def execute(self):
-        self.controller.delete_player(self.player_id)
-
-
-class CreateTournamentCommand(Command):
-    def __init__(self, controller, name, date):
-        self.controller = controller
-        self.name = name
-        self.date = date
-
-    def execute(self):
-        self.controller.create_tournament(self.name, self.date)
-
-
-class ShowAllTournamentsCommand(Command):
-    def __init__(self, controller):
-        self.controller = controller
-
-    def execute(self):
-        self.controller.get_all_tournaments()
-
-
-class UpdateTournamentCommand(Command):
-    def __init__(self, controller, tournament_id, name, date):
-        self.controller = controller
-        self.tournament_id = tournament_id
-        self.name = name
-        self.date = date
-
-    def execute(self):
-        self.controller.update_tournament(self.tournament_id, self.name, self.date)
-
-
-class GetTournamentByIdCommand(Command):
-    def __init__(self, controller, tournament_id):
-        self.controller = controller
-        self.tournament_id = tournament_id
-
-    def execute(self):
-        self.controller.get_tournament_by_id(self.tournament_id)
-
-
-class DeleteTournamentCommand(Command):
-    def __init__(self, controller, tournament_id):
-        self.controller = controller
-        self.tournament_id = tournament_id
-
-    def execute(self):
-        self.controller.delete_tournament(self.tournament_id)
-
-
-# Vue du menu
-class MenuView:
-    def display_menu(self, tournament_loaded):
-        print("\nMenu:")
-        print("1. Create Player")
-        print("2. Get All Players")
-        print("3. Update Player")
-        print("4. Get Player by ID")
-        print("5. Delete Player")
-        print("6. Create Tournament")
-        print("7. Get All Tournaments")
-
-        if tournament_loaded:
-            print("8. Update Tournament")
-            print("9. Get Tournament by ID")
-            print("10. Delete Tournament")
-
-        print("11. Quit")
-
-    def get_user_choice(self):
-        return input("Choose an option: ")
-
-    def display_message(self, message):
-        print(message)
-
-
-# Contrôleur du menu
-class MenuController:
-    def __init__(self, view, player_controller, tournament_controller):
-        self.view = view
-        self.player_controller = player_controller
-        self.tournament_controller = tournament_controller
-        self.tournament_loaded = False
-
-    def execute_choice(self, choice):
-        if choice == "1":
-            name = input("Enter player name: ")
-            age = int(input("Enter player age: "))
-            command = CreatePlayerCommand(self.player_controller, name, age)
-        elif choice == "2":
-            command = GetAllPlayersCommand(self.player_controller)
-        elif choice == "3":
-            player_id = int(input("Enter player ID to update: "))
-            name = input("Enter new name: ")
-            age = int(input("Enter new age: "))
-            command = UpdatePlayerCommand(self.player_controller, player_id, name, age)
-        elif choice == "4":
-            player_id = int(input("Enter player ID: "))
-            command = GetPlayerByIdCommand(self.player_controller, player_id)
-        elif choice == "5":
-            player_id = int(input("Enter player ID to delete: "))
-            command = DeletePlayerCommand(self.player_controller, player_id)
-        elif choice == "6":
-            name = input("Enter tournament name: ")
-            date = input("Enter tournament date (YYYY-MM-DD): ")
-            command = CreateTournamentCommand(self.tournament_controller, name, date)
-            self.tournament_loaded = True  # Tournament is loaded after creation
-        elif choice == "7":
-            command = ShowAllTournamentsCommand(self.tournament_controller)
-            self.tournament_loaded = True  # Tournament is loaded after retrieval
-        elif choice == "8" and self.tournament_loaded:
-            tournament_id = int(input("Enter tournament ID to update: "))
-            name = input("Enter new name: ")
-            date = input("Enter new date (YYYY-MM-DD): ")
-            command = UpdateTournamentCommand(
-                self.tournament_controller, tournament_id, name, date
+class VueTournoi:
+    def afficher_tournoi(self, tournoi):
+        print(f"Tournoi: {tournoi.nom}, Date: {tournoi.date}, Lieu: {tournoi.lieu}")
+        for partie in tournoi.parties:
+            print(
+                f"Partie entre {partie.joueur1.nom} et {partie.joueur2.nom}, Résultat: {partie.resultat}"
             )
-        elif choice == "9" and self.tournament_loaded:
-            tournament_id = int(input("Enter tournament ID: "))
-            command = GetTournamentByIdCommand(
-                self.tournament_controller, tournament_id
-            )
-        elif choice == "10" and self.tournament_loaded:
-            tournament_id = int(input("Enter tournament ID to delete: "))
-            command = DeleteTournamentCommand(self.tournament_controller, tournament_id)
-            self.tournament_loaded = False  # Tournament is unloaded after deletion
-        elif choice == "11":
-            self.view.display_message("Goodbye!")
-            return None
+
+
+class ControleurTournoi:
+    def __init__(self, modele, vue):
+        self.modele = modele
+        self.vue = vue
+
+    def creer_tournoi(self, nom, date, lieu, id):
+        tournoi = Tournament(id, nom, date, lieu)
+        self.modele.ajouter_tournoi(tournoi)
+        print(f"Tournoi '{nom}' créé avec succès.")
+
+    def selectionner_tournoi(self, nom):
+        self.modele.selectionner_tournoi(nom)
+
+    def ajouter_partie(self, joueur1, joueur2, resultat=None):
+        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        if tournoi_actif:
+            partie = Partie(joueur1, joueur2, resultat)
+            tournoi_actif.ajouter_partie(partie)
+            self.modele.repository.save_tournaments(self.modele.tournois)
+            print("Partie ajoutée avec succès.")
         else:
-            self.view.display_message("Invalid choice. Please try again.")
-            return self.execute_choice(self.view.get_user_choice())
+            print("Aucun tournoi actif sélectionné.")
 
-        return command
+    def mettre_a_jour_resultat(self, index_partie, resultat):
+        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        if tournoi_actif and 0 <= index_partie < len(tournoi_actif.parties):
+            tournoi_actif.parties[index_partie].resultat = resultat
+            self.modele.repository.save_tournaments(self.modele.tournois)
+            print("Résultat mis à jour avec succès.")
+        else:
+            print("Index de partie invalide ou aucun tournoi actif.")
+
+    def afficher_tournoi(self):
+        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        if tournoi_actif:
+            self.vue.afficher_tournoi(tournoi_actif)
+        else:
+            print("Aucun tournoi actif sélectionné.")
+
+    def afficher_parties_sans_resultat(self):
+        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        if tournoi_actif:
+            parties_sans_resultat = [
+                partie for partie in tournoi_actif.parties if partie.resultat is None
+            ]
+            if parties_sans_resultat:
+                print("Parties sans résultat :")
+                for partie in parties_sans_resultat:
+                    print(f"Partie entre {partie.joueur1.nom} et {partie.joueur2.nom}")
+            else:
+                print("Toutes les parties ont un résultat.")
+        else:
+            print("Aucun tournoi actif sélectionné.")
+
+    def lister_tournois(self):
+        tournois = self.modele.lister_tournois()
+        if tournois:
+            print("Tournois disponibles :")
+            for nom in tournois:
+                print(f"- {nom}")
+        else:
+            print("Aucun tournoi disponible.")
 
 
-def main():
-    # Initialisation des contrôleurs
-    player_controller = PlayerController(PlayerRepository(), PlayerView())
-    tournament_controller = TournamentController(
-        TournamentRepository(), TournamentView()
-    )
+class Application:
+    def __init__(self):
+        repository = TournamentRepository()
+        self.modele = Modele(repository)
+        self.vue = VueTournoi()
+        self.controleur = ControleurTournoi(self.modele, self.vue)
 
-    # Initialisation du contrôleur de menu
-    menu_view = MenuView()
-    menu_controller = MenuController(
-        menu_view, player_controller, tournament_controller
-    )
+    def afficher_menu(self):
+        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        if tournoi_actif:
+            print("\nActions disponibles (Tournoi actif) :")
+            print("1. Ajouter une partie")
+            print("2. Mettre à jour le résultat d'une partie")
+            print("3. Afficher les détails du tournoi")
+            print("4. Afficher les parties sans résultat")
+            print("5. Sélectionner un autre tournoi")
+            print("6. Quitter")
+        else:
+            print("\nActions disponibles (Aucun tournoi actif) :")
+            print("1. Créer un nouveau tournoi")
+            print("2. Sélectionner un tournoi")
+            print("3. Lister les tournois")
+            print("4. Quitter")
 
-    while True:
-        menu_view.display_menu(menu_controller.tournament_loaded)
-        choice = menu_view.get_user_choice()
-        command = menu_controller.execute_choice(choice)
+    def executer(self):
+        while True:
+            self.afficher_menu()
+            choix = input("Choisissez une action : ")
 
-        if command is None:
-            break
+            if not self.modele.obtenir_tournoi_actif():
+                if choix == "1":
+                    nom = input("Nom du tournoi : ")
+                    date = input("Date du tournoi : ")
+                    lieu = input("Lieu du tournoi : ")
+                    id = input("ID du tournoi : ")
+                    self.controleur.creer_tournoi(nom, date, lieu, id)
 
-        command.execute()
+                elif choix == "2":
+                    self.controleur.lister_tournois()
+                    nom = input("Nom du tournoi à sélectionner : ")
+                    self.controleur.selectionner_tournoi(nom)
+
+                elif choix == "3":
+                    self.controleur.lister_tournois()
+
+                elif choix == "4":
+                    print("Fin du programme.")
+                    break
+
+                else:
+                    print("Choix invalide. Veuillez réessayer.")
+
+            else:
+                if choix == "1":
+                    nom1 = input("Nom du joueur 1 : ")
+                    nom2 = input("Nom du joueur 2 : ")
+                    classement1 = int(input("Classement du joueur 1 : "))
+                    classement2 = int(input("Classement du joueur 2 : "))
+                    joueur1 = Joueur(nom1, classement1)
+                    joueur2 = Joueur(nom2, classement2)
+                    self.controleur.ajouter_partie(joueur1, joueur2)
+
+                elif choix == "2":
+                    index = int(input("Index de la partie à mettre à jour : "))
+                    resultat = input("Nouveau résultat : ")
+                    self.controleur.mettre_a_jour_resultat(index, resultat)
+
+                elif choix == "3":
+                    self.controleur.afficher_tournoi()
+
+                elif choix == "4":
+                    self.controleur.afficher_parties_sans_resultat()
+
+                elif choix == "5":
+                    self.controleur.lister_tournois()
+                    nom = input("Nom du tournoi à sélectionner : ")
+                    self.controleur.selectionner_tournoi(nom)
+
+                elif choix == "6":
+                    print("Fin du programme.")
+                    break
+
+                else:
+                    print("Choix invalide. Veuillez réessayer.")
 
 
-if __name__ == "__main__":
-    main()
+# Exécution de l'application
+app = Application()
+app.executer()
