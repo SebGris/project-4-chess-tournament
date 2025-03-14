@@ -1,7 +1,9 @@
 from commands.command import Command
+from controllers.tournament_controller import TournamentController
+
 
 class ShowTournamentDetailsCommand(Command):
-    def __init__(self, tournament_controller):
+    def __init__(self, tournament_controller: TournamentController):
         self.tournament_controller = tournament_controller
 
     def execute(self):
@@ -13,7 +15,7 @@ class ShowTournamentDetailsCommand(Command):
                 "start_date": tournament.start_date,
                 "end_date": tournament.end_date,
                 "description": tournament.description,
-                "number_of_rounds": tournament.number_of_rounds
+                "number_of_rounds": tournament.number_of_rounds,
             }
             self.tournament_controller.view.display_tournament_details(tournament_dic)
         else:
