@@ -17,6 +17,8 @@ class ShowTournamentsDetailsCommand(Command):
                     "description": tournament.description,
                     "number_of_rounds": tournament.number_of_rounds,
                 }
-                self.controller.view.display_tournament_details(tournament_dic)
+                self.controller.tournament_view.display_tournament_details(
+                    tournament_dic
+                )
         else:
-            self.controller.view.display_no_tournament_message()
+            self.controller.tournament_view.display_no_tournament_message()

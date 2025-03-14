@@ -9,14 +9,18 @@ class CreateTournamentCommand(Command):
     def execute(self):
         tournament_info = self.collect_tournament_info()
         self.controller.create_tournament(**tournament_info)
-        self.controller.view.display_new_tournament_created(tournament_info["name"])
+        self.controller.tournament_view.display_new_tournament_created(
+            tournament_info["name"]
+        )
 
     def collect_tournament_info(self):
-        name = self.controller.view.get_tournament_name()
-        location = self.controller.view.get_tournament_location()
-        start_date = self.controller.view.get_tournament_start_date()
-        end_date = self.controller.view.get_tournament_end_date()
-        number_of_rounds = self.controller.view.get_tournament_number_of_rounds()
+        name = self.controller.tournament_view.get_tournament_name()
+        location = self.controller.tournament_view.get_tournament_location()
+        start_date = self.controller.tournament_view.get_tournament_start_date()
+        end_date = self.controller.tournament_view.get_tournament_end_date()
+        number_of_rounds = (
+            self.controller.tournament_view.get_tournament_number_of_rounds()
+        )
         return {
             "name": name,
             "location": location,

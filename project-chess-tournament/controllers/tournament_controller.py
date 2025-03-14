@@ -4,31 +4,31 @@ from models.player import Player
 from models.player_repository import PlayerRepository
 from models.round import Round
 from models.tournament import Tournament
-from models.tournament_repository import TournamentRepository
+from models.tournament_manager import TournamentManager
 from views.player_view import PlayerView
 from views.tournament_view import TournamentView
 
 
 class TournamentController:
 
-    def __init__(self, repository: TournamentRepository, view: TournamentView):
-        self.repository = repository
-        self.view = view
+    def __init__(self, manager: TournamentManager, view: TournamentView):
+        self.tournament_manager = manager
+        self.tournament_view = view
         player_repo = PlayerRepository()
         player_view = PlayerView()
         self.player_controller = PlayerController(player_repo, player_view)
 
     def show_all_tournaments(self):
-        tournaments = self.repository.get_all_tournaments()
-        self.view.display_tournaments(tournaments)
+        tournaments = self.tournament_manager.get_all_tournaments()
+        self.tournament_view.display_tournaments(tournaments)
 
     def show_tournament_selection(self):
-        tournaments = self.repository.get_all_tournaments()
-        self.view.get_tournament_selection(tournaments)
+        tournaments = self.tournament_manager.get_all_tournaments()
+        self.tournament_view.get_tournament_selection(tournaments)
 
     def get_tournament_by_id(self, tournament_id):
-        tournament = self.repository.find_tournament_by_id(tournament_id)
-        self.view.display_tournament_details(tournament)
+        tournament = self.tournament_manager.find_tournament_by_id(tournament_id)
+        self.tournament_view.display_tournament_details(tournament)
 
     def create_tournament(
         self,
@@ -57,17 +57,19 @@ class TournamentController:
             players_list,
             rounds_list,
         )
-        self.repository.create_tournament(tournament)
-        self.view.display_new_tournament_created(tournament)
+        self.tournament_manager.create_tournament(tournament)
+        self.tournament_view.display_new_tournament_created(tournament)
 
     def update_tournament(self, tournament_id, name, date):
         updated_data = {"name": name, "date": date}
-        tournament = self.repository.update_tournament(tournament_id, updated_data)
-        self.view.display_tournament_updated(tournament)
+        tournament = self.tournament_manager.update_tournament(
+            tournament_id, updated_data
+        )
+        self.tournament_view.display_tournament_updated(tournament)
 
     def select_tournament(self, tournament_index):
         self.active_tournament = self.tournaments[tournament_index]
-        self.view.menu.set_tournament_loaded(True)
+        self.tournament_view.menu.set_tournament_loaded(True)
 
     def load_all_players(self):
         try:
@@ -77,7 +79,7 @@ class TournamentController:
             }
             return all_players
         except FileNotFoundError as e:
-            self.view.display_for_file_not_found(str(e))
+            self.tournament_view.display_for_file_not_found(str(e))
 
     def add_player(self, player_data):
         player = Player(**player_data)
@@ -121,7 +123,7 @@ class TournamentController:
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.active_tournament.rounds.append(new_round)
-        self.view.display_added_round_message(round_name)
+        self.tournament_view.display_added_round_message(round_name)
 
     def update_number_of_rounds(self, new_number_of_rounds):
         self.active_tournament.set_number_of_rounds(new_number_of_rounds)
@@ -131,12 +133,12 @@ class TournamentController:
 
     def enter_scores(self):
         round_instance = self.active_tournament.get_current_round()
-        self.view.display_record_results_message(round_instance.name)
+        self.tournament_view.display_record_results_message(round_instance.name)
         for match in round_instance.matches:
             if round_instance.is_finished():
                 continue
-            self.view.display_match_summary(match.get_player_names())
-            result = self.view.get_match_result()
+            self.tournament_view.display_match_summary(match.get_player_names())
+            result = self.tournament_view.get_match_result()
             if result == "1":
                 match.set_score(1, 0)
             elif result == "2":

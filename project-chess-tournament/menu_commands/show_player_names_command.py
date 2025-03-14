@@ -11,6 +11,6 @@ class ShowPlayerNamesCommand(Command):
             players_names = [
                 player.full_name for player in self.controller.active_tournament.players
             ]
-            self.controller.view.display_tournament_players(players_names)
+            self.controller.tournament_view.display_tournament_players(players_names)
         else:
-            self.controller.view.display_no_tournament_message()
+            self.controller.tournament_view.display_no_tournament_message()

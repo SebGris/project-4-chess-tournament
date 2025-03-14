@@ -7,6 +7,6 @@ class UpdateDescriptionCommand(Command):
         self.controller = controller
 
     def execute(self):
-        description = self.controller.view.get_tournament_description()
+        description = self.controller.tournament_view.get_tournament_description()
         self.controller.update_description(description)
-        self.controller.view.display_successful_description_message()
+        self.controller.tournament_view.display_successful_description_message()

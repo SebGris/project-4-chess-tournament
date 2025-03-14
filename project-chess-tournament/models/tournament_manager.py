@@ -25,5 +25,5 @@ class TournamentManager:
     def obtenir_tournoi_actif(self):
         return self.active_tournament
 
-    def lister_tournois(self):
-        return [tournament.nom for tournament in self.tournaments]
+    def get_all_tournaments(self):
+        return self.repository.get_all_tournaments()

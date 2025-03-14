@@ -15,13 +15,13 @@ class ShowCurrentRound(Command):
                     "start_date": current_round.start_datetime,
                     "end_date": current_round.end_datetime,
                 }
-                self.controller.view.display_round_info(round)
+                self.controller.tournament_view.display_round_info(round)
                 round_no = {
                     "current_round": self.controller.active_tournament.current_round,
                     "number_of_rounds": self.controller.active_tournament.number_of_rounds,
                 }
-                self.controller.view.display_current_round_number(round_no)
+                self.controller.tournament_view.display_current_round_number(round_no)
             else:
-                self.controller.view.display_no_round_message()
+                self.controller.tournament_view.display_no_round_message()
         except IndexError:
-            self.controller.view.display_no_tournament_message()
+            self.controller.tournament_view.display_no_tournament_message()
