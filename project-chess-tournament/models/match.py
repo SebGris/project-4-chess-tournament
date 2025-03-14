@@ -1,11 +1,20 @@
+import uuid
 from .player import Player
+from typing import Dict
 
 
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(self, player1: Player, player2: Player,
-                 player1_score=0, player2_score=0):
+    def __init__(
+        self,
+        match_id: uuid.UUID,
+        player1: Player,
+        player2: Player,
+        player1_score=0.0,
+        player2_score=0.0,
+    ):
+        self.id = match_id
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
@@ -21,18 +30,11 @@ class Match:
 
     def to_dict(self):
         return {
-            "player1": {
-                "id": str(self.player1.id),
-                "last_name": self.player1.last_name,
-                "first_name": self.player1.first_name
-            },
+            "id": str(self.id),
+            "player1_id": str(self.player1.id),
             "player1_score": self.player1_score,
-            "player2": {
-                "id": str(self.player2.id),
-                "last_name": self.player2.last_name,
-                "first_name": self.player2.first_name
-            },
-            "player2_score": self.player2_score
+            "player2_id": str(self.player2.id),
+            "player2_score": self.player2_score,
         }
 
     def get_player_names(self):
@@ -51,16 +53,13 @@ class Match:
     def get_player2(self):
         return self.player2.id, self.player2_score
 
-    def __repr__(self):
-        return (
-            f"Match(player1={self.player1}, player2={self.player2}, "
-            f"player1_score={self.player1_score}, "
-            f"player2_score={self.player2_score})"
+    @staticmethod
+    def from_dict(match_dict: Dict[str, str]) -> "Match":
+        match = Match(
+            uuid.UUID(match_dict["id"]),
+            match_dict["player1_id"],
+            match_dict["player1_score"],
+            match_dict["player2_id"],
+            match_dict["player2_score"],
         )
-
-    def __str__(self):
-        """Returns a text representation of the match."""
-        return (
-            f"{' vs '.join(self.get_player_names())} "
-            f" Scores: {self.player1_score} - {self.player2_score}"
-        )
+        return match

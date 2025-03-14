@@ -1,4 +1,4 @@
-class Menu:
+class TournamentMenu:
     def __init__(self):
         self.groups = []
         self.tournament_loaded = False

@@ -2,7 +2,7 @@ from controllers.menu_controller import MenuController
 from controllers.menu_state_updater import MenuStateUpdater
 from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
-from models.menu import Menu
+from models.tournament_menu import TournamentMenu
 from models.player_repository import PlayerRepository
 from models.tournament_repository import TournamentRepository
 from views.menu_view import MenuView
@@ -18,8 +18,8 @@ if __name__ == "__main__":
     tournament_view = TournamentView()
     tournament_controller = TournamentController(tournament_repository, tournament_view)
 
-    menu = Menu()
+    tournament_menu = TournamentMenu()
     menu_view = MenuView()
-    menu_state_updater = MenuStateUpdater(menu, tournament_controller)
-    menu_controller = MenuController(menu, menu_view, menu_state_updater)
+    menu_state_updater = MenuStateUpdater(tournament_menu, tournament_controller)
+    menu_controller = MenuController(tournament_menu, menu_view, menu_state_updater)
     menu_controller.run()

@@ -28,7 +28,9 @@ class PlayerRepository(BaseRepository):
         self.file_service.write_to_file([player.to_dict() for player in players])
         return player
 
-    def update_player(self, player_id: uuid.UUID, updated_data: Dict[str, str]) -> Optional[Player]:
+    def update_player(
+        self, player_id: uuid.UUID, updated_data: Dict[str, str]
+    ) -> Optional[Player]:
         players = self.get_all_players()
         for player in players:
             if player.id == player_id:

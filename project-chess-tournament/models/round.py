@@ -1,46 +1,27 @@
+import uuid
 from datetime import datetime
 from models.match import Match
-from models.player import Player
+from typing import List
 
 
 class Round:
     """Represents a round in a chess tournament."""
 
     def __init__(
-        self, name, matches=None, start_datetime=None, end_datetime=None
+        self,
+        round_id: uuid.UUID,
+        name,
+        matches: List[Match],
+        start_date=None,
+        end_date=None,
     ):
+        self.id = round_id
         self.name = name
-        self.matches = (
-            self.convert_dict_to_matches(matches)
-            if matches is not None else []
-        )
+        self.matches = matches if matches is not None else []
         self.start_datetime = (
-            datetime.fromisoformat(start_datetime)
-            if start_datetime
-            else datetime.now()
+            datetime.fromisoformat(start_date) if start_date else datetime.now()
         )
-        self.end_datetime = (
-            datetime.fromisoformat(end_datetime) if end_datetime else None
-        )
-
-    def convert_dict_to_matches(self, matches):
-        return [
-            Match(
-                Player(
-                    match['player1']['last_name'],
-                    match['player1']['first_name'],
-                    id=match['player1']['id']
-                ),
-                Player(
-                    match['player2']['last_name'],
-                    match['player2']['first_name'],
-                    id=match['player2']['id']
-                ),
-                match['player1_score'],
-                match['player2_score']
-            )
-            for match in matches
-        ]
+        self.end_datetime = datetime.fromisoformat(end_date) if end_date else None
 
     def add_match(self, player1, player2):
         match = Match(player1, player2)
@@ -59,33 +40,34 @@ class Round:
         return (
             self.name,
             [
-                match.get_player_names_and_scores()
-                if match.is_finished()
-                else match.get_player_names()
+                (
+                    match.get_player_names_and_scores()
+                    if match.is_finished()
+                    else match.get_player_names()
+                )
                 for match in self.matches
-            ]
+            ],
         )
 
     def to_dict(self):
         """Convert Round object to dictionary."""
         return {
+            "id": str(self.id),
             "name": self.name,
-            "matches": [match.to_dict() for match in self.matches],
+            "match_ids": [str(match.id) for match in self.matches],
             "start_datetime": self.start_datetime.isoformat(),
             "end_datetime": (
                 self.end_datetime.isoformat() if self.end_datetime else None
-            )
+            ),
         }
 
-    def __repr__(self):
-        return f"Round(matches={self.matches})"
-
-    def __str__(self):
-        """Returns a string representation of the round."""
-        matches_str = "\n".join(str(match) for match in self.matches)
-        return (
-            f"Round: {self.name}\n"
-            f"Start: {self.start_datetime}\n"
-            f"End: {self.end_datetime}\n"
-            f"Matches:\n{matches_str}"
+    @staticmethod
+    def from_dict(round: dict):
+        """Create a Tournament object from a dictionary."""
+        return Round(
+            uuid.UUID(round["id"]),
+            round["name"],
+            round["matches"],
+            round["start_date"],
+            round["end_date"],
         )
