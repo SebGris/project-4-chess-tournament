@@ -20,7 +20,7 @@ class ShowCurrentRound(Command):
                     "current_round": self.controller.active_tournament.current_round,
                     "number_of_rounds": self.controller.active_tournament.number_of_rounds,
                 }
-                self.controller.view.display_current_round_no(round_no)
+                self.controller.view.display_current_round_number(round_no)
             else:
                 self.controller.view.display_no_round_message()
         except IndexError:

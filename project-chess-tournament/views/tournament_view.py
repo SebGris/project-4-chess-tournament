@@ -1,7 +1,6 @@
-from views.base_view import BaseView
 from models.tournament import Tournament
-from models.round import Round
 from typing import List
+from views.base_view import BaseView
 
 
 class TournamentView(BaseView):
@@ -78,24 +77,14 @@ class TournamentView(BaseView):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
-    def display_current_round_no(self, round_no):
+    def display_current_round_number(self, tournament: Tournament):
         print(
-            f"N° round actuel : {round_no['current_round']}/{round_no['number_of_rounds']}"
+            f"Round actuel : {tournament.current_round}/{tournament.number_of_rounds}"
         )
 
     def display_match_summary(self, match):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
-
-    def display_round_info(self, round: Round):
-        """Display information about a round."""
-        round_name = round["name"]
-        if round_name == "Round 1":
-            print("--- Liste des rounds ---")
-        print(f"--- {round_name} ---")
-        if round["start_date"]:
-            print(f"Date de début : {round['start_date']}")
-        print(f"Date de fin : {round['end_date'] or 'round en cours'}")
 
     def display_record_results_message(self, round_name):
         self.write_line(f"Enregistrement des résultats du {round_name}:")
