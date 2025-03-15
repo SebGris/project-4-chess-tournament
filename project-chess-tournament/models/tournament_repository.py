@@ -31,13 +31,9 @@ class TournamentRepository(BaseRepository):
                 return tournament
         return None
 
-    def create_tournament(self, tournament: Tournament) -> Tournament:
-        tournaments = self.get_all_tournaments()
-        tournaments.append(tournament)
-        self.file_service.write_to_file(
-            [tournament.to_dict() for tournament in tournaments]
-        )
-        return tournament
+    def save_tournaments(self, tournaments: List[Tournament]):
+        tournaments_dict = [tournament.to_dict() for tournament in tournaments]
+        self.file_service.write_to_file(tournaments_dict)
 
     def update_tournament(
         self, id: uuid.UUID, data: Dict[str, str]

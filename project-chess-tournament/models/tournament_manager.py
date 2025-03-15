@@ -1,4 +1,5 @@
 from models.tournament import Tournament
+from typing import List
 
 
 class TournamentManager:
@@ -6,9 +7,10 @@ class TournamentManager:
         self.tournaments = all_tournaments
         self.active_tournament = None
 
-    def add_tournament(self, tournament: Tournament):
+    def add_tournament(self, tournament: Tournament) -> List[Tournament]:
         self.tournaments.append(tournament)
         self.active_tournament = tournament
+        return self.tournaments
 
     def select_tournament(self, index: int):
         self.active_tournament = self.tournaments[index]

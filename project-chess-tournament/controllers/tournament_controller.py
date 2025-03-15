@@ -53,8 +53,8 @@ class TournamentController:
 
     def create_tournament(self, name, location, start_date, end_date, number_of_rounds):
         tournament = Tournament(name, location, start_date, end_date, number_of_rounds)
-        self.tournament_manager.add_tournament(tournament)
-        # self.tournament_repository.save_tournaments(self.tournaments)
+        tournaments = self.tournament_manager.add_tournament(tournament)
+        self.tournament_repository.save_tournaments(tournaments)
 
     def select_tournament(self):
         tournaments = self.get_all_tournaments()
