@@ -21,7 +21,7 @@ from views.tournament_view import TournamentView
 
 class Application:
     def __init__(self, application_menu):
-        self.tournament_menu = application_menu
+        self.application_menu = application_menu
         self.tournament_repository = TournamentRepository(PlayerRepository())
         self.tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
@@ -29,16 +29,13 @@ class Application:
         )
 
     def get_refresh_menu(self):
-        self.tournament_menu.clear_menu()
-        self._set_tournament_app_title()
+        self.application_menu.clear_menu()
+        self.application_menu.add_title("Application tournois d'échecs")
         self._add_general_menu()
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
             self._add_tournament_menu(active_tournament.name)
-        return self.tournament_menu
-
-    def _set_tournament_app_title(self):
-        self.tournament_menu.add_group("Application tournois d'échecs", [])
+        return self.application_menu
 
     def _add_tournament_menu(self, name):
         show_tournament_composite_com = CompositeCommand()
@@ -54,7 +51,7 @@ class Application:
         show_tournament_composite_com.add_command(
             ShowPlayerPairsCommand(self.tournament_controller)
         )
-        self.tournament_menu.add_group(
+        self.application_menu.add_group(
             "Tournoi : {}".format(name),
             [
                 {
@@ -89,19 +86,12 @@ class Application:
         )
 
     def _add_general_menu(self):
-        new_tournament_composite_command = CompositeCommand()
-        new_tournament_composite_command.add_command(
-            NewTournamentCommand(self.tournament_controller)
-        )
-        new_tournament_composite_command.add_command(
-            SelectTournamentCommand(self.tournament_controller)
-        )
-        self.tournament_menu.add_group(
+        self.application_menu.add_group(
             "Menu Général",
             [
                 {
                     "label": "Nouveau tournoi",
-                    "command": new_tournament_composite_command.execute,
+                    "command": NewTournamentCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Sélectionner un tournoi",
@@ -111,6 +101,9 @@ class Application:
                     "label": "Afficher tous les tournois",
                     "command": ShowTournamentsDetailsCommand(self.tournament_controller).execute,
                 },
-                {"label": "Quitter", "command": QuitCommand().execute},
+                {
+                    "label": "Quitter",
+                    "command": QuitCommand().execute
+                },
             ],
         )
