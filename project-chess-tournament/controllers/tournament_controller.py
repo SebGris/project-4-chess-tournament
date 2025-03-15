@@ -27,22 +27,13 @@ class TournamentController:
     def get_active_tournament(self):
         return self.active_tournament
 
-    def get_tournament_by_id(self, tournament_id):
-        tournament = self.tournament_manager.find_tournament_by_id(tournament_id)
-        self.tournament_view.display_tournament_details(tournament)
-
     def collect_tournament_info(self):
-        name = self.tournament_view.get_name()
-        location = self.tournament_view.get_location()
-        start_date = self.tournament_view.get_start_date()
-        end_date = self.tournament_view.get_end_date()
-        number_of_rounds = self.tournament_view.get_number_of_rounds()
         return {
-            "name": name,
-            "location": location,
-            "start_date": start_date,
-            "end_date": end_date,
-            "number_of_rounds": number_of_rounds,
+            "name": self.tournament_view.get_name(),
+            "location": self.tournament_view.get_location(),
+            "start_date": self.tournament_view.get_start_date(),
+            "end_date": self.tournament_view.get_end_date(),
+            "number_of_rounds": self.tournament_view.get_number_of_rounds(),
         }
 
     def create_new_tournament(self):
@@ -171,13 +162,9 @@ class TournamentController:
         if current_round:
             self.round_view.display_round_info(current_round)
             self.tournament_view.display_current_round(self.active_tournament)
-            # self.tournament_view.display_no_tournament_message()
-            # self.tournament_view.display_no_round_message()
 
     def display_player_pairs(self):
         current_round = self.active_tournament.get_current_round()
         if current_round:
             round_name, pairs = current_round.get_pairs_players()
             self.round_view.display_player_pairs(round_name, pairs)
-            # self.controller.tournament_view.display_no_round_message()
-            # self.controller.tournament_view.display_no_tournament_message()
