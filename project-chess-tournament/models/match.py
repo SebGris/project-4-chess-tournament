@@ -6,19 +6,12 @@ from typing import Dict
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(
-        self,
-        match_id: uuid.UUID,
-        player1: Player,
-        player2: Player,
-        player1_score=0.0,
-        player2_score=0.0,
-    ):
-        self.id = match_id
+    def __init__(self, player1: Player, player2: Player, player1_score=0.0, player2_score=0.0, match_id=None):
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
         self.player2_score = player2_score
+        self._id = match_id or uuid.uuid4()
 
     def set_score(self, player1_score, player2_score):
         self.player1_score = player1_score
@@ -30,10 +23,10 @@ class Match:
 
     def to_dict(self):
         return {
-            "id": str(self.id),
-            "player1_id": str(self.player1.id),
+            "id": self.id,
+            "player1_id": self.player1.id,
             "player1_score": self.player1_score,
-            "player2_id": str(self.player2.id),
+            "player2_id": self.player2.id,
             "player2_score": self.player2_score,
         }
 
@@ -56,10 +49,14 @@ class Match:
     @staticmethod
     def from_dict(match_dict: Dict[str, str]) -> "Match":
         match = Match(
-            uuid.UUID(match_dict["id"]),
             match_dict["player1_id"],
             match_dict["player1_score"],
             match_dict["player2_id"],
             match_dict["player2_score"],
+            uuid.UUID(match_dict["id"])
         )
         return match
+
+    @property
+    def id(self):
+        return str(self._id)

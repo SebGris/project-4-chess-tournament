@@ -1,7 +1,7 @@
 from controllers.tournament_controller import TournamentController
 from commands.composite_command import CompositeCommand
 from menu_commands.add_players_command import AddPlayersCommand
-from menu_commands.create_tournament_command import CreateTournamentCommand
+from menu_commands.new_tournament_command import NewTournamentCommand
 from menu_commands.enter_scores_command import EnterScoresCommand
 from menu_commands.quit_command import QuitCommand
 from menu_commands.select_tournament_command import SelectTournamentCommand
@@ -15,6 +15,7 @@ from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
 from models.tournament_menu import TournamentMenu
+from models.player_repository import PlayerRepository
 from models.tournament_manager import TournamentManager
 from models.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
@@ -22,39 +23,43 @@ from views.tournament_view import TournamentView
 
 class Application:
     def __init__(self):
-        repository = TournamentRepository()
-        self.tournament_manager = TournamentManager(repository)
+        player_repository = PlayerRepository()
+        tournament_repository = TournamentRepository(player_repository)
+        self.tournament_manager = TournamentManager(tournament_repository)
         self.tournament_view = TournamentView()
-        self.controller = TournamentController(
+        self.tournament_controller = TournamentController(
             self.tournament_manager, self.tournament_view
         )
         self.menu = TournamentMenu()
 
-    def refresh_menu(self):
+    def get_refresh_menu(self):
         self.menu.clear_menu()
         self._set_tournament_app_title()
         self._add_general_menu()
-        if self.menu.is_tournament_loaded():
-            self._add_tournament_menu()
+        active_tournament = self.tournament_manager.get_active_tournament()
+        if active_tournament:
+            self._add_tournament_menu(active_tournament.name)
         return self.menu
 
     def _set_tournament_app_title(self):
         self.menu.add_group("Application tournois d'échecs", [])
 
-    def _add_tournament_menu(self):
+    def _add_tournament_menu(self, name):
         show_tournament_composite_com = CompositeCommand()
         show_tournament_composite_com.add_command(
-            ShowTournamentDetailsCommand(self.controller)
+            ShowTournamentDetailsCommand(self.tournament_controller)
         )
         show_tournament_composite_com.add_command(
-            ShowPlayerNamesCommand(self.controller)
+            ShowPlayerNamesCommand(self.tournament_controller)
         )
-        show_tournament_composite_com.add_command(ShowCurrentRound(self.controller))
         show_tournament_composite_com.add_command(
-            ShowPlayerPairsCommand(self.controller)
+            ShowCurrentRound(self.tournament_controller)
+        )
+        show_tournament_composite_com.add_command(
+            ShowPlayerPairsCommand(self.tournament_controller)
         )
         self.menu.add_group(
-            "Menu Tournoi",
+            "Tournoi : {}".format(name),
             [
                 {
                     "label": "Afficher le tournoi",
@@ -62,53 +67,53 @@ class Application:
                 },
                 {
                     "label": "Afficher les joueurs",
-                    "command": ShowPlayersCommand(self.controller).execute,
+                    "command": ShowPlayersCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Modifier la description",
-                    "command": UpdateDescriptionCommand(self.controller).execute,
+                    "command": UpdateDescriptionCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Ajouter des joueurs",
-                    "command": AddPlayersCommand(self.controller).execute,
+                    "command": AddPlayersCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Démarrer un tournoi",
-                    "command": StartTournamentCommand(self.controller).execute,
+                    "command": StartTournamentCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Modifier le nombre de tours",
-                    "command": UpdateNumberOfRoundsCommand(self.controller).execute,
+                    "command": UpdateNumberOfRoundsCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Saisir les scores",
-                    "command": EnterScoresCommand(self.controller).execute,
+                    "command": EnterScoresCommand(self.tournament_controller).execute,
                 },
             ],
         )
 
     def _add_general_menu(self):
-        create_tournament_composite_com = CompositeCommand()
-        create_tournament_composite_com.add_command(
-            CreateTournamentCommand(self.controller)
+        new_tournament_composite_command = CompositeCommand()
+        new_tournament_composite_command.add_command(
+            NewTournamentCommand(self.tournament_controller)
         )
-        create_tournament_composite_com.add_command(
-            SelectTournamentCommand(self.controller)
+        new_tournament_composite_command.add_command(
+            SelectTournamentCommand(self.tournament_controller)
         )
         self.menu.add_group(
             "Menu Général",
             [
                 {
                     "label": "Nouveau tournoi",
-                    "command": create_tournament_composite_com.execute,
+                    "command": new_tournament_composite_command.execute,
                 },
                 {
                     "label": "Sélectionner un tournoi",
-                    "command": SelectTournamentCommand(self.controller).execute,
+                    "command": SelectTournamentCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Afficher tous les tournois",
-                    "command": ShowTournamentsDetailsCommand(self.controller).execute,
+                    "command": ShowTournamentsDetailsCommand(self.tournament_controller).execute,
                 },
                 {"label": "Quitter", "command": QuitCommand().execute},
             ],

@@ -5,22 +5,22 @@ from views.base_view import BaseView
 
 class TournamentView(BaseView):
 
-    def get_tournament_name(self):
+    def get_name(self):
         return self.input("Entrez le nom du tournoi :")
 
-    def get_tournament_location(self):
+    def get_location(self):
         return self.input("Entrez le lieu du tournoi :")
 
-    def get_tournament_start_date(self):
+    def get_start_date(self):
         return self.input("Entrez la date de début du tournoi :")
 
-    def get_tournament_end_date(self):
+    def get_end_date(self):
         return self.input("Entrez la date de fin du tournoi :")
 
     def get_tournament_description(self):
         return self.input("Entrez la description du tournoi :")
 
-    def get_tournament_number_of_rounds(self):
+    def get_number_of_rounds(self):
         while True:
             try:
                 rounds = self.input(
@@ -77,7 +77,7 @@ class TournamentView(BaseView):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
-    def display_current_round_number(self, tournament: Tournament):
+    def display_current_round(self, tournament: Tournament):
         print(
             f"Round actuel : {tournament.current_round}/{tournament.number_of_rounds}"
         )
@@ -106,7 +106,7 @@ class TournamentView(BaseView):
             f"=== Information ===\n{error}\nVeuillez créer un nouveau tournoi."
         )
 
-    def display_new_tournament_created(self, name):
+    def display_tournament_created(self, name):
         self.write_line(f"Nouveau tournoi {name} créé.")
 
     def display_save_success_message(self, filename):

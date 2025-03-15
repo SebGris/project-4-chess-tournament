@@ -9,6 +9,7 @@ class MatchRepository(BaseRepository):
     FILE_PATH = "matches.json"
 
     def __init__(self):
+        super().__init__()
         self.file_service = FileService(self.get_file_path())
 
     def get_all_matches(self) -> List[Match]:

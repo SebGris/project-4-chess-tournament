@@ -7,10 +7,4 @@ class ShowPlayerNamesCommand(Command):
         self.controller = controller
 
     def execute(self):
-        if self.controller.active_tournament:
-            players_names = [
-                player.full_name for player in self.controller.active_tournament.players
-            ]
-            self.controller.tournament_view.display_tournament_players(players_names)
-        else:
-            self.controller.tournament_view.display_no_tournament_message()
+        self.controller.display_player_names()

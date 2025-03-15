@@ -7,21 +7,4 @@ class ShowCurrentRound(Command):
         self.controller = controller
 
     def execute(self):
-        try:
-            current_round = self.controller.active_tournament.get_current_round()
-            if current_round:
-                round = {
-                    "name": current_round.name,
-                    "start_date": current_round.start_datetime,
-                    "end_date": current_round.end_datetime,
-                }
-                self.controller.tournament_view.display_round_info(round)
-                round_no = {
-                    "current_round": self.controller.active_tournament.current_round,
-                    "number_of_rounds": self.controller.active_tournament.number_of_rounds,
-                }
-                self.controller.tournament_view.display_current_round_number(round_no)
-            else:
-                self.controller.tournament_view.display_no_round_message()
-        except IndexError:
-            self.controller.tournament_view.display_no_tournament_message()
+        self.controller.display_current_round()

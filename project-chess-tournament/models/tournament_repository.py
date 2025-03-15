@@ -8,12 +8,24 @@ from typing import List, Dict, Optional
 class TournamentRepository(BaseRepository):
     FILE_PATH = "tournaments.json"
 
-    def __init__(self):
+    def __init__(self, player_repository):
+        super().__init__()
         self.file_service = FileService(self.get_file_path())
+        self.player_repository = player_repository
 
     def get_all_tournaments(self) -> List[Tournament]:
         tournaments_dict = self.file_service.read_from_file()
-        return [Tournament.from_dict(tournament) for tournament in tournaments_dict]
+        all_players = self.player_repository.get_all_players()
+        tournaments = []
+        for tournament_dict in tournaments_dict:
+            tournament = Tournament.from_dict(tournament_dict)
+            players = []
+            for player in all_players:
+                if player.id in tournament_dict["player_ids"]:
+                    players.append(player)
+            tournament.add_players(players)
+            tournaments.append(tournament)
+        return tournaments
 
     def find_tournament_by_id(self, tournament_id):
         tournaments = self.get_all_tournaments()
@@ -30,12 +42,14 @@ class TournamentRepository(BaseRepository):
         )
         return tournament
 
-    def update_tournament(self, tournament_id: uuid.UUID, updated_data: Dict[str, str]) -> Optional[Tournament]:
+    def update_tournament(
+        self, id: uuid.UUID, data: Dict[str, str]
+    ) -> Optional[Tournament]:
         tournaments = self.get_all_tournaments()
         for tournament in tournaments:
-            if tournament.id == tournament_id:
-                tournament.name = updated_data["name"]
-                tournament.date = updated_data["date"]
+            if tournament.id == id:
+                tournament.name = data["name"]
+                tournament.date = data["date"]
                 self.file_service.write_to_file(
                     [tournament.to_dict() for tournament in tournaments]
                 )

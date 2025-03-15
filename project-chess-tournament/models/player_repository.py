@@ -9,6 +9,7 @@ class PlayerRepository(BaseRepository):
     FILE_PATH = "players.json"
 
     def __init__(self):
+        super().__init__()
         self.file_service = FileService(self.get_file_path())
 
     def get_all_players(self) -> List[Player]:

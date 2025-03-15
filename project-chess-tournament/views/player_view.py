@@ -39,15 +39,6 @@ class PlayerView(BaseView):
     def display_add_player_message(self, name):
         self.write_line(f"Joueur {name} ajouté.")
 
-    def display_player_pairs(self, round_name, pairs):
-        """Display pairs of players for a round."""
-        print(f"{round_name} avec les paires suivantes :")
-        for index, pair in enumerate(pairs, start=1):
-            if len(pair) == 2:
-                print(f"{index}. {pair[0]} vs {pair[1]}")
-            else:
-                print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
-
     def display_players(self, players: List[Player]):
         """Display a list of players."""
         print("--- Joueurs du tournoi ---")
@@ -60,5 +51,8 @@ class PlayerView(BaseView):
     def display_tournament_players(self, players_names):
         """Display the players of a tournament."""
         print("--- Joueurs du tournoi ---")
-        print(f"Joueurs : {', '.join(players_names)}")
-        print(f"Nombre de joueurs : {len(players_names)}")
+        if not players_names:
+            print("Aucun joueur enregistré.")
+        else:
+            print(f"Joueurs : {', '.join(players_names)}")
+            print(f"Nombre de joueurs : {len(players_names)}")

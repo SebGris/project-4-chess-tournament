@@ -7,12 +7,4 @@ class ShowPlayerPairsCommand(Command):
         self.controller = controller
 
     def execute(self):
-        if self.controller.active_tournament:
-            try:
-                current_round = self.controller.active_tournament.get_current_round()
-                round_name, pairs = current_round.get_pairs_players()
-                self.controller.tournament_view.display_player_pairs(round_name, pairs)
-            except Exception:
-                self.controller.tournament_view.display_no_round_message()
-        else:
-            self.controller.tournament_view.display_no_tournament_message()
+        self.controller.display_player_pairs()

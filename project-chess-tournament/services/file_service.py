@@ -1,13 +1,9 @@
 import json
-import os
 
 
 class FileService:
     def __init__(self, file_path):
         self.file_path = file_path
-
-    def file_exists(self):
-        return os.path.exists(self.file_path)
 
     def read_from_file(self):
         try:

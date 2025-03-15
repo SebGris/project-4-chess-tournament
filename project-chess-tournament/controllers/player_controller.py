@@ -27,3 +27,6 @@ class PlayerController:
         updated_data = {"last_name": last_name, "first_name": first_name, "birth_date": birth_date, "id_chess": id_chess}
         player = self.repository.update_player(player_id, updated_data)
         self.view.display_player_updated(player)
+
+    def display_tournament_players(self, players_names):
+        self.view.display_tournament_players(players_names)

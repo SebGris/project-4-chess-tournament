@@ -1,10 +1,21 @@
 import json
+import os
+import uuid
 from typing import List
 
 
 class BaseRepository:
-    def get_file_path(self):
-        raise NotImplementedError("Subclasses should implement this method.")
+    FILE_PATH = ""
+
+    def __init__(self):
+        if not os.path.exists(self.get_file_path()):
+            with open(self.get_file_path(), "w") as file:
+                json.dump([], file)
+
+    def get_file_path(self, folder="data/tournaments"):
+        data_folder = os.path.join(os.getcwd(), folder)
+        os.makedirs(data_folder, exist_ok=True)
+        return os.path.join(data_folder, self.FILE_PATH)
 
 
 class FileService:
@@ -16,25 +27,31 @@ class FileService:
             with open(self.file_path, "r") as file:
                 return json.load(file)
         except FileNotFoundError:
-            return []
+            raise ValueError("Fichier non trouvé")
+        except json.JSONDecodeError:
+            raise ValueError("Erreur de décodage JSON")
 
     def write_to_file(self, data):
-        with open(self.file_path, "w") as file:
-            json.dump(data, file, indent=4)
+        try:
+            with open(self.file_path, "w") as file:
+                json.dump(data, file, indent=4)
+        except IOError:
+            raise ValueError("Erreur d'écriture du fichier")
 
 
 class TournamentRepository(BaseRepository):
     FILE_PATH = "tournaments.json"
 
-    def __init__(self):
+    def __init__(self, player_repository: "PlayerRepository"):
+        super().__init__()
         self.file_service = FileService(self.get_file_path())
-
-    def get_file_path(self):
-        return self.FILE_PATH
+        self.player_repository = player_repository
 
     def get_all_tournaments(self) -> List["Tournament"]:
         tournaments_dict = self.file_service.read_from_file()
-        return [Tournament.from_dict(tournament) for tournament in tournaments_dict]
+        players = self.player_repository.get_all_players()
+        players_dict = {player.id: player for player in players}
+        return [Tournament.from_dict(tournament, players_dict) for tournament in tournaments_dict]
 
     def find_tournament_by_id(self, tournament_id):
         tournaments = self.get_all_tournaments()
@@ -48,19 +65,75 @@ class TournamentRepository(BaseRepository):
         self.file_service.write_to_file(tournaments_dict)
 
 
+class PlayerRepository(BaseRepository):
+    FILE_PATH = "players.json"
+
+    def __init__(self):
+        super().__init__()
+        self.file_service = FileService(self.get_file_path())
+
+    def get_all_players(self) -> List["Player"]:
+        players_dict = self.file_service.read_from_file()
+        return [Player(**player) for player in players_dict]
+
+    def find_player_by_id(self, player_id):
+        players = self.get_all_players()
+        for player in players:
+            if player.id == player_id:
+                return player
+        return None
+
+    def save_players(self, players: List["Player"]):
+        players_dict = [player.to_dict() for player in players]
+        self.file_service.write_to_file(players_dict)
+
+
+class Player:
+    def __init__(self, first_name, last_name, classement, player_id=None):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.classement = classement
+        self.id = player_id or uuid.uuid4()
+
+    def to_dict(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "classement": self.classement,
+            "id": str(self.id)
+        }
+
+    @classmethod
+    def from_dict(dict_):
+        return Player(
+            dict_["first_name"],
+            dict_["last_name"],
+            dict_["classement"],
+            dict_.get("id")
+        )
+
+
 class Tournament:
-    def __init__(self, id, nom, date, lieu):
-        self.id = id
+    def __init__(self, nom, date, lieu, tournament_id=None):
         self.nom = nom
         self.date = date
         self.lieu = lieu
-        self.parties = []
+        self.players = []
+        self.rounds = []
+        self.id = tournament_id or str(uuid.uuid4())
+
+    def add_player(self, player: Player):
+        self.players.append(player)
+
+    def add_players(self, players: List[Player]):
+        self.players.extend(players)
 
     @classmethod
-    def from_dict(cls, dict_):
-        tournament = cls(dict_["id"], dict_["nom"], dict_["date"], dict_["lieu"])
-        tournament.parties = [
-            Partie.from_dict(partie) for partie in dict_.get("parties", [])
+    def from_dict(dict_, players_dict):
+        tournament = Tournament(dict_["nom"], dict_["date"], dict_["lieu"], dict_.get("id"))
+        tournament.add_players([players_dict[player_id] for player_id in dict_.get("player_ids", [])])
+        tournament.rounds = [
+            Round.from_dict(round, players_dict) for round in dict_.get("rounds", [])
         ]
         return tournament
 
@@ -70,53 +143,48 @@ class Tournament:
             "nom": self.nom,
             "date": self.date,
             "lieu": self.lieu,
-            "parties": [partie.to_dict() for partie in self.parties],
+            "player_ids": [player.id for player in self.players],
+            "rounds": [round.to_dict() for round in self.rounds],
         }
 
-    def ajouter_partie(self, partie):
-        self.parties.append(partie)
+    def ajouter_round(self, round: "Round"):  # Correction du type
+        self.rounds.append(round)
 
 
-class Partie:
+class Round:
     def __init__(self, joueur1, joueur2, resultat=None):
         self.joueur1 = joueur1
         self.joueur2 = joueur2
         self.resultat = resultat
 
     @classmethod
-    def from_dict(cls, dict_):
-        joueur1 = Joueur(**dict_["joueur1"])
-        joueur2 = Joueur(**dict_["joueur2"])
+    def from_dict(cls, dict_, players_dict):
+        joueur1 = players_dict[dict_["joueur1"]]
+        joueur2 = players_dict[dict_["joueur2"]]
         return cls(joueur1, joueur2, dict_.get("resultat"))
 
     def to_dict(self):
         return {
-            "joueur1": self.joueur1.to_dict(),
-            "joueur2": self.joueur2.to_dict(),
+            "joueur1": self.joueur1.id,
+            "joueur2": self.joueur2.id,
             "resultat": self.resultat,
         }
 
 
-class Joueur:
-    def __init__(self, nom, classement):
-        self.nom = nom
-        self.classement = classement
-
-    def to_dict(self):
-        return {"nom": self.nom, "classement": self.classement}
-
-
-class Modele:
-    def __init__(self, repository):
-        self.repository = repository
-        self.tournois = self.repository.get_all_tournaments()
+class TournamentManager:
+    def __init__(
+        self,
+        tournament_repository: TournamentRepository
+    ):
+        self.tournament_repository = tournament_repository
+        self.tournois = self.tournament_repository.get_all_tournaments()
         self.tournoi_actif = None
 
-    def ajouter_tournoi(self, tournoi):
+    def add_tournament(self, tournoi):
         self.tournois.append(tournoi)
-        self.repository.save_tournaments(self.tournois)
+        self.tournament_repository.save_tournaments(self.tournois)
 
-    def selectionner_tournoi(self, nom):
+    def select_tournament(self, nom):
         for tournoi in self.tournois:
             if tournoi.nom == nom:
                 self.tournoi_actif = tournoi
@@ -124,78 +192,78 @@ class Modele:
                 return
         print("Tournoi non trouvé.")
 
-    def obtenir_tournoi_actif(self):
+    def get_active_tournament(self):
         return self.tournoi_actif
 
     def lister_tournois(self):
         return [tournoi.nom for tournoi in self.tournois]
 
 
-class VueTournoi:
+class TournamentView:
     def afficher_tournoi(self, tournoi):
         print(f"Tournoi: {tournoi.nom}, Date: {tournoi.date}, Lieu: {tournoi.lieu}")
-        for partie in tournoi.parties:
+        for round in tournoi.rounds:
             print(
-                f"Partie entre {partie.joueur1.nom} et {partie.joueur2.nom}, Résultat: {partie.resultat}"
+                f"Partie entre {round.joueur1.first_name} {round.joueur1.last_name} et {round.joueur2.first_name} {round.joueur2.last_name}, Résultat: {round.resultat}"
             )
 
 
-class ControleurTournoi:
-    def __init__(self, modele, vue):
-        self.modele = modele
-        self.vue = vue
+class TournamentController:
+    def __init__(self, manager: TournamentManager, view: TournamentView):
+        self.tournament_manager = manager
+        self.tournament_view = view
 
-    def creer_tournoi(self, nom, date, lieu, id):
-        tournoi = Tournament(id, nom, date, lieu)
-        self.modele.ajouter_tournoi(tournoi)
+    def create_tournament(self, nom, date, lieu, tournament_id):
+        tournament = Tournament(nom, date, lieu, tournament_id)
+        self.tournament_manager.add_tournament(tournament)
         print(f"Tournoi '{nom}' créé avec succès.")
 
     def selectionner_tournoi(self, nom):
-        self.modele.selectionner_tournoi(nom)
+        self.tournament_manager.select_tournament(nom)
 
-    def ajouter_partie(self, joueur1, joueur2, resultat=None):
-        tournoi_actif = self.modele.obtenir_tournoi_actif()
+    def ajouter_round(self, joueur1, joueur2, resultat=None):
+        tournoi_actif = self.tournament_manager.get_active_tournament()
         if tournoi_actif:
-            partie = Partie(joueur1, joueur2, resultat)
-            tournoi_actif.ajouter_partie(partie)
-            self.modele.repository.save_tournaments(self.modele.tournois)
+            round = Round(joueur1, joueur2, resultat)
+            tournoi_actif.ajouter_round(round)
+            self.tournament_manager.tournament_repository.save_tournaments(self.tournament_manager.tournois)
             print("Partie ajoutée avec succès.")
         else:
             print("Aucun tournoi actif sélectionné.")
 
-    def mettre_a_jour_resultat(self, index_partie, resultat):
-        tournoi_actif = self.modele.obtenir_tournoi_actif()
-        if tournoi_actif and 0 <= index_partie < len(tournoi_actif.parties):
-            tournoi_actif.parties[index_partie].resultat = resultat
-            self.modele.repository.save_tournaments(self.modele.tournois)
+    def mettre_a_jour_resultat(self, index_round, resultat):
+        tournoi_actif = self.tournament_manager.get_active_tournament()
+        if tournoi_actif and 0 <= index_round < len(tournoi_actif.rounds):
+            tournoi_actif.rounds[index_round].resultat = resultat
+            self.tournament_manager.tournament_repository.save_tournaments(self.tournament_manager.tournois)
             print("Résultat mis à jour avec succès.")
         else:
-            print("Index de partie invalide ou aucun tournoi actif.")
+            print("Index de round invalide ou aucun tournoi actif.")
 
     def afficher_tournoi(self):
-        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        tournoi_actif = self.tournament_manager.get_active_tournament()
         if tournoi_actif:
-            self.vue.afficher_tournoi(tournoi_actif)
+            self.tournament_view.afficher_tournoi(tournoi_actif)
         else:
             print("Aucun tournoi actif sélectionné.")
 
-    def afficher_parties_sans_resultat(self):
-        tournoi_actif = self.modele.obtenir_tournoi_actif()
+    def afficher_rounds_sans_resultat(self):
+        tournoi_actif = self.tournament_manager.get_active_tournament()
         if tournoi_actif:
-            parties_sans_resultat = [
-                partie for partie in tournoi_actif.parties if partie.resultat is None
+            rounds_sans_resultat = [
+                round for round in tournoi_actif.rounds if round.resultat is None
             ]
-            if parties_sans_resultat:
+            if rounds_sans_resultat:
                 print("Parties sans résultat :")
-                for partie in parties_sans_resultat:
-                    print(f"Partie entre {partie.joueur1.nom} et {partie.joueur2.nom}")
+                for round in rounds_sans_resultat:
+                    print(f"Partie entre {round.joueur1.first_name} {round.joueur1.last_name} et {round.joueur2.first_name} {round.joueur2.last_name}")
             else:
-                print("Toutes les parties ont un résultat.")
+                print("Toutes les rounds ont un résultat.")
         else:
             print("Aucun tournoi actif sélectionné.")
 
-    def lister_tournois(self):
-        tournois = self.modele.lister_tournois()
+    def display_available_tournaments(self):
+        tournois = self.tournament_manager.lister_tournois()
         if tournois:
             print("Tournois disponibles :")
             for nom in tournois:
@@ -206,19 +274,22 @@ class ControleurTournoi:
 
 class Application:
     def __init__(self):
-        repository = TournamentRepository()
-        self.modele = Modele(repository)
-        self.vue = VueTournoi()
-        self.controleur = ControleurTournoi(self.modele, self.vue)
+        player_repository = PlayerRepository()
+        tournament_repository = TournamentRepository(player_repository)
+        self.tournament_manager = TournamentManager(tournament_repository)
+        self.tournament_view = TournamentView()
+        self.tournament_controller = TournamentController(
+            self.tournament_manager, self.tournament_view
+        )
 
     def afficher_menu(self):
-        tournoi_actif = self.modele.obtenir_tournoi_actif()
+        tournoi_actif = self.tournament_manager.get_active_tournament()
         if tournoi_actif:
             print("\nActions disponibles (Tournoi actif) :")
-            print("1. Ajouter une partie")
-            print("2. Mettre à jour le résultat d'une partie")
+            print("1. Ajouter une round")
+            print("2. Mettre à jour le résultat d'une round")
             print("3. Afficher les détails du tournoi")
-            print("4. Afficher les parties sans résultat")
+            print("4. Afficher les rounds sans résultat")
             print("5. Sélectionner un autre tournoi")
             print("6. Quitter")
         else:
@@ -233,21 +304,21 @@ class Application:
             self.afficher_menu()
             choix = input("Choisissez une action : ")
 
-            if not self.modele.obtenir_tournoi_actif():
+            if not self.tournament_manager.get_active_tournament():
                 if choix == "1":
                     nom = input("Nom du tournoi : ")
                     date = input("Date du tournoi : ")
                     lieu = input("Lieu du tournoi : ")
-                    id = input("ID du tournoi : ")
-                    self.controleur.creer_tournoi(nom, date, lieu, id)
+                    tournament_id = input("ID du tournoi : ")
+                    self.tournament_controller.create_tournament(nom, date, lieu, tournament_id)
 
                 elif choix == "2":
-                    self.controleur.lister_tournois()
+                    self.tournament_controller.display_available_tournaments()
                     nom = input("Nom du tournoi à sélectionner : ")
-                    self.controleur.selectionner_tournoi(nom)
+                    self.tournament_controller.selectionner_tournoi(nom)
 
                 elif choix == "3":
-                    self.controleur.lister_tournois()
+                    self.tournament_controller.display_available_tournaments()
 
                 elif choix == "4":
                     print("Fin du programme.")
@@ -259,28 +330,30 @@ class Application:
             else:
                 if choix == "1":
                     nom1 = input("Nom du joueur 1 : ")
+                    prenom1 = input("Prénom du joueur 1 : ")
                     nom2 = input("Nom du joueur 2 : ")
+                    prenom2 = input("Prénom du joueur 2 : ")
                     classement1 = int(input("Classement du joueur 1 : "))
                     classement2 = int(input("Classement du joueur 2 : "))
-                    joueur1 = Joueur(nom1, classement1)
-                    joueur2 = Joueur(nom2, classement2)
-                    self.controleur.ajouter_partie(joueur1, joueur2)
+                    joueur1 = Player(prenom1, nom1, classement1)
+                    joueur2 = Player(prenom2, nom2, classement2)
+                    self.tournament_controller.ajouter_round(joueur1, joueur2)
 
                 elif choix == "2":
-                    index = int(input("Index de la partie à mettre à jour : "))
+                    index = int(input("Index de la round à mettre à jour : "))
                     resultat = input("Nouveau résultat : ")
-                    self.controleur.mettre_a_jour_resultat(index, resultat)
+                    self.tournament_controller.mettre_a_jour_resultat(index, resultat)
 
                 elif choix == "3":
-                    self.controleur.afficher_tournoi()
+                    self.tournament_controller.afficher_tournoi()
 
                 elif choix == "4":
-                    self.controleur.afficher_parties_sans_resultat()
+                    self.tournament_controller.afficher_rounds_sans_resultat()
 
                 elif choix == "5":
-                    self.controleur.lister_tournois()
+                    self.tournament_controller.display_available_tournaments()
                     nom = input("Nom du tournoi à sélectionner : ")
-                    self.controleur.selectionner_tournoi(nom)
+                    self.tournament_controller.selectionner_tournoi(nom)
 
                 elif choix == "6":
                     print("Fin du programme.")

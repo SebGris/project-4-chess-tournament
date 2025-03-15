@@ -1,30 +1,8 @@
 [
     {
         "id": "ac28514f-a1cf-4c0f-a382-0fbcb37c0600",
-        "name": "bb",
+        "name": "AA",
         "location": "bb",
-        "start_date": "",
-        "end_date": "",
-        "player_ids": [],
-        "description": null,
-        "rounds": [],
-        "number_of_rounds": 4
-    },
-    {
-        "id": "db8dd39e-9d2a-49a3-b7f0-d8d52a2f0a54",
-        "name": "pp",
-        "location": "qq",
-        "start_date": "c",
-        "end_date": "c",
-        "player_ids": [],
-        "description": null,
-        "rounds": [],
-        "number_of_rounds": 4
-    },
-    {
-        "id": "c00459f6-52cc-4ad2-a8c1-1c0c295cdcdf",
-        "name": "ww",
-        "location": "xx",
         "start_date": "",
         "end_date": "",
         "player_ids": [],
@@ -39,7 +17,10 @@
         "start_date": "",
         "end_date": "",
         "player_ids": [
-            "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a"
+            "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+            "350cf9b5-75db-4703-94c1-7c633ae1c490",
+            "812160aa-8e0a-453a-a345-80335d77eb59"
         ],
         "description": null,
         "rounds": [],
