@@ -1,7 +1,7 @@
+import uuid
 from models.player import Player
 from models.player_repository import PlayerRepository
 from views.player_view import PlayerView
-import uuid
 
 
 class PlayerController:
@@ -30,3 +30,6 @@ class PlayerController:
 
     def display_tournament_players(self, players_names):
         self.view.display_tournament_players(players_names)
+
+    def display_players(self, players):
+        self.view.display_players(players)

@@ -12,8 +12,6 @@ class TournamentManager:
         self.active_tournament = tournament
         return self.tournaments
 
-    def select_tournament(self, index: int):
+    def select_tournament(self, index: int) -> Tournament:
         self.active_tournament = self.tournaments[index]
-
-    def get_active_tournament(self) -> Tournament:
         return self.active_tournament

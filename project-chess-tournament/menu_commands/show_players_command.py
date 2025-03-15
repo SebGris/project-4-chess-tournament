@@ -7,8 +7,4 @@ class ShowPlayersCommand(Command):
         self.controller = controller
 
     def execute(self):
-        if self.controller.active_tournament:
-            players = self.controller.get_players()
-            self.controller.tournament_view.display_players(players)
-        else:
-            self.controller.tournament_view.display_no_tournament_message()
+        self.controller.display_players()

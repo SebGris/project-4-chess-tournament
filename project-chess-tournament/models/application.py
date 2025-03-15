@@ -52,7 +52,7 @@ class Application:
             ShowPlayerPairsCommand(self.tournament_controller)
         )
         self.application_menu.add_group(
-            "Tournoi : {}".format(name),
+            "Menu Tournoi : {}".format(name),
             [
                 {
                     "label": "Afficher le tournoi",

@@ -17,16 +17,15 @@ class TournamentController:
         self.tournament_repository = tournament_repository
         self.tournament_view = view
         self.tournament_manager = TournamentManager(self.get_all_tournaments())
-        player_repository = PlayerRepository()
-        player_view = PlayerView()
         self.round_view = RoundView()
-        self.player_controller = PlayerController(player_repository, player_view)
+        self.player_controller = PlayerController(PlayerRepository(), PlayerView())
+        self.active_tournament = None
 
     def get_all_tournaments(self):
         return self.tournament_repository.get_all_tournaments()
 
     def get_active_tournament(self):
-        return self.tournament_manager.get_active_tournament()
+        return self.active_tournament
 
     def get_tournament_by_id(self, tournament_id):
         tournament = self.tournament_manager.find_tournament_by_id(tournament_id)
@@ -59,7 +58,7 @@ class TournamentController:
     def select_tournament(self):
         tournaments = self.get_all_tournaments()
         index = self.tournament_view.get_tournament_selection(tournaments)
-        self.tournament_manager.select_tournament(index)
+        self.active_tournament = self.tournament_manager.select_tournament(index)
 
     def update_tournament(self, tournament_id, name, date):
         updated_data = {"name": name, "date": date}
@@ -153,31 +152,30 @@ class TournamentController:
         self.tournament_view.display_tournaments(tournaments)
 
     def display_active_tournament(self):
-        tournament = self.get_active_tournament()
-        self.tournament_view.display_tournament_details(tournament)
+        self.tournament_view.display_tournament_details(self.active_tournament)
+
+    def display_players(self):
+        self.player_controller.display_players(self.active_tournament.players)
 
     def display_player_names(self):
-        active_tournament = self.get_active_tournament()
-        if active_tournament:
+        if self.active_tournament:
             players_names = [
-                player.full_name for player in active_tournament.players
+                player.full_name for player in self.active_tournament.players
             ]
             self.player_controller.display_tournament_players(players_names)
         else:
             self.tournament_view.display_no_tournament_message()
 
     def display_current_round(self):
-        active_tournament = self.get_active_tournament()
-        current_round = active_tournament.get_current_round()
+        current_round = self.active_tournament.get_current_round()
         if current_round:
             self.round_view.display_round_info(current_round)
-            self.tournament_view.display_current_round(active_tournament)
+            self.tournament_view.display_current_round(self.active_tournament)
             # self.tournament_view.display_no_tournament_message()
             # self.tournament_view.display_no_round_message()
 
     def display_player_pairs(self):
-        active_tournament = self.get_active_tournament()
-        current_round = active_tournament.get_current_round()
+        current_round = self.active_tournament.get_current_round()
         if current_round:
             round_name, pairs = current_round.get_pairs_players()
             self.round_view.display_player_pairs(round_name, pairs)
