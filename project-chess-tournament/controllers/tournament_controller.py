@@ -4,7 +4,6 @@ from models.player import Player
 from models.player_repository import PlayerRepository
 from models.round import Round
 from models.tournament import Tournament
-from models.tournament_manager import TournamentManager
 from models.tournament_repository import TournamentRepository
 from views.player_view import PlayerView
 from views.round_view import RoundView
@@ -16,9 +15,9 @@ class TournamentController:
     def __init__(self, tournament_repository: TournamentRepository, view: TournamentView):
         self.tournament_repository = tournament_repository
         self.tournament_view = view
-        self.tournament_manager = TournamentManager(self.get_all_tournaments())
         self.round_view = RoundView()
         self.player_controller = PlayerController(PlayerRepository(), PlayerView())
+        self.tournaments = self.get_all_tournaments()
         self.active_tournament = None
 
     def get_all_tournaments(self):
@@ -43,13 +42,13 @@ class TournamentController:
 
     def create_tournament(self, name, location, start_date, end_date, number_of_rounds):
         tournament = Tournament(name, location, start_date, end_date, number_of_rounds)
-        tournaments = self.tournament_manager.add_tournament(tournament)
-        self.tournament_repository.save_tournaments(tournaments)
+        self.tournaments.append(tournament)
+        self.tournament_repository.save_tournaments(self.tournaments)
 
     def select_tournament(self):
         tournaments = self.get_all_tournaments()
         index = self.tournament_view.get_tournament_selection(tournaments)
-        self.active_tournament = self.tournament_manager.select_tournament(index)
+        self.active_tournament = self.tournaments[index]
 
     def update_tournament(self, tournament_id, name, date):
         updated_data = {"name": name, "date": date}

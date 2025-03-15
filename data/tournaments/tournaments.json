@@ -50,8 +50,8 @@
         "id": "50c8a832-dec5-4659-8d02-31c0b937bbf0",
         "name": "Test dallas",
         "location": "Dallas",
-        "start_date": "15/12/2020",
-        "end_date": "15/11/2020",
+        "start_date": "15/11/2020",
+        "end_date": "15/12/2020",
         "description": null,
         "number_of_rounds": 4,
         "player_ids": [
