@@ -13,7 +13,7 @@ class TournamentRepository(BaseRepository):
         self.file_service = FileService(self.get_file_path())
         self.player_repository = player_repository
 
-    def get_all_tournaments(self) -> List[Tournament]:
+    def get_tournaments(self) -> List[Tournament]:
         tournaments_dict = self.file_service.read_from_file()
         all_players = {player.id: player for player in self.player_repository.get_all_players()}
         tournaments = []
@@ -25,7 +25,7 @@ class TournamentRepository(BaseRepository):
         return tournaments
 
     def find_tournament_by_id(self, tournament_id):
-        tournaments = self.get_all_tournaments()
+        tournaments = self.get_tournaments()
         for tournament in tournaments:
             if tournament.id == tournament_id:
                 return tournament
@@ -38,7 +38,7 @@ class TournamentRepository(BaseRepository):
     def update_tournament(
         self, id: uuid.UUID, data: Dict[str, str]
     ) -> Optional[Tournament]:
-        tournaments = self.get_all_tournaments()
+        tournaments = self.get_tournaments()
         for tournament in tournaments:
             if tournament.id == id:
                 tournament.name = data["name"]

@@ -17,7 +17,7 @@ class TournamentController:
         self.tournament_view = view
         self.round_view = RoundView()
         self.player_controller = PlayerController(PlayerRepository(), PlayerView())
-        self.tournaments = self.tournament_repository.get_all_tournaments()
+        self.tournaments = self.tournament_repository.get_tournaments()
         self.active_tournament = None
 
     def get_active_tournament(self):
@@ -75,15 +75,28 @@ class TournamentController:
         ]
 
     def start_tournament(self):
-        for index in range(1, self.active_tournament.number_of_rounds):
-            self.active_tournament.update_scores(round.matches)
-            print(self.active_tournament.players)
-            # if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
-            current_round = self.active_tournament.get_current_round()
-            if current_round is None:
-                self.add_round()
-            elif current_round.is_finished():
-                self.add_round()
+        if self.__check_if_start():
+            for index in range(1, self.active_tournament.number_of_rounds):
+                self.active_tournament.update_scores(round.matches)
+                print(self.active_tournament.players)
+                # if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
+                current_round = self.active_tournament.get_current_round()
+                if current_round is None:
+                    self.add_round()
+                elif current_round.is_finished():
+                    self.add_round()
+
+    def __check_if_start(self):
+        if not self.active_tournament.players:
+            self.tournament_view.display_start_error_without_players()
+            return False
+        elif self.__check_if_odd(len(self.active_tournament.players)):
+            self.tournament_view.display_start_error_even_players()
+            return False
+        return True
+
+    def __check_if_odd(self, number):
+        return number % 2 != 0
 
     def add_round(self):
         round_name = f"Round {len(self.active_tournament.rounds) + 1}"

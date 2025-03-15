@@ -115,10 +115,10 @@ class TournamentView(BaseView):
     def display_save_error_message(self, error):
         self.write_line(f"Erreur lors de la sauvegarde du tournoi : {error}")
 
-    def display_start_error_tournament_without_players(self):
+    def display_start_error_without_players(self):
         self.write_line("Le tournoi ne peut pas commencer sans joueurs.")
 
-    def display_start_error_tournament_even_players(self):
+    def display_start_error_even_players(self):
         self.write_line(
             "Le nombre de joueurs doit être pair pour commencer le tournoi."
         )
