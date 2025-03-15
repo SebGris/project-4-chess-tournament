@@ -1,4 +1,4 @@
-class TournamentMenu:
+class ApplicationMenu:
     def __init__(self):
         self.groups = []
 

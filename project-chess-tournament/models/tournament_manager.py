@@ -9,8 +9,8 @@ class TournamentManager:
     def add_tournament(self, tournament: Tournament):
         self.tournaments.append(tournament)
 
-    def select_tournament(self, index):
+    def select_tournament(self, index: int):
         self.active_tournament = self.tournaments[index]
 
-    def get_active_tournament(self):
+    def get_active_tournament(self) -> Tournament:
         return self.active_tournament

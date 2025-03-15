@@ -15,31 +15,30 @@ from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
 from models.player_repository import PlayerRepository
-from models.tournament_menu import TournamentMenu
 from models.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
 
 
 class Application:
-    def __init__(self):
+    def __init__(self, application_menu):
+        self.tournament_menu = application_menu
         self.tournament_repository = TournamentRepository(PlayerRepository())
         self.tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
             self.tournament_repository, self.tournament_view
         )
-        self.menu = TournamentMenu()
 
     def get_refresh_menu(self):
-        self.menu.clear_menu()
+        self.tournament_menu.clear_menu()
         self._set_tournament_app_title()
         self._add_general_menu()
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
             self._add_tournament_menu(active_tournament.name)
-        return self.menu
+        return self.tournament_menu
 
     def _set_tournament_app_title(self):
-        self.menu.add_group("Application tournois d'échecs", [])
+        self.tournament_menu.add_group("Application tournois d'échecs", [])
 
     def _add_tournament_menu(self, name):
         show_tournament_composite_com = CompositeCommand()
@@ -55,7 +54,7 @@ class Application:
         show_tournament_composite_com.add_command(
             ShowPlayerPairsCommand(self.tournament_controller)
         )
-        self.menu.add_group(
+        self.tournament_menu.add_group(
             "Tournoi : {}".format(name),
             [
                 {
@@ -97,7 +96,7 @@ class Application:
         new_tournament_composite_command.add_command(
             SelectTournamentCommand(self.tournament_controller)
         )
-        self.menu.add_group(
+        self.tournament_menu.add_group(
             "Menu Général",
             [
                 {
