@@ -5,6 +5,7 @@ from models.player_repository import PlayerRepository
 from models.round import Round
 from models.tournament import Tournament
 from models.tournament_manager import TournamentManager
+from models.tournament_repository import TournamentRepository
 from views.player_view import PlayerView
 from views.round_view import RoundView
 from views.tournament_view import TournamentView
@@ -12,16 +13,17 @@ from views.tournament_view import TournamentView
 
 class TournamentController:
 
-    def __init__(self, manager: TournamentManager, view: TournamentView):
-        self.tournament_manager = manager
+    def __init__(self, tournament_repository: TournamentRepository, view: TournamentView):
+        self.tournament_repository = tournament_repository
         self.tournament_view = view
+        self.tournament_manager = TournamentManager(self.get_all_tournaments())
         player_repository = PlayerRepository()
         player_view = PlayerView()
         self.round_view = RoundView()
         self.player_controller = PlayerController(player_repository, player_view)
 
     def get_all_tournaments(self):
-        return self.tournament_manager.get_all_tournaments()
+        return self.tournament_repository.get_all_tournaments()
 
     def get_active_tournament(self):
         return self.tournament_manager.get_active_tournament()
@@ -46,22 +48,13 @@ class TournamentController:
 
     def create_new_tournament(self):
         tournament_info = self.collect_tournament_info()
-        self.create_tournament(tournament_info)
+        self.create_tournament(**tournament_info)
         self.tournament_view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(self, name, location, start_date, end_date, description, rounds, number_of_rounds, tournament_id):
-        rounds_list = [Round(**round) for round in rounds] if rounds else []
-        tournament = Tournament(
-            name,
-            location,
-            start_date,
-            end_date,
-            number_of_rounds,
-            description,
-            rounds_list,
-            tournament_id
-        )
+    def create_tournament(self, name, location, start_date, end_date, number_of_rounds):
+        tournament = Tournament(name, location, start_date, end_date, number_of_rounds)
         self.tournament_manager.add_tournament(tournament)
+        # self.tournament_repository.save_tournaments(self.tournaments)
 
     def select_tournament(self):
         tournaments = self.get_all_tournaments()
@@ -129,11 +122,15 @@ class TournamentController:
         self.active_tournament.rounds.append(new_round)
         self.tournament_view.display_added_round_message(round_name)
 
-    def update_number_of_rounds(self, new_number_of_rounds):
-        self.active_tournament.set_number_of_rounds(new_number_of_rounds)
+    def update_number_of_rounds(self):
+        new_number = self.tournament_view.get_number_of_rounds()
+        self.active_tournament.set_number_of_rounds(new_number)
+        self.tournament_view.display_updated_number_rounds_message(new_number)
 
-    def update_description(self, description):
+    def update_description(self):
+        description = self.tournament_view.get_tournament_description()
         self.active_tournament.set_description(description)
+        self.tournament_view.display_successful_description_message()
 
     def enter_scores(self):
         round_instance = self.active_tournament.get_current_round()

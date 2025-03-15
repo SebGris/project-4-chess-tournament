@@ -15,14 +15,11 @@ class TournamentRepository(BaseRepository):
 
     def get_all_tournaments(self) -> List[Tournament]:
         tournaments_dict = self.file_service.read_from_file()
-        all_players = self.player_repository.get_all_players()
+        all_players = {player.id: player for player in self.player_repository.get_all_players()}
         tournaments = []
         for tournament_dict in tournaments_dict:
             tournament = Tournament.from_dict(tournament_dict)
-            players = []
-            for player in all_players:
-                if player.id in tournament_dict["player_ids"]:
-                    players.append(player)
+            players = [all_players[player_id] for player_id in tournament_dict["player_ids"] if player_id in all_players]
             tournament.add_players(players)
             tournaments.append(tournament)
         return tournaments
@@ -49,7 +46,6 @@ class TournamentRepository(BaseRepository):
         for tournament in tournaments:
             if tournament.id == id:
                 tournament.name = data["name"]
-                tournament.date = data["date"]
                 self.file_service.write_to_file(
                     [tournament.to_dict() for tournament in tournaments]
                 )

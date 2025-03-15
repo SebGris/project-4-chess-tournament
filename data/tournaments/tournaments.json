@@ -5,10 +5,10 @@
         "location": "bb",
         "start_date": "",
         "end_date": "",
-        "player_ids": [],
         "description": null,
-        "rounds": [],
-        "number_of_rounds": 4
+        "number_of_rounds": 4,
+        "player_ids": [],
+        "round_ids": []
     },
     {
         "id": "09cab1aa-598b-4589-a6ca-8572cb92311e",
@@ -16,15 +16,15 @@
         "location": "PP",
         "start_date": "",
         "end_date": "",
+        "description": null,
+        "number_of_rounds": 4,
         "player_ids": [
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
             "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
             "350cf9b5-75db-4703-94c1-7c633ae1c490",
             "812160aa-8e0a-453a-a345-80335d77eb59"
         ],
-        "description": null,
-        "rounds": [],
-        "number_of_rounds": 4
+        "round_ids": []
     },
     {
         "id": "2550812f-cdda-4763-9531-6b61ffe2a7ef",
@@ -32,6 +32,8 @@
         "location": "ici",
         "start_date": "15/10/2024",
         "end_date": "20/10/2024",
+        "description": "test",
+        "number_of_rounds": 4,
         "player_ids": [
             "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
             "350cf9b5-75db-4703-94c1-7c633ae1c490",
@@ -42,80 +44,16 @@
             "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
             "03b5eef5-caa6-421f-8e2a-e645a57eaa5f"
         ],
-        "description": "test",
-        "rounds": [
-            {
-                "name": "Round 1",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-                            "last_name": "Harvey",
-                            "first_name": "Brady"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "350cf9b5-75db-4703-94c1-7c633ae1c490",
-                            "last_name": "Hull",
-                            "first_name": "Geraldine"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "812160aa-8e0a-453a-a345-80335d77eb59",
-                            "last_name": "Thomas",
-                            "first_name": "Hayes"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-                            "last_name": "Holder",
-                            "first_name": "Daugherty"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-                            "last_name": "Graham",
-                            "first_name": "Fitzgerald"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
-                            "last_name": "Russo",
-                            "first_name": "Jacklyn"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-                            "last_name": "Bartlett",
-                            "first_name": "Gayle"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-                            "last_name": "Herrera",
-                            "first_name": "Ivy"
-                        },
-                        "player2_score": 0
-                    }
-                ],
-                "start_datetime": "2025-03-10T17:24:01.415208",
-                "end_datetime": null
-            }
-        ],
-        "number_of_rounds": 4
+        "round_ids": []
     },
     {
         "id": "50c8a832-dec5-4659-8d02-31c0b937bbf0",
         "name": "Test dallas",
         "location": "Dallas",
         "start_date": "15/12/2020",
-        "end_date": "11",
+        "end_date": "15/11/2020",
+        "description": null,
+        "number_of_rounds": 4,
         "player_ids": [
             "350cf9b5-75db-4703-94c1-7c633ae1c490",
             "52995956-a29c-471d-aa81-e393c16c3ce5",
@@ -126,135 +64,6 @@
             "812160aa-8e0a-453a-a345-80335d77eb59",
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a"
         ],
-        "description": null,
-        "rounds": [
-            {
-                "name": "Round 1",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "350cf9b5-75db-4703-94c1-7c633ae1c490",
-                            "last_name": "Hull",
-                            "first_name": "Geraldine"
-                        },
-                        "player1_score": 1,
-                        "player2": {
-                            "id": "812160aa-8e0a-453a-a345-80335d77eb59",
-                            "last_name": "Thomas",
-                            "first_name": "Hayes"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-                            "last_name": "Holder",
-                            "first_name": "Daugherty"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
-                            "last_name": "Russo",
-                            "first_name": "Jacklyn"
-                        },
-                        "player2_score": 1
-                    },
-                    {
-                        "player1": {
-                            "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-                            "last_name": "Graham",
-                            "first_name": "Fitzgerald"
-                        },
-                        "player1_score": 0.5,
-                        "player2": {
-                            "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-                            "last_name": "Bartlett",
-                            "first_name": "Gayle"
-                        },
-                        "player2_score": 0.5
-                    },
-                    {
-                        "player1": {
-                            "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-                            "last_name": "Herrera",
-                            "first_name": "Ivy"
-                        },
-                        "player1_score": 0.5,
-                        "player2": {
-                            "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-                            "last_name": "Harvey",
-                            "first_name": "Brady"
-                        },
-                        "player2_score": 0.5
-                    }
-                ],
-                "start_datetime": "2025-03-10T19:35:51.779710",
-                "end_datetime": "2025-03-10T19:47:12.411350"
-            },
-            {
-                "name": "Round 2",
-                "matches": [
-                    {
-                        "player1": {
-                            "id": "350cf9b5-75db-4703-94c1-7c633ae1c490",
-                            "last_name": "Hull",
-                            "first_name": "Geraldine"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
-                            "last_name": "Russo",
-                            "first_name": "Jacklyn"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-                            "last_name": "Graham",
-                            "first_name": "Fitzgerald"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-                            "last_name": "Bartlett",
-                            "first_name": "Gayle"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-                            "last_name": "Herrera",
-                            "first_name": "Ivy"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-                            "last_name": "Harvey",
-                            "first_name": "Brady"
-                        },
-                        "player2_score": 0
-                    },
-                    {
-                        "player1": {
-                            "id": "812160aa-8e0a-453a-a345-80335d77eb59",
-                            "last_name": "Thomas",
-                            "first_name": "Hayes"
-                        },
-                        "player1_score": 0,
-                        "player2": {
-                            "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-                            "last_name": "Holder",
-                            "first_name": "Daugherty"
-                        },
-                        "player2_score": 0
-                    }
-                ],
-                "start_datetime": "2025-03-10T19:47:19.936174",
-                "end_datetime": null
-            }
-        ],
-        "number_of_rounds": 4
+        "round_ids": []
     }
 ]

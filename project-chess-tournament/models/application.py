@@ -14,21 +14,18 @@ from menu_commands.show_tournaments_details_command import ShowTournamentsDetail
 from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
-from models.tournament_menu import TournamentMenu
 from models.player_repository import PlayerRepository
-from models.tournament_manager import TournamentManager
+from models.tournament_menu import TournamentMenu
 from models.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
 
 
 class Application:
     def __init__(self):
-        player_repository = PlayerRepository()
-        tournament_repository = TournamentRepository(player_repository)
-        self.tournament_manager = TournamentManager(tournament_repository)
+        self.tournament_repository = TournamentRepository(PlayerRepository())
         self.tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
-            self.tournament_manager, self.tournament_view
+            self.tournament_repository, self.tournament_view
         )
         self.menu = TournamentMenu()
 
@@ -36,7 +33,7 @@ class Application:
         self.menu.clear_menu()
         self._set_tournament_app_title()
         self._add_general_menu()
-        active_tournament = self.tournament_manager.get_active_tournament()
+        active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
             self._add_tournament_menu(active_tournament.name)
         return self.menu

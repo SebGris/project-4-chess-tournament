@@ -6,23 +6,35 @@ from models.round import Round
 
 class Tournament:
 
-    def __init__(self, name: str, location: str, start_date: str, end_date: str, description: str, rounds: List[Round], number_of_rounds: int, tournament_id=None):
+    def __init__(self, name, location, start_date, end_date, number_of_rounds, tournament_id=None):
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.description = description
-        self.players = []
-        self.rounds = rounds
         self.number_of_rounds = number_of_rounds
-        self.current_round = 0
         self._id = tournament_id or uuid.uuid4()
+        self.players = []
+        self.rounds = []
+        self.current_round = 0
+        self.description = None
 
     def add_player(self, player: Player):
         self.players.append(player)
 
     def add_players(self, players: List[Player]):
         self.players.extend(players)
+
+    def add_round(self, player: Round):
+        self.players.append(player)
+
+    def add_rounds(self, players: List[Round]):
+        self.players.extend(players)
+
+    def set_description(self, description):
+        self.description = description
+
+    def set_number_of_rounds(self, number_of_rounds):
+        self.number_of_rounds = number_of_rounds
 
     def update_scores(self, match_results):
         for match in match_results:
@@ -64,9 +76,9 @@ class Tournament:
             "start_date": self.start_date,
             "end_date": self.end_date,
             "description": self.description,
-            "player_ids": [player.id for player in self.players],
-            "round_ids": [str(round.id) for round in self.rounds],
             "number_of_rounds": self.number_of_rounds,
+            "player_ids": [player.id for player in self.players],
+            "round_ids": [round.id for round in self.rounds]
         }
 
     @staticmethod
@@ -76,11 +88,10 @@ class Tournament:
             dict_["location"],
             dict_["start_date"],
             dict_["end_date"],
-            dict_["description"],
-            dict_["rounds"],
             dict_["number_of_rounds"],
             dict_.get("id")
         )
+        tournament.set_description(dict_["description"])
         return tournament
 
     @property
