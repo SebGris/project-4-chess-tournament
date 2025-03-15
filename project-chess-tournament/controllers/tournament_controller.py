@@ -17,11 +17,8 @@ class TournamentController:
         self.tournament_view = view
         self.round_view = RoundView()
         self.player_controller = PlayerController(PlayerRepository(), PlayerView())
-        self.tournaments = self.get_all_tournaments()
+        self.tournaments = self.tournament_repository.get_all_tournaments()
         self.active_tournament = None
-
-    def get_all_tournaments(self):
-        return self.tournament_repository.get_all_tournaments()
 
     def get_active_tournament(self):
         return self.active_tournament
@@ -46,8 +43,7 @@ class TournamentController:
         self.tournament_repository.save_tournaments(self.tournaments)
 
     def select_tournament(self):
-        tournaments = self.get_all_tournaments()
-        index = self.tournament_view.get_tournament_selection(tournaments)
+        index = self.tournament_view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
 
     def update_tournament(self, tournament_id, name, date):
@@ -138,8 +134,7 @@ class TournamentController:
         round_instance.end_round()
 
     def display_available_tournaments(self):
-        tournaments = self.get_all_tournaments()
-        self.tournament_view.display_tournaments(tournaments)
+        self.tournament_view.display_tournaments(self.tournaments)
 
     def display_active_tournament(self):
         self.tournament_view.display_tournament_details(self.active_tournament)
