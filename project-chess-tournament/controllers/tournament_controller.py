@@ -4,7 +4,7 @@ from models.round import Round
 from models.tournament import Tournament
 from repositories.tournament_repository import TournamentRepository
 from repositories.player_repository import PlayerRepository
-from views.round_view import RoundView
+from repositories.round_repository import RoundRepository
 from views.tournament_view import TournamentView
 
 
@@ -14,18 +14,21 @@ class TournamentController:
         self,
         tournament_repository: TournamentRepository,
         player_repository: PlayerRepository,
+        round_repository: RoundRepository,
         view: TournamentView
     ):
         self.tournament_repository = tournament_repository
         self.player_repository = player_repository
+        self.round_repository = round_repository
         self.view = view
-        self.round_view = RoundView()
         self.tournaments = self.get_tournaments()
         self.active_tournament = None
 
     def get_tournaments(self):
         return [
-            Tournament.from_dto(tournament_dto, self.player_repository)
+            Tournament.from_dto(
+                tournament_dto, self.player_repository, self.round_repository
+            )
             for tournament_dto in self.tournament_repository.get_tournaments()
         ]
 
@@ -33,7 +36,11 @@ class TournamentController:
         return self.active_tournament
 
     def get_active_round(self):
-        return self.active_tournament.rounds[-1] if self.active_tournament.rounds else None
+        return (
+            self.active_tournament.rounds[-1]
+            if self.active_tournament.rounds
+            else None
+        )
 
     def collect_tournament_info(self):
         return {
@@ -95,7 +102,7 @@ class TournamentController:
             previous_matches = {
                 (match.player1.id, match.player2.id)
                 for round in self.active_tournament.rounds
-                for match in round.matches
+                for match in round.match_ids
             }
             pairs = Pairing.generate_next_round_pairs(
                 self.active_tournament.players, previous_matches
@@ -147,7 +154,7 @@ class TournamentController:
     def display_current_round(self):
         active_round = self.get_active_round()
         if active_round:
-            self.round_view.display_round_info(active_round)
+            self.view.display_round_info(active_round)
         self.view.display_current_round_number(self.active_tournament)
 
     def display_player_pairs(self):
@@ -155,7 +162,7 @@ class TournamentController:
         active_round = self.get_active_round()
         if active_round:
             round_name, pairs = active_round.get_pairs_players()
-            self.round_view.display_player_pairs(round_name, pairs)
+            self.view.display_player_pairs(round_name, pairs)
 
     def display_tournaments_details(self):
         for tournament in self.tournaments:

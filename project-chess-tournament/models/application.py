@@ -7,7 +7,6 @@ from menu_commands.quit_command import QuitCommand
 from menu_commands.select_tournament_command import SelectTournamentCommand
 from menu_commands.show_current_round import ShowCurrentRound
 from menu_commands.show_player_names_command import ShowPlayerNamesCommand
-from menu_commands.show_player_pairs_command import ShowPlayerPairsCommand
 from menu_commands.show_players_command import ShowPlayersCommand
 from menu_commands.show_tournament_details_command import ShowTournamentDetailsCommand
 from menu_commands.show_tournaments_details_command import ShowTournamentsDetailsCommand
@@ -15,6 +14,7 @@ from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
 from repositories.player_repository import PlayerRepository
+from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
 
@@ -24,9 +24,13 @@ class Application:
         self.application_menu = application_menu
         player_repository = PlayerRepository()
         tournament_repository = TournamentRepository()
+        round_repository = RoundRepository()
         tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
-            tournament_repository, player_repository, tournament_view
+            tournament_repository,
+            player_repository,
+            round_repository,
+            tournament_view
         )
 
     def get_refresh_menu(self):
@@ -48,9 +52,6 @@ class Application:
         )
         show_tournament_composite_com.add_command(
             ShowCurrentRound(self.tournament_controller)
-        )
-        show_tournament_composite_com.add_command(
-            ShowPlayerPairsCommand(self.tournament_controller)
         )
         self.application_menu.add_group(
             "Menu Tournoi : {}".format(name),

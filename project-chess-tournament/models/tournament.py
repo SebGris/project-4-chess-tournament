@@ -4,11 +4,13 @@ from models.player import Player
 from models.round import Round
 from dtos.tournament_dto import TournamentDTO
 from repositories.player_repository import PlayerRepository
+from repositories.round_repository import RoundRepository
 
 
 class Tournament:
 
-    def __init__(self, name, location, start_date, end_date, number_of_rounds, tournament_id=None):
+    def __init__(self, name, location, start_date, end_date, number_of_rounds,
+                 tournament_id=None):
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -38,17 +40,23 @@ class Tournament:
         self.number_of_rounds = number_of_rounds
 
     @staticmethod
-    def from_dto(tournament_dto: TournamentDTO, player_repo: PlayerRepository):
+    def from_dto(
+        tournament_dto: TournamentDTO,
+        player_repo: PlayerRepository,
+        round_repo: RoundRepository
+    ):
         tournament = Tournament(
             tournament_dto.name,
             tournament_dto.location,
             tournament_dto.start_date,
             tournament_dto.end_date,
             tournament_dto.number_of_rounds,
-            tournament_dto.id
+            uuid.UUID(tournament_dto.id)
         )
         players = player_repo.get_players_by_ids(tournament_dto.player_ids)
         tournament.players.extend([Player.from_dto(p) for p in players])
+        rounds = round_repo.get_rounds_by_ids(tournament_dto.round_ids)
+        tournament.rounds.extend([Round.from_dto(r) for r in rounds])
         return tournament
 
     def to_dict(self):

@@ -1,4 +1,4 @@
-from models.round import Round
+from dtos.round_dto import RoundDTO
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
 from typing import List
@@ -11,12 +11,25 @@ class RoundRepository(BaseRepository):
         super().__init__()
         self.file_service = FileService(self.get_file_path())
 
-    def get_all_rounds(self) -> List[Round]:
-        rounds_dict = self.file_service.read_from_file()
-        return [Round.from_dict(round) for round in rounds_dict]
+    def get_rounds(self):
+        return [
+            RoundDTO.from_dict(round_dict)
+            for round_dict in self.file_service.read_from_file()
+        ]
 
-    def create_round(self, round: Round) -> Round:
-        rounds = self.get_all_rounds()
+    def get_round_by_id(self, id: str):
+        return next((r for r in self.get_rounds() if r.id == id), None)
+
+    def get_rounds_by_ids(self, ids: List[str]):
+        return [round for round in self.get_rounds() if round.id in ids]
+
+    def save_rounds(self, rounds: List[RoundDTO]):
+        self.file_service.write_to_file(
+            [round.to_dict() for round in rounds]
+        )
+
+    def create_round(self, round: RoundDTO) -> RoundDTO:
+        rounds = self.get_rounds()
         rounds.append(round)
-        self.file_service.write_to_file([round.to_dict() for round in rounds])
+        self.save_rounds(rounds)
         return round
