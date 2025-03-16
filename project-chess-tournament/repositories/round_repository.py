@@ -28,7 +28,7 @@ class RoundRepository(BaseRepository):
             [round.to_dict() for round in rounds]
         )
 
-    def save_round(self, round: RoundDTO) -> RoundDTO:
+    def save(self, round: RoundDTO) -> RoundDTO:
         rounds = self.get_rounds()
         rounds.append(round)
         self.write_rounds_to_file(rounds)

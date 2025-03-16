@@ -34,7 +34,7 @@ class PlayerRepository(BaseRepository):
         self.write_players_to_file(players)
         return player
 
-    def save_players(self, new_players: List[PlayerDTO]):
+    def save(self, new_players: List[PlayerDTO]):
         players = self.get_players()
         players.extend(new_players)
         self.write_players_to_file(players)

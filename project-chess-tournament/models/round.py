@@ -10,14 +10,14 @@ class Round:
 
     def __init__(self, name, round_id=None):
         self.name = name
-        self.match_ids: List[Match] = []
         self.start_datetime = datetime.now()
         self.end_datetime = None
         self._id = round_id or uuid.uuid4()
+        self.matches: List[Match] = []
 
     def add_match(self, player1, player2):
         match = Match(player1, player2)
-        self.match_ids.append(match)
+        self.matches.append(match)
 
     def end_round(self):
         """Marks the lap as completed and records the end time."""
@@ -37,28 +37,13 @@ class Round:
                     if match.is_finished()
                     else match.get_player_names()
                 )
-                for match in self.match_ids
+                for match in self.matches
             ],
         )
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "start_datetime": self.start_datetime.isoformat(),
-            "end_datetime": (
-                self.end_datetime.isoformat() if self.end_datetime else None),
-            "match_ids": [match.id for match in self.match_ids]
-        }
-
-    @staticmethod
-    def from_dict(round):
-        return Round(
-            round["name"],
-            round["start_datetime"],
-            round["end_datetime"],
-            round["id"]
-        )
+    @property
+    def id(self):
+        return str(self._id)
 
     @staticmethod
     def from_dto(round_dto: RoundDTO):
@@ -70,6 +55,13 @@ class Round:
             uuid.UUID(round_dto.id)
         )
 
-    @property
-    def id(self):
-        return str(self._id)
+    def to_dto(self):
+        return RoundDTO(
+            self.id,
+            self.name,
+            [match.id for match in self.matches],
+            self.start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            self.end_datetime.strftime("%Y-%m-%d %H:%M:%S")
+            if self.end_datetime
+            else None
+        )

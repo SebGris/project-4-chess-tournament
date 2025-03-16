@@ -56,17 +56,24 @@
         "chess_id": "AZ81641"
     },
     {
+        "id": "6d02bc33-dd01-40dd-a53e-fb995d442773",
         "last_name": "Dallas",
         "first_name": "Sue",
         "birth_date": "15/08/2020",
-        "chess_id": "DD12345",
-        "id": "6d02bc33-dd01-40dd-a53e-fb995d442773"
+        "chess_id": "DD12345"
     },
     {
+        "id": "3971f481-f354-4b48-81a9-6143bfed65c1",
         "last_name": "Dad",
         "first_name": "B",
         "birth_date": "",
-        "chess_id": "AA12345",
-        "id": "3971f481-f354-4b48-81a9-6143bfed65c1"
+        "chess_id": "AA12345"
+    },
+    {
+        "id": "e178e9da-cb23-4aa2-bf5a-df316adf632c",
+        "last_name": "a",
+        "first_name": "a",
+        "birth_date": "",
+        "chess_id": "AA00000"
     }
 ]

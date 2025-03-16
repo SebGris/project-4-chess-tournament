@@ -7,7 +7,9 @@
         "end_date": "",
         "description": null,
         "number_of_rounds": 4,
-        "player_ids": [],
+        "player_ids": [
+            "e178e9da-cb23-4aa2-bf5a-df316adf632c"
+        ],
         "round_ids": []
     },
     {
@@ -20,10 +22,10 @@
         "number_of_rounds": 4,
         "player_ids": [
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
-            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-            "350cf9b5-75db-4703-94c1-7c633ae1c490",
+            "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
             "812160aa-8e0a-453a-a345-80335d77eb59",
-            "03b5eef5-caa6-421f-8e2a-e645a57eaa5f"
+            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+            "350cf9b5-75db-4703-94c1-7c633ae1c490"
         ],
         "round_ids": []
     },
@@ -33,17 +35,17 @@
         "location": "ici",
         "start_date": "15/10/2024",
         "end_date": "20/10/2024",
-        "description": "test",
+        "description": null,
         "number_of_rounds": 4,
         "player_ids": [
-            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
-            "350cf9b5-75db-4703-94c1-7c633ae1c490",
-            "812160aa-8e0a-453a-a345-80335d77eb59",
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
             "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-            "52995956-a29c-471d-aa81-e393c16c3ce5",
+            "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
             "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-            "03b5eef5-caa6-421f-8e2a-e645a57eaa5f"
+            "52995956-a29c-471d-aa81-e393c16c3ce5",
+            "812160aa-8e0a-453a-a345-80335d77eb59",
+            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+            "350cf9b5-75db-4703-94c1-7c633ae1c490"
         ],
         "round_ids": []
     },
@@ -56,14 +58,14 @@
         "description": null,
         "number_of_rounds": 4,
         "player_ids": [
-            "350cf9b5-75db-4703-94c1-7c633ae1c490",
-            "52995956-a29c-471d-aa81-e393c16c3ce5",
+            "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
             "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-            "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
             "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+            "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+            "52995956-a29c-471d-aa81-e393c16c3ce5",
             "812160aa-8e0a-453a-a345-80335d77eb59",
-            "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a"
+            "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+            "350cf9b5-75db-4703-94c1-7c633ae1c490"
         ],
         "round_ids": []
     }

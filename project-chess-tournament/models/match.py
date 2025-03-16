@@ -46,15 +46,6 @@ class Match:
     def get_player2(self):
         return self.player2.id, self.player2_score
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "player1_id": self.player1.id,
-            "player1_score": self.player1_score,
-            "player2_id": self.player2.id,
-            "player2_score": self.player2_score,
-        }
-
     @staticmethod
     def from_dict(match_dict):
         return Match(

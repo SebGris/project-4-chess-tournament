@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import List
 
 
@@ -29,14 +29,4 @@ class TournamentDTO:
         )
 
     def to_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "location": self.location,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "description": self.description,
-            "number_of_rounds": self.number_of_rounds,
-            "player_ids": self.player_ids,
-            "round_ids": self.round_ids
-        }
+        return asdict(self)

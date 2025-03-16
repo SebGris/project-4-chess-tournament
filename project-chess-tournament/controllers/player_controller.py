@@ -26,4 +26,4 @@ class PlayerController:
             player = Player(**player_data)
             self.added_players.append(player)
             self.view.display_add_player_message(player)
-        self.repository.save_players(self.added_players)
+        self.repository.save(self.added_players)

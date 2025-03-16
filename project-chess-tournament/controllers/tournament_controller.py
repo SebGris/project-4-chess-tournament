@@ -62,7 +62,11 @@ class TournamentController:
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
-        self.tournament_repository.write_tournaments_to_file(self.tournaments)
+        self.save_tournaments()
+
+    def save_tournaments(self):
+        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
+        self.tournament_repository.write_tournaments_to_file(tournaments_dto)
 
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
@@ -73,12 +77,15 @@ class TournamentController:
         players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)
         players_dto = [player.to_dto() for player in players]
-        self.player_repository.save_players(players_dto)
-        self.tournament_repository.write_tournaments_to_file(self.tournaments)
+        self.player_repository.save(players_dto)
+        self.save_tournaments()
 
     def start_tournament(self):
         if self.__check_if_start():
             self.add_round()
+            round_dto = self.get_active_round().to_dto()
+            self.round_repository.save(round_dto)
+            self.save_tournaments()
 
     def __check_if_start(self):
         # Check if there are players in the tournament
@@ -102,7 +109,7 @@ class TournamentController:
             previous_matches = {
                 (match.player1.id, match.player2.id)
                 for round in self.active_tournament.rounds
-                for match in round.match_ids
+                for match in round.matches
             }
             pairs = Pairing.generate_next_round_pairs(
                 self.active_tournament.players, previous_matches

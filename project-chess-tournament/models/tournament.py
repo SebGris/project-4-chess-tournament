@@ -39,6 +39,10 @@ class Tournament:
     def set_number_of_rounds(self, number_of_rounds):
         self.number_of_rounds = number_of_rounds
 
+    @property
+    def id(self):
+        return str(self._id)
+
     @staticmethod
     def from_dto(
         tournament_dto: TournamentDTO,
@@ -59,20 +63,15 @@ class Tournament:
         tournament.rounds.extend([Round.from_dto(r) for r in rounds])
         return tournament
 
-    def to_dict(self):
-        """Convert Tournament object to dictionary."""
-        return {
-            "id": self.id,
-            "name": self.name,
-            "location": self.location,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "description": self.description,
-            "number_of_rounds": self.number_of_rounds,
-            "player_ids": [player.id for player in self.players],
-            "round_ids": [round.id for round in self.rounds]
-        }
-
-    @property
-    def id(self):
-        return str(self._id)
+    def to_dto(self):
+        return TournamentDTO(
+            self.id,
+            self.name,
+            self.location,
+            self.start_date,
+            self.end_date,
+            self.description,
+            self.number_of_rounds,
+            [p.id for p in self.players],
+            [r.id for r in self.rounds]
+        )
