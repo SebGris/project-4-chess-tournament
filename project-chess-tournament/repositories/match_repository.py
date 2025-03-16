@@ -1,5 +1,5 @@
-from models.base_repository import BaseRepository
 from models.match import Match
+from repositories.base_repository import BaseRepository
 from services.file_service import FileService
 from typing import List
 

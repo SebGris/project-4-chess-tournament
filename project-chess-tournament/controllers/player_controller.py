@@ -9,27 +9,27 @@ class PlayerController:
         self.repository = repository
         self.view = view
 
-    def get_all_players(self):
-        players = self.repository.get_all_players()
-        self.view.display_all_players(players)
+    def add_players(self):
+        players_data = []
+        while player_data := self.view.get_player_data():
+            players_data.append(player_data)
+        self.create_players(players_data)
 
-    def get_player_by_id(self, player_id: uuid.UUID):
-        player = self.repository.find_player_by_id(player_id)
-        self.view.display_player(player)
+    def create_players(self, players_data):
+        players = []
+        for player_data in players_data:
+            player = self._create_player_instance(**player_data)
+            players.append(player)
+            self.view.display_add_player_message(player)
+        self.repository.create_players(players)
 
-    def create_player(self, last_name: str, first_name: str, birth_date: str, id_chess: str):
-        player_id = uuid.uuid4()
-        player = Player(player_id, last_name, first_name, birth_date, id_chess)
-        self.repository.create_player(player)
-        self.view.display_player_created(player)
-
-    def update_player(self, player_id: uuid.UUID, last_name: str, first_name: str, birth_date: str, id_chess: str):
-        updated_data = {"last_name": last_name, "first_name": first_name, "birth_date": birth_date, "id_chess": id_chess}
-        player = self.repository.update_player(player_id, updated_data)
-        self.view.display_player_updated(player)
-
-    def display_tournament_players(self, players_names):
-        self.view.display_tournament_players(players_names)
+    def display_players_name(self, players):
+        self.view.display_players_name(players)
 
     def display_players(self, players):
         self.view.display_players(players)
+
+    def _create_player_instance(self, last_name, first_name, birth_date, id_chess):
+        player_id = uuid.uuid4()
+        player = Player(last_name, first_name, birth_date, id_chess, player_id)
+        return player

@@ -36,8 +36,8 @@ class PlayerView(BaseView):
             else:
                 print("Réponse invalide. Veuillez répondre par 'oui' ou 'non'.")
 
-    def display_add_player_message(self, name):
-        self.write_line(f"Joueur {name} ajouté.")
+    def display_add_player_message(self, player: Player):
+        self.write_line(f"Joueur {player.full_name} ajouté.")
 
     def display_players(self, players: List[Player]):
         """Display a list of players."""
@@ -49,14 +49,14 @@ class PlayerView(BaseView):
                 print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.chess_id}")
             self.display_number_of_players(players)
 
-    def display_tournament_players(self, players_names):
+    def display_players_name(self, players: List[Player]):
         """Display the players of a tournament."""
         print("--- Joueurs du tournoi ---")
-        if not players_names:
+        if not players:
             print("Aucun joueur enregistré.")
         else:
-            print(f"Joueurs : {', '.join(players_names)}")
-            self.display_number_of_players(players_names)
+            print(f"Joueurs : {', '.join(players.full_name for player in players)}")
+            self.display_number_of_players(players)
 
     def display_number_of_players(self, player_list):
         """Display the number of players."""

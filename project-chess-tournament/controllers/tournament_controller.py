@@ -46,13 +46,6 @@ class TournamentController:
         index = self.tournament_view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
 
-    def update_tournament(self, tournament_id, name, date):
-        updated_data = {"name": name, "date": date}
-        tournament = self.tournament_manager.update_tournament(
-            tournament_id, updated_data
-        )
-        self.tournament_view.display_tournament_updated(tournament)
-
     def load_all_players(self):
         try:
             all_players = {
@@ -63,16 +56,25 @@ class TournamentController:
         except FileNotFoundError as e:
             self.tournament_view.display_for_file_not_found(str(e))
 
+    def add_players(self):
+        while True:
+            player_data = self.player_controller.get_player_data()
+            if player_data:
+                player_id = self.add_player(player_data)
+                player_data["id"] = player_id
+                full_name = f"{player_data['first_name']} {player_data['last_name']}"
+                self.tournament_view.display_add_player_message(full_name)
+                existing_players = self.controller.load_players_data()
+                existing_players.append(player_data)
+                self.controller.save_players_data(existing_players)
+            else:
+                break
+
+
     def add_player(self, player_data):
         player = Player(**player_data)
         self.active_tournament.players.append(player)
-        return str(player.id)
-
-    def get_players(self):
-        return [
-            {**player.to_dict(), "full_name": player.full_name}
-            for player in self.active_tournament.players
-        ]
+        return player.id
 
     def start_tournament(self):
         if self.__check_if_start():
@@ -156,13 +158,7 @@ class TournamentController:
         self.player_controller.display_players(self.active_tournament.players)
 
     def display_player_names(self):
-        if self.active_tournament:
-            players_names = [
-                player.full_name for player in self.active_tournament.players
-            ]
-            self.player_controller.display_tournament_players(players_names)
-        else:
-            self.tournament_view.display_no_tournament_message()
+        self.player_controller.display_players_name(self.active_tournament.players)
 
     def display_current_round(self):
         current_round = self.active_tournament.get_current_round()
