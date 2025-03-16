@@ -57,24 +57,9 @@ class TournamentController:
             self.tournament_view.display_for_file_not_found(str(e))
 
     def add_players(self):
-        while True:
-            player_data = self.player_controller.get_player_data()
-            if player_data:
-                player_id = self.add_player(player_data)
-                player_data["id"] = player_id
-                full_name = f"{player_data['first_name']} {player_data['last_name']}"
-                self.tournament_view.display_add_player_message(full_name)
-                existing_players = self.controller.load_players_data()
-                existing_players.append(player_data)
-                self.controller.save_players_data(existing_players)
-            else:
-                break
-
-
-    def add_player(self, player_data):
-        player = Player(**player_data)
-        self.active_tournament.players.append(player)
-        return player.id
+        players = self.player_controller.add_players()
+        self.active_tournament.add_players(players)
+        self.tournament_repository.save_tournaments(self.tournaments)
 
     def start_tournament(self):
         if self.__check_if_start():

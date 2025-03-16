@@ -15,13 +15,16 @@ class PlayerRepository(BaseRepository):
         players_dict = self.file_service.read_from_file()
         return [Player.from_dict(player) for player in players_dict]
 
+    def save_players(self, players: List[Player]):
+        self.file_service.write_to_file([player.to_dict() for player in players])
+
     def create_player(self, player: Player) -> Player:
         players = self.get_players()
         players.append(player)
-        self.file_service.write_to_file([player.to_dict() for player in players])
+        self.save_players(players)
         return player
 
-    def create_players(self, players: List[Player]):
+    def create_players(self, new_players: List[Player]):
         players = self.get_players()
-        players.extend(players)
-        self.file_service.write_to_file([player.to_dict() for player in players])
+        players.extend(new_players)
+        self.save_players(players)

@@ -14,7 +14,7 @@ class TournamentRepository(BaseRepository):
 
     def get_tournaments(self) -> List[Tournament]:
         tournaments_dict = self.file_service.read_from_file()
-        all_players = {player.id: player for player in self.player_repository.get_all_players()}
+        all_players = {player.id: player for player in self.player_repository.get_players()}
         tournaments = []
         for tournament_dict in tournaments_dict:
             tournament = Tournament.from_dict(tournament_dict)
