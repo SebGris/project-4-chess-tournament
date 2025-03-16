@@ -1,8 +1,7 @@
-import uuid
 from models.tournament import Tournament
-from models.base_repository import BaseRepository
+from repositories.base_repository import BaseRepository
 from services.file_service import FileService
-from typing import List, Dict, Optional
+from typing import List
 
 
 class TournamentRepository(BaseRepository):
@@ -24,26 +23,6 @@ class TournamentRepository(BaseRepository):
             tournaments.append(tournament)
         return tournaments
 
-    def find_tournament_by_id(self, tournament_id):
-        tournaments = self.get_tournaments()
-        for tournament in tournaments:
-            if tournament.id == tournament_id:
-                return tournament
-        return None
-
     def save_tournaments(self, tournaments: List[Tournament]):
         tournaments_dict = [tournament.to_dict() for tournament in tournaments]
         self.file_service.write_to_file(tournaments_dict)
-
-    def update_tournament(
-        self, id: uuid.UUID, data: Dict[str, str]
-    ) -> Optional[Tournament]:
-        tournaments = self.get_tournaments()
-        for tournament in tournaments:
-            if tournament.id == id:
-                tournament.name = data["name"]
-                self.file_service.write_to_file(
-                    [tournament.to_dict() for tournament in tournaments]
-                )
-                return tournament
-        return None

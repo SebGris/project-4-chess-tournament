@@ -1,6 +1,5 @@
 import uuid
 from .player import Player
-from typing import Dict
 
 
 class Match:
@@ -21,15 +20,6 @@ class Match:
         """Returns True if player score 1 is not negative, False otherwise."""
         return self.player1_score >= 0
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "player1_id": self.player1.id,
-            "player1_score": self.player1_score,
-            "player2_id": self.player2.id,
-            "player2_score": self.player2_score,
-        }
-
     def get_player_names(self):
         """Returns a tuple of the full names of player1 and player2."""
         return self.player1.full_name, self.player2.full_name
@@ -46,16 +36,24 @@ class Match:
     def get_player2(self):
         return self.player2.id, self.player2_score
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "player1_id": self.player1.id,
+            "player1_score": self.player1_score,
+            "player2_id": self.player2.id,
+            "player2_score": self.player2_score,
+        }
+
     @staticmethod
-    def from_dict(match_dict: Dict[str, str]) -> "Match":
-        match = Match(
+    def from_dict(match_dict):
+        return Match(
             match_dict["player1_id"],
             match_dict["player1_score"],
             match_dict["player2_id"],
             match_dict["player2_score"],
-            uuid.UUID(match_dict["id"])
+            match_dict["id"]
         )
-        return match
 
     @property
     def id(self):

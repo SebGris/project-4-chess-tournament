@@ -1,19 +1,18 @@
 import uuid
 from datetime import datetime
 from models.match import Match
-from typing import List
 
 
 class Round:
     """Represents a round in a chess tournament."""
 
-    def __init__(self, name, matches: List[Match], start_date=None, end_date=None, round_id=None):
+    def __init__(self, name, start_datetime, end_datetime, round_id=None):
         self.name = name
-        self.matches = matches if matches is not None else []
+        self.matches = []
         self.start_datetime = (
-            datetime.fromisoformat(start_date) if start_date else datetime.now()
+            datetime.fromisoformat(start_datetime) if start_datetime else datetime.now()
         )
-        self.end_datetime = datetime.fromisoformat(end_date) if end_date else None
+        self.end_datetime = datetime.fromisoformat(end_datetime) if end_datetime else None
         self._id = round_id or uuid.uuid4()
 
     def add_match(self, player1, player2):
@@ -43,25 +42,22 @@ class Round:
         )
 
     def to_dict(self):
-        """Convert Round object to dictionary."""
         return {
             "id": self.id,
             "name": self.name,
-            "match_ids": [str(match.id) for match in self.matches],
             "start_datetime": self.start_datetime.isoformat(),
             "end_datetime": (
-                self.end_datetime.isoformat() if self.end_datetime else None)
+                self.end_datetime.isoformat() if self.end_datetime else None),
+            "match_ids": [match.id for match in self.matches]
         }
 
     @staticmethod
-    def from_dict(round: dict):
-        """Create a Tournament object from a dictionary."""
+    def from_dict(round):
         return Round(
             round["name"],
-            round["matches"],
-            round["start_date"],
-            round["end_date"],
-            uuid.UUID(round["id"]),
+            round["start_datetime"],
+            round["end_datetime"],
+            round["id"]
         )
 
     @property

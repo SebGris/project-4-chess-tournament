@@ -57,12 +57,6 @@ class Tournament:
                 return index + 1
         return 0
 
-    # def get_current_round(self):
-    #     for round in self.rounds:
-    #         if round.is_finished() is False:
-    #             return round
-    #     return None
-
     def is_complete(self):
         """Checks if the tournament is over."""
         return self.current_round > self.number_of_rounds
@@ -89,7 +83,7 @@ class Tournament:
             dict_["start_date"],
             dict_["end_date"],
             dict_["number_of_rounds"],
-            dict_.get("id")
+            dict_["id"]
         )
         tournament.set_description(dict_["description"])
         return tournament

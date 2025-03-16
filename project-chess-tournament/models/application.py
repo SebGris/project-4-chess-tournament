@@ -14,8 +14,8 @@ from menu_commands.show_tournaments_details_command import ShowTournamentsDetail
 from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
-from models.player_repository import PlayerRepository
-from models.tournament_repository import TournamentRepository
+from repositories.player_repository import PlayerRepository
+from repositories.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
 
 

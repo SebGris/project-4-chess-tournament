@@ -1,6 +1,6 @@
 import uuid
 from models.player import Player
-from models.player_repository import PlayerRepository
+from repositories.player_repository import PlayerRepository
 from views.player_view import PlayerView
 
 

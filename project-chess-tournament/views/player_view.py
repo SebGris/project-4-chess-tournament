@@ -46,7 +46,7 @@ class PlayerView(BaseView):
             print("Aucun joueur enregistré.")
         else:
             for player in players:
-                print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.id_chess}")
+                print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.chess_id}")
             self.display_number_of_players(players)
 
     def display_tournament_players(self, players_names):
