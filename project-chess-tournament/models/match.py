@@ -1,11 +1,16 @@
 import uuid
-from .player import Player
+from dtos.match_dto import MatchDTO
+from models.player import Player
+from repositories.player_repository import PlayerRepository
 
 
 class Match:
     """Represents a match between two players in a chess tournament."""
 
-    def __init__(self, player1: Player, player2: Player, player1_score=0.0, player2_score=0.0, match_id=None):
+    def __init__(
+        self, player1: Player, player2: Player,
+        player1_score=0.0, player2_score=0.0, match_id=None
+    ):
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
@@ -46,16 +51,27 @@ class Match:
     def get_player2(self):
         return self.player2.id, self.player2_score
 
-    @staticmethod
-    def from_dict(match_dict):
-        return Match(
-            match_dict["player1_id"],
-            match_dict["player1_score"],
-            match_dict["player2_id"],
-            match_dict["player2_score"],
-            match_dict["id"]
-        )
-
     @property
     def id(self):
         return str(self._id)
+
+    @staticmethod
+    def from_dto(match_dto: MatchDTO, player_repo: PlayerRepository):
+        player1_dto = player_repo.get_player_by_id(match_dto.player1)
+        player2_dto = player_repo.get_player_by_id(match_dto.player2)
+        return Match(
+            Player.from_dto(player1_dto),
+            Player.from_dto(player2_dto),
+            match_dto.player1_score,
+            match_dto.player2_score,
+            uuid.UUID(match_dto.id)
+        )
+
+    def to_dto(self):
+        return MatchDTO(
+            self.id,
+            self.player1.id,
+            self.player2.id,
+            self.player1_score,
+            self.player2_score
+        )

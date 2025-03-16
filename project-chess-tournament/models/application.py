@@ -13,6 +13,7 @@ from menu_commands.show_tournaments_details_command import ShowTournamentsDetail
 from menu_commands.start_tournament_command import StartTournamentCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
+from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
@@ -25,11 +26,13 @@ class Application:
         player_repository = PlayerRepository()
         tournament_repository = TournamentRepository()
         round_repository = RoundRepository()
+        match_repository = MatchRepository()
         tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
             tournament_repository,
             player_repository,
             round_repository,
+            match_repository,
             tournament_view
         )
 

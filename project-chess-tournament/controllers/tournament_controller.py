@@ -2,6 +2,7 @@ from controllers.pairing import Pairing
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
+from repositories.match_repository import MatchRepository
 from repositories.tournament_repository import TournamentRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
@@ -15,11 +16,13 @@ class TournamentController:
         tournament_repository: TournamentRepository,
         player_repository: PlayerRepository,
         round_repository: RoundRepository,
+        match_repository: MatchRepository,
         view: TournamentView
     ):
         self.tournament_repository = tournament_repository
         self.player_repository = player_repository
         self.round_repository = round_repository
+        self.match_repository = match_repository
         self.view = view
         self.tournaments = self.get_tournaments()
         self.active_tournament = None
@@ -83,8 +86,10 @@ class TournamentController:
     def start_tournament(self):
         if self.__check_if_start():
             self.add_round()
-            round_dto = self.get_active_round().to_dto()
-            self.round_repository.save(round_dto)
+            active_round = self.get_active_round()
+            matches_dto = [match.to_dto() for match in active_round.matches]
+            self.round_repository.save(active_round.to_dto())
+            self.match_repository.save(matches_dto)
             self.save_tournaments()
 
     def __check_if_start(self):
