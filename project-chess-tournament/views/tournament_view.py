@@ -1,5 +1,6 @@
 from models.tournament import Tournament
 from models.player import Player
+from models.round import Round
 from typing import List
 from views.base_player_view import BasePlayerView
 
@@ -78,9 +79,9 @@ class TournamentView(BasePlayerView):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
-    def display_current_round(self, tournament: Tournament):
+    def display_current_round_number(self, tournament: Tournament):
         print(
-            f"Round actuel : {tournament.current_round}/{tournament.number_of_rounds}"
+            f"Round actuel : {len(tournament.rounds)}/{tournament.number_of_rounds}"
         )
 
     def display_match_summary(self, match):
@@ -93,8 +94,8 @@ class TournamentView(BasePlayerView):
     def display_updated_number_rounds_message(self, number):
         self.write_line(f"Le nombre de tours a été mis à jour à {number}.")
 
-    def display_added_round_message(self, round_name):
-        self.write_line(f"Nom du round ajouté : {round_name}")
+    def display_added_round_message(self, round: Round):
+        self.write_line(f"Nom du round ajouté : {round.name}")
 
     def display_no_tournament_message(self):
         self.write_line("Aucun tournoi n'est chargé.")
@@ -126,9 +127,6 @@ class TournamentView(BasePlayerView):
 
     def display_successful_description_message(self):
         self.write_line("Description ajoutée avec succès.")
-
-    def display_tournament_closed_message(self):
-        self.write_line("Le tournoi a été fermé avec succès.")
 
     def display_tournament_selected(self, name):
         self.write_line(f"Tournoi sélectionné : {name}")

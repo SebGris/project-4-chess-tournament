@@ -15,9 +15,8 @@ class Tournament:
         self.end_date = end_date
         self.number_of_rounds = number_of_rounds
         self._id = tournament_id or uuid.uuid4()
-        self.players = []
-        self.rounds = []
-        self.current_round = 0
+        self.players: List[Player] = []
+        self.rounds: List[Round] = []
         self.description = None
 
     def add_player(self, player: Player):
@@ -26,42 +25,17 @@ class Tournament:
     def add_players(self, players: List[Player]):
         self.players.extend(players)
 
-    def add_round(self, player: Round):
-        self.players.append(player)
+    def add_round(self, round: Round):
+        self.rounds.append(round)
 
-    def add_rounds(self, players: List[Round]):
-        self.players.extend(players)
+    def add_rounds(self, rounds: List[Round]):
+        self.rounds.extend(rounds)
 
     def set_description(self, description):
         self.description = description
 
     def set_number_of_rounds(self, number_of_rounds):
         self.number_of_rounds = number_of_rounds
-
-    def update_scores(self, match_results):
-        for match in match_results:
-            player1_id, player1_score = match.get_player1()
-            player2_id, player2_score = match.get_player2()
-            for player in self.players:
-                if player.id == player1_id:
-                    player.score += player1_score
-                elif player.id == player2_id:
-                    player.score += player2_score
-
-    def get_current_round(self):
-        if len(self.rounds) == 0:
-            return None
-        return self.rounds[self.current_round]
-
-    def get_current_round_no(self):
-        for index, round in enumerate(self.rounds):
-            if round.is_finished() is False:
-                return index + 1
-        return 0
-
-    def is_complete(self):
-        """Checks if the tournament is over."""
-        return self.current_round > self.number_of_rounds
 
     @staticmethod
     def from_dto(tournament_dto: TournamentDTO, player_repo: PlayerRepository):

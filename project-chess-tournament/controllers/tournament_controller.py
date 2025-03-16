@@ -32,6 +32,9 @@ class TournamentController:
     def get_active_tournament(self):
         return self.active_tournament
 
+    def get_active_round(self):
+        return self.active_tournament.rounds[-1] if self.active_tournament.rounds else None
+
     def collect_tournament_info(self):
         return {
             "name": self.view.get_name(),
@@ -70,49 +73,40 @@ class TournamentController:
 
     def start_tournament(self):
         if self.__check_if_start():
-            for index in range(1, self.active_tournament.number_of_rounds):
-                self.active_tournament.update_scores(round.matches)
-                print(self.active_tournament.players)
-                # if self.active_tournament.number_of_rounds > len(self.active_tournament.rounds):
-                current_round = self.active_tournament.get_current_round()
-                if current_round is None:
-                    self.add_round()
-                elif current_round.is_finished():
-                    self.add_round()
+            self.add_round()
 
     def __check_if_start(self):
+        # Check if there are players in the tournament
         if not self.active_tournament.players:
             self.view.display_start_error_without_players()
             return False
-        elif self.__check_if_odd(len(self.active_tournament.players)):
+        # Check if the number of players is odd
+        elif len(self.active_tournament.players) % 2 != 0:
             self.view.display_start_error_even_players()
             return False
         return True
 
-    def __check_if_odd(self, number):
-        return number % 2 != 0
-
     def add_round(self):
-        round_name = f"Round {len(self.active_tournament.rounds) + 1}"
-        new_round = Round(round_name)
-        previous_matches = {
-            (match.player1.id, match.player2.id)
-            for round in self.active_tournament.rounds
-            for match in round.matches
-        }
-        if len(self.active_tournament.rounds) == 0:
+        number_of_rounds = len(self.active_tournament.rounds)
+        new_round = Round(f"Round {number_of_rounds + 1}")
+        if number_of_rounds == 0:
             print("First round")
             pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
         else:
             print("Next round")
+            previous_matches = {
+                (match.player1.id, match.player2.id)
+                for round in self.active_tournament.rounds
+                for match in round.matches
+            }
             pairs = Pairing.generate_next_round_pairs(
                 self.active_tournament.players, previous_matches
             )
-            print(pairs)
         for player1, player2 in pairs:
             new_round.add_match(player1, player2)
         self.active_tournament.rounds.append(new_round)
-        self.view.display_added_round_message(round_name)
+        self.view.display_added_round_message(new_round)
+        self.display_player_pairs()
 
     def update_number_of_rounds(self):
         new_number = self.view.get_number_of_rounds()
@@ -153,15 +147,16 @@ class TournamentController:
         self.view.display_players_name(self.active_tournament.players)
 
     def display_current_round(self):
-        current_round = self.active_tournament.get_current_round()
-        if current_round:
-            self.round_view.display_round_info(current_round)
-            self.view.display_current_round(self.active_tournament)
+        active_round = self.get_active_round()
+        if active_round:
+            self.round_view.display_round_info(active_round)
+        self.view.display_current_round_number(self.active_tournament)
 
     def display_player_pairs(self):
-        current_round = self.active_tournament.get_current_round()
-        if current_round:
-            round_name, pairs = current_round.get_pairs_players()
+        """Display pairs of players for the current round."""
+        active_round = self.get_active_round()
+        if active_round:
+            round_name, pairs = active_round.get_pairs_players()
             self.round_view.display_player_pairs(round_name, pairs)
 
     def display_tournaments_details(self):

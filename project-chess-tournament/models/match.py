@@ -16,6 +16,16 @@ class Match:
         self.player1_score = player1_score
         self.player2_score = player2_score
 
+    def update_scores(self, match_results):
+        for match in match_results:
+            player1_id, player1_score = match.get_player1()
+            player2_id, player2_score = match.get_player2()
+            for player in self.players:
+                if player.id == player1_id:
+                    player.score += player1_score
+                elif player.id == player2_id:
+                    player.score += player2_score
+
     def is_finished(self):
         """Returns True if player score 1 is not negative, False otherwise."""
         return self.player1_score >= 0

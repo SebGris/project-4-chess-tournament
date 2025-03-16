@@ -1,18 +1,17 @@
 import uuid
 from datetime import datetime
+from typing import List
 from models.match import Match
 
 
 class Round:
     """Represents a round in a chess tournament."""
 
-    def __init__(self, name, start_datetime, end_datetime, round_id=None):
+    def __init__(self, name, round_id=None):
         self.name = name
-        self.matches = []
-        self.start_datetime = (
-            datetime.fromisoformat(start_datetime) if start_datetime else datetime.now()
-        )
-        self.end_datetime = datetime.fromisoformat(end_datetime) if end_datetime else None
+        self.matches: List[Match] = []
+        self.start_datetime = datetime.now()
+        self.end_datetime = None
         self._id = round_id or uuid.uuid4()
 
     def add_match(self, player1, player2):
