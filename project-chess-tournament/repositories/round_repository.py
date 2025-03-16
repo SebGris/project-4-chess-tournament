@@ -23,13 +23,13 @@ class RoundRepository(BaseRepository):
     def get_rounds_by_ids(self, ids: List[str]):
         return [round for round in self.get_rounds() if round.id in ids]
 
-    def save_rounds(self, rounds: List[RoundDTO]):
+    def write_rounds_to_file(self, rounds: List[RoundDTO]):
         self.file_service.write_to_file(
             [round.to_dict() for round in rounds]
         )
 
-    def create_round(self, round: RoundDTO) -> RoundDTO:
+    def save_round(self, round: RoundDTO) -> RoundDTO:
         rounds = self.get_rounds()
         rounds.append(round)
-        self.save_rounds(rounds)
+        self.write_rounds_to_file(rounds)
         return round

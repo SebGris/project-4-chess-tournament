@@ -23,7 +23,7 @@ class PlayerRepository(BaseRepository):
     def get_players_by_ids(self, ids: List[str]):
         return [player for player in self.get_players() if player.id in ids]
 
-    def save_players(self, players: List[PlayerDTO]):
+    def write_players_to_file(self, players: List[PlayerDTO]):
         self.file_service.write_to_file(
             [player.to_dict() for player in players]
         )
@@ -31,10 +31,10 @@ class PlayerRepository(BaseRepository):
     def create_player(self, player: PlayerDTO) -> PlayerDTO:
         players = self.get_players()
         players.append(player)
-        self.save_players(players)
+        self.write_players_to_file(players)
         return player
 
-    def create_players(self, new_players: List[PlayerDTO]):
+    def save_players(self, new_players: List[PlayerDTO]):
         players = self.get_players()
         players.extend(new_players)
-        self.save_players(players)
+        self.write_players_to_file(players)

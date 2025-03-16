@@ -17,7 +17,7 @@ class TournamentRepository(BaseRepository):
             for tournament_dict in self.file_service.read_from_file()
         ]
 
-    def save_tournaments(self, tournaments: List[TournamentDTO]):
+    def write_tournaments_to_file(self, tournaments: List[TournamentDTO]):
         self.file_service.write_to_file(
             [tournament.to_dict() for tournament in tournaments]
         )

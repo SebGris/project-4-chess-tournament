@@ -62,7 +62,7 @@ class TournamentController:
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
-        self.tournament_repository.save_tournaments(self.tournaments)
+        self.tournament_repository.write_tournaments_to_file(self.tournaments)
 
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
@@ -73,8 +73,8 @@ class TournamentController:
         players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)
         players_dto = [player.to_dto() for player in players]
-        self.player_repository.create_players(players_dto)
-        self.tournament_repository.save_tournaments(self.tournaments)
+        self.player_repository.save_players(players_dto)
+        self.tournament_repository.write_tournaments_to_file(self.tournaments)
 
     def start_tournament(self):
         if self.__check_if_start():
