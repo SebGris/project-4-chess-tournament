@@ -62,9 +62,7 @@ class TournamentController:
         self.active_tournament = self.tournaments[index]
 
     def add_players(self):
-        players_data = []
-        while player_data := self.view.get_player_data():
-            players_data.append(player_data)
+        players_data = iter(self.view.get_player_data, None)
         players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)
         players_dto = [player.to_dto() for player in players]

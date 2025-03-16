@@ -39,10 +39,6 @@ class Tournament:
 
     @staticmethod
     def from_dto(tournament_dto: TournamentDTO, player_repo: PlayerRepository):
-        players = [
-            Player.from_dto(player_repo.get_player_by_id(id))
-            for id in tournament_dto.player_ids
-        ]
         tournament = Tournament(
             tournament_dto.name,
             tournament_dto.location,
@@ -51,6 +47,10 @@ class Tournament:
             tournament_dto.number_of_rounds,
             tournament_dto.id
         )
+        players = [
+            Player.from_dto(player_repo.get_player_by_id(id))
+            for id in tournament_dto.player_ids
+        ]
         tournament.add_players(players)
         return tournament
 
