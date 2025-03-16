@@ -23,12 +23,7 @@ class PlayerController:
 
     def _create_and_add_players(self, players_data):
         for player_data in players_data:
-            player = self._create_player_instance(**player_data)
+            player = Player(**player_data)
             self.added_players.append(player)
             self.view.display_add_player_message(player)
         self.repository.create_players(self.added_players)
-
-    def _create_player_instance(self, last_name, first_name, birth_date, id_chess):
-        player_id = uuid.uuid4()
-        player = Player(last_name, first_name, birth_date, id_chess, player_id)
-        return player

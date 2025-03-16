@@ -1,10 +1,10 @@
 from models.tournament import Tournament
 from models.player import Player
 from typing import List
-from views.base_view import BaseView
+from views.base_player_view import BasePlayerView
 
 
-class TournamentView(BaseView):
+class TournamentView(BasePlayerView):
 
     def get_name(self):
         return self.input("Entrez le nom du tournoi :")

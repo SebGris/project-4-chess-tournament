@@ -36,3 +36,12 @@ class Player:
             player_dto.chess_id,
             uuid.UUID(player_dto.id)
         )
+
+    def to_dto(self):
+        return PlayerDTO(
+            self.id,
+            self.last_name,
+            self.first_name,
+            self.birth_date,
+            self.chess_id
+        )

@@ -10,9 +10,14 @@ from views.tournament_view import TournamentView
 
 class TournamentController:
 
-    def __init__(self, tournament_repo: TournamentRepository, player_repo: PlayerRepository, view: TournamentView):
-        self.tournament_repository = tournament_repo
-        self.player_repository = player_repo
+    def __init__(
+        self,
+        tournament_repository: TournamentRepository,
+        player_repository: PlayerRepository,
+        view: TournamentView
+    ):
+        self.tournament_repository = tournament_repository
+        self.player_repository = player_repository
         self.tournament_view = view
         self.round_view = RoundView()
         self.tournaments = self.get_tournaments()
@@ -37,6 +42,7 @@ class TournamentController:
         }
 
     def create_new_tournament(self):
+        """Create a new tournament.""" 
         tournament_info = self.collect_tournament_info()
         self.create_tournament(**tournament_info)
         self.tournament_view.display_tournament_created(tournament_info["name"])
@@ -44,6 +50,8 @@ class TournamentController:
     def create_tournament(self, name, location, start_date, end_date, number_of_rounds):
         tournament = Tournament(name, location, start_date, end_date, number_of_rounds)
         self.tournaments.append(tournament)
+        # Set the newly created tournament as the active tournament
+        self.active_tournament = self.tournaments[-1]
         self.tournament_repository.save_tournaments(self.tournaments)
 
     def select_tournament(self):
@@ -61,8 +69,13 @@ class TournamentController:
             self.tournament_view.display_for_file_not_found(str(e))
 
     def add_players(self):
-        players = self.player_controller.add_players()
+        players_data = []
+        while player_data := self.tournament_view.get_player_data():
+            players_data.append(player_data)
+        players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)
+        players_dto = [player.to_dto() for player in players]
+        self.player_repository.create_players(players_dto)
         self.tournament_repository.save_tournaments(self.tournaments)
 
     def start_tournament(self):
