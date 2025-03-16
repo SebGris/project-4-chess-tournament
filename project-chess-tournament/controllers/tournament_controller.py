@@ -1,24 +1,28 @@
 from controllers.pairing import Pairing
-from controllers.player_controller import PlayerController
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
-from repositories.player_repository import PlayerRepository
 from repositories.tournament_repository import TournamentRepository
-from views.player_view import PlayerView
+from repositories.player_repository import PlayerRepository
 from views.round_view import RoundView
 from views.tournament_view import TournamentView
 
 
 class TournamentController:
 
-    def __init__(self, tournament_repository: TournamentRepository, view: TournamentView):
-        self.tournament_repository = tournament_repository
+    def __init__(self, tournament_repo: TournamentRepository, player_repo: PlayerRepository, view: TournamentView):
+        self.tournament_repository = tournament_repo
+        self.player_repository = player_repo
         self.tournament_view = view
         self.round_view = RoundView()
-        self.player_controller = PlayerController(PlayerRepository(), PlayerView())
-        self.tournaments = self.tournament_repository.get_tournaments()
+        self.tournaments = self.get_tournaments()
         self.active_tournament = None
+
+    def get_tournaments(self):
+        return [
+            Tournament.from_dto(tournament_dto, self.player_repository)
+            for tournament_dto in self.tournament_repository.get_tournaments()
+        ]
 
     def get_active_tournament(self):
         return self.active_tournament
@@ -140,10 +144,10 @@ class TournamentController:
         self.tournament_view.display_tournament_details(self.active_tournament)
 
     def display_players(self):
-        self.player_controller.display_players(self.active_tournament.players)
+        self.tournament_view.display_players(self.active_tournament.players)
 
     def display_player_names(self):
-        self.player_controller.display_players_name(self.active_tournament.players)
+        self.tournament_view.display_players_name(self.active_tournament.players)
 
     def display_current_round(self):
         current_round = self.active_tournament.get_current_round()

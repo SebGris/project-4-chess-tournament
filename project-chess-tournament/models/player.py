@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from dtos.player_dto import PlayerDTO
 from typing import Optional
 
 
@@ -22,27 +23,16 @@ class Player:
                 return self.birth_date
         return None
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "last_name": self.last_name,
-            "first_name": self.first_name,
-            "birth_date": self.birth_date,
-            "chess_id": self.chess_id
-        }
-
-    @staticmethod
-    def from_dict(player_dict):
-        player = Player(
-            player_dict["last_name"],
-            player_dict["first_name"],
-            player_dict["birth_date"],
-            player_dict["chess_id"],
-            uuid.UUID(player_dict["id"])
-        )
-        player.full_name = f"{player.first_name} {player.last_name}"
-        return player
-
     @property
     def id(self):
         return str(self._id)
+
+    @staticmethod
+    def from_dto(player_dto: PlayerDTO):
+        return Player(
+            player_dto.last_name,
+            player_dto.first_name,
+            player_dto.birth_date,
+            player_dto.chess_id,
+            uuid.UUID(player_dto.id)
+        )

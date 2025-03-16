@@ -10,6 +10,9 @@ class PlayerController:
         self.view = view
         self.added_players = []
 
+    def get_players_from_repository(self):
+        return self.repository.get_players()
+
     def add_players(self):
         self.added_players.clear()
         players_data = []
@@ -24,12 +27,6 @@ class PlayerController:
             self.added_players.append(player)
             self.view.display_add_player_message(player)
         self.repository.create_players(self.added_players)
-
-    def display_players_name(self, players):
-        self.view.display_players_name(players)
-
-    def display_players(self, players):
-        self.view.display_players(players)
 
     def _create_player_instance(self, last_name, first_name, birth_date, id_chess):
         player_id = uuid.uuid4()

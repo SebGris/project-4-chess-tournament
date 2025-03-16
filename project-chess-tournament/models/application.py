@@ -22,10 +22,11 @@ from views.tournament_view import TournamentView
 class Application:
     def __init__(self, application_menu):
         self.application_menu = application_menu
-        self.tournament_repository = TournamentRepository(PlayerRepository())
-        self.tournament_view = TournamentView()
+        player_repository = PlayerRepository()
+        tournament_repository = TournamentRepository()
+        tournament_view = TournamentView()
         self.tournament_controller = TournamentController(
-            self.tournament_repository, self.tournament_view
+            tournament_repository, player_repository, tournament_view
         )
 
     def get_refresh_menu(self):

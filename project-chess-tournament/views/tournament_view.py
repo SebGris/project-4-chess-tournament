@@ -1,4 +1,5 @@
 from models.tournament import Tournament
+from models.player import Player
 from typing import List
 from views.base_view import BaseView
 
@@ -131,3 +132,26 @@ class TournamentView(BaseView):
 
     def display_tournament_selected(self, name):
         self.write_line(f"Tournoi sélectionné : {name}")
+
+    def display_players_name(self, players: List[Player]):
+        """Display the players of a tournament."""
+        print("--- Joueurs du tournoi ---")
+        if not players:
+            print("Aucun joueur enregistré.")
+        else:
+            print(f"Joueurs : {', '.join(player.full_name for player in players)}")
+            self.display_number_of_players(players)
+
+    def display_players(self, players: List[Player]):
+        """Display a list of players."""
+        print("--- Joueurs du tournoi ---")
+        if not players:
+            print("Aucun joueur enregistré.")
+        else:
+            for player in players:
+                print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.chess_id}")
+            self.display_number_of_players(players)
+
+    def display_number_of_players(self, player_list):
+        """Display the number of players."""
+        print(f"Nombre de joueurs : {len(player_list)}")

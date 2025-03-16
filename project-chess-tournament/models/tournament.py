@@ -2,6 +2,8 @@ import uuid
 from typing import List
 from models.player import Player
 from models.round import Round
+from dtos.tournament_dto import TournamentDTO
+from repositories.player_repository import PlayerRepository
 
 
 class Tournament:
@@ -61,6 +63,23 @@ class Tournament:
         """Checks if the tournament is over."""
         return self.current_round > self.number_of_rounds
 
+    @staticmethod
+    def from_dto(tournament_dto: TournamentDTO, player_repo: PlayerRepository):
+        players = [
+            Player.from_dto(player_repo.get_player_by_id(id))
+            for id in tournament_dto.player_ids
+        ]
+        tournament = Tournament(
+            tournament_dto.name,
+            tournament_dto.location,
+            tournament_dto.start_date,
+            tournament_dto.end_date,
+            tournament_dto.number_of_rounds,
+            tournament_dto.id
+        )
+        tournament.add_players(players)
+        return tournament
+
     def to_dict(self):
         """Convert Tournament object to dictionary."""
         return {
@@ -74,19 +93,6 @@ class Tournament:
             "player_ids": [player.id for player in self.players],
             "round_ids": [round.id for round in self.rounds]
         }
-
-    @staticmethod
-    def from_dict(dict_):
-        tournament = Tournament(
-            dict_["name"],
-            dict_["location"],
-            dict_["start_date"],
-            dict_["end_date"],
-            dict_["number_of_rounds"],
-            dict_["id"]
-        )
-        tournament.set_description(dict_["description"])
-        return tournament
 
     @property
     def id(self):
