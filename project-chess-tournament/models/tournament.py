@@ -47,11 +47,8 @@ class Tournament:
             tournament_dto.number_of_rounds,
             tournament_dto.id
         )
-        players = [
-            Player.from_dto(player_repo.get_player_by_id(id))
-            for id in tournament_dto.player_ids
-        ]
-        tournament.add_players(players)
+        players = player_repo.get_players_by_ids(tournament_dto.player_ids)
+        tournament.players.extend([Player.from_dto(p) for p in players])
         return tournament
 
     def to_dict(self):

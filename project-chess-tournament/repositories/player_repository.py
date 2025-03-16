@@ -17,12 +17,11 @@ class PlayerRepository(BaseRepository):
             for player_dict in self.file_service.read_from_file()
         ]
 
-    def get_player_by_id(self, id):
-        players = self.get_players()
-        for player in players:
-            if player.id == id:
-                return player
-        return None
+    def get_player_by_id(self, id: str):
+        return next((ply for ply in self.get_players() if ply.id == id), None)
+
+    def get_players_by_ids(self, ids: List[str]):
+        return [player for player in self.get_players() if player.id in ids]
 
     def save_players(self, players: List[PlayerDTO]):
         self.file_service.write_to_file(
