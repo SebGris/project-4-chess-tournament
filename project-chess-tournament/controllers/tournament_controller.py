@@ -58,16 +58,6 @@ class TournamentController:
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
 
-    def load_all_players(self):
-        try:
-            all_players = {
-                player_data["id"]: Player(**player_data)
-                for player_data in self.load_players_data()
-            }
-            return all_players
-        except FileNotFoundError as e:
-            self.view.display_for_file_not_found(str(e))
-
     def add_players(self):
         players_data = []
         while player_data := self.view.get_player_data():
@@ -174,6 +164,6 @@ class TournamentController:
             round_name, pairs = current_round.get_pairs_players()
             self.round_view.display_player_pairs(round_name, pairs)
 
-    def display_tournament_details(self):
+    def display_tournaments_details(self):
         for tournament in self.tournaments:
             self.view.display_tournament_details(tournament)
