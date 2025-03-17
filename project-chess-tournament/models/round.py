@@ -22,10 +22,10 @@ class Round:
         self.matches.append(match)
 
     def set_start_date(self, start_datetime):
-        self.start_datetime = start_datetime
+        self.start_datetime = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
 
     def set_end_date(self, end_datetime):
-        self.end_datetime = end_datetime
+        self.end_datetime = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M:%S") if end_datetime else None
 
     def end_round(self):
         """Marks the lap as completed and records the end time."""

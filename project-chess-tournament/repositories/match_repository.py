@@ -28,13 +28,14 @@ class MatchRepository(BaseRepository):
             [match.to_dict() for match in matches]
         )
 
-    def create_match(self, match: MatchDTO) -> MatchDTO:
+    def create(self, new_match: MatchDTO):
         matches = self.get_matches()
-        matches.append(match)
+        matches.append(new_match)
         self.write_matches_to_file(matches)
-        return match
 
-    def save(self, new_matches: List[MatchDTO]):
-        matches = self.get_matches()
-        matches.extend(new_matches)
+    def save(self, updated_match: MatchDTO):
+        old_matches = self.get_matches()
+        # deletes the match in matches that has the same id as updated_match
+        matches = [m for m in old_matches if m.id != updated_match.id]
+        matches.append(updated_match)
         self.write_matches_to_file(matches)

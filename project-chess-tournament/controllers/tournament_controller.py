@@ -139,20 +139,24 @@ class TournamentController:
         self.view.display_successful_description_message()
 
     def enter_scores(self):
-        round_instance = self.active_tournament.get_current_round()
-        self.view.display_record_results_message(round_instance.name)
-        for match in round_instance.matches:
-            if round_instance.is_finished():
-                continue
-            self.view.display_match_summary(match.get_player_names())
-            result = self.view.get_match_result()
-            if result == "1":
-                match.set_score(1, 0)
-            elif result == "2":
-                match.set_score(0, 1)
-            elif result == "0":
-                match.set_score(0.5, 0.5)
-        round_instance.end_round()
+        round = self.get_active_round()
+        self.view.display_record_results_message(round.name)
+        if not round.is_finished():
+            for match in round.matches:
+                if not match.is_finished():
+                    self.view.display_match_summary(match.get_player_names())
+                    result = self.view.get_match_result()
+                    if result == "1":
+                        match.set_score(1, 0)
+                    elif result == "2":
+                        match.set_score(0, 1)
+                    elif result == "0":
+                        match.set_score(0.5, 0.5)
+                    else:
+                        self.view.display_invalid_result_message()
+                    self.match_repository.save(match.to_dto())
+            round.end_round()
+            self.round_repository.save(round.to_dto())
 
     def display_available_tournaments(self):
         self.view.display_tournaments(self.tournaments)

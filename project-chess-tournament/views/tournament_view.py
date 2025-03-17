@@ -125,6 +125,9 @@ class TournamentView(BasePlayerView):
             "Le nombre de joueurs doit être pair pour commencer le tournoi."
         )
 
+    def display_invalid_result_message(self):
+        self.write_line("Score invalide. Veuillez entrer 1, 2 ou 0.")
+
     def display_successful_description_message(self):
         self.write_line("Description ajoutée avec succès.")
 

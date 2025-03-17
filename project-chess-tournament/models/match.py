@@ -32,8 +32,8 @@ class Match:
                     player.score += player2_score
 
     def is_finished(self):
-        """Returns True if player score 1 is not negative, False otherwise."""
-        return self.player1_score >= 0
+        """If the sum of the two scores is not zero."""
+        return self.player1_score + self.player2_score != 0
 
     def get_player_names(self):
         """Returns a tuple of the full names of player1 and player2."""

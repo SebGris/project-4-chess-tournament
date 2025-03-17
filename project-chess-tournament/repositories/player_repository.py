@@ -28,12 +28,6 @@ class PlayerRepository(BaseRepository):
             [player.to_dict() for player in players]
         )
 
-    def create_player(self, player: PlayerDTO) -> PlayerDTO:
-        players = self.get_players()
-        players.append(player)
-        self.write_players_to_file(players)
-        return player
-
     def save(self, new_players: List[PlayerDTO]):
         players = self.get_players()
         players.extend(new_players)

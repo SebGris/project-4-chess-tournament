@@ -3,28 +3,28 @@
         "id": "90e6d1b4-50bd-465c-8e13-ec850bd8ebda",
         "player1": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
         "player2": "812160aa-8e0a-453a-a345-80335d77eb59",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 0.5,
+        "player2_score": 0.5
     },
     {
         "id": "a192c271-9cd3-4c60-af96-fbf7c00c907f",
         "player1": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
         "player2": "350cf9b5-75db-4703-94c1-7c633ae1c490",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 1,
+        "player2_score": 0
     },
     {
         "id": "a49b7111-e397-4364-bf13-a7525caf237d",
         "player1": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
         "player2": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 0,
+        "player2_score": 1
     },
     {
         "id": "5d53ed9b-db9d-42b1-8e24-f010cb93a1eb",
         "player1": "52995956-a29c-471d-aa81-e393c16c3ce5",
         "player2": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 0.5,
+        "player2_score": 0.5
     }
 ]

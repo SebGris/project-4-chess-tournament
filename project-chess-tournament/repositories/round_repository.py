@@ -28,8 +28,14 @@ class RoundRepository(BaseRepository):
             [round.to_dict() for round in rounds]
         )
 
-    def save(self, round: RoundDTO) -> RoundDTO:
+    def create(self, new_round: RoundDTO):
         rounds = self.get_rounds()
-        rounds.append(round)
+        rounds.append(new_round)
         self.write_rounds_to_file(rounds)
-        return round
+
+    def save(self, updated_round: RoundDTO):
+        old_rounds = self.get_rounds()
+        # deletes the round in rounds that has the same id as updated_round
+        rounds = [r for r in old_rounds if r.id != updated_round.id]
+        rounds.append(updated_round)
+        self.write_rounds_to_file(rounds)
