@@ -22,7 +22,7 @@ class TournamentView(BasePlayerView):
     def get_tournament_description(self):
         return self.input("Entrez la description du tournoi :")
 
-    def get_number_of_rounds(self):
+    def get_total_of_rounds(self):
         while True:
             try:
                 rounds = self.input(
@@ -73,7 +73,7 @@ class TournamentView(BasePlayerView):
         print(
             f"Description : {tournament.description if tournament.description else 'Aucune'}"
         )
-        print(f"Nombre de tours : {tournament.number_of_rounds}")
+        print(f"Nombre de tours : {tournament.total_rounds}")
 
     def display_tournaments(self, tournaments: List[Tournament]):
         for tournament in tournaments:
@@ -81,7 +81,7 @@ class TournamentView(BasePlayerView):
 
     def display_current_round_number(self, tournament: Tournament):
         print(
-            f"Round actuel : {len(tournament.rounds)}/{tournament.number_of_rounds}"
+            f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
         )
 
     def display_match_summary(self, match):

@@ -7,4 +7,4 @@ class UpdateNumberOfRoundsCommand(Command):
         self.controller = controller
 
     def execute(self):
-        self.controller.update_number_of_rounds()
+        self.controller.update_total_of_rounds()

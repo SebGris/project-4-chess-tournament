@@ -6,7 +6,7 @@
         "start_date": "",
         "end_date": "",
         "description": null,
-        "number_of_rounds": 4,
+        "total_rounds": 4,
         "player_ids": [
             "e178e9da-cb23-4aa2-bf5a-df316adf632c"
         ],
@@ -19,7 +19,7 @@
         "start_date": "",
         "end_date": "",
         "description": null,
-        "number_of_rounds": 4,
+        "total_rounds": 4,
         "player_ids": [
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
             "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
@@ -36,7 +36,7 @@
         "start_date": "15/10/2024",
         "end_date": "20/10/2024",
         "description": null,
-        "number_of_rounds": 4,
+        "total_rounds": 4,
         "player_ids": [
             "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
             "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
@@ -56,7 +56,7 @@
         "start_date": "15/11/2020",
         "end_date": "15/12/2020",
         "description": null,
-        "number_of_rounds": 4,
+        "total_rounds": 4,
         "player_ids": [
             "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
             "812160aa-8e0a-453a-a345-80335d77eb59",

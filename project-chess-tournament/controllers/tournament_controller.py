@@ -54,7 +54,7 @@ class TournamentController:
             "location": self.view.get_location(),
             "start_date": self.view.get_start_date(),
             "end_date": self.view.get_end_date(),
-            "number_of_rounds": self.view.get_number_of_rounds(),
+            "total_rounds": self.view.get_total_of_rounds(),
         }
 
     def create_new_tournament(self):
@@ -63,20 +63,20 @@ class TournamentController:
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(self, name, location, start_date, end_date, number_of_rounds):
-        tournament = Tournament(name, location, start_date, end_date, number_of_rounds)
+    def create_tournament(self, name, location, start_date, end_date, total_rounds):
+        tournament = Tournament(name, location, start_date, end_date, total_rounds)
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
         self.save_tournaments()
 
-    def save_tournaments(self):
-        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
-        self.tournament_repository.write_tournaments_to_file(tournaments_dto)
-
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
+
+    def save_tournaments(self):
+        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
+        self.tournament_repository.write_tournaments_to_file(tournaments_dto)
 
     def add_players(self):
         players_data = iter(self.view.get_player_data, None)
@@ -107,13 +107,11 @@ class TournamentController:
         return True
 
     def add_round(self):
-        number_of_rounds = len(self.active_tournament.rounds)
-        new_round = Round(f"Round {number_of_rounds + 1}")
-        if number_of_rounds == 0:
-            print("First round")
+        number_rounds = len(self.active_tournament.rounds)
+        new_round = Round(f"Round {number_rounds + 1}")
+        if number_rounds == 0:
             pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
         else:
-            print("Next round")
             previous_matches = {
                 (match.player1.id, match.player2.id)
                 for round in self.active_tournament.rounds
@@ -128,9 +126,9 @@ class TournamentController:
         self.view.display_added_round_message(new_round)
         self.display_player_pairs()
 
-    def update_number_of_rounds(self):
-        new_number = self.view.get_number_of_rounds()
-        self.active_tournament.set_number_of_rounds(new_number)
+    def update_total_of_rounds(self):
+        new_number = self.view.get_total_of_rounds()
+        self.active_tournament.set_total_of_rounds(new_number)
         self.view.display_updated_number_rounds_message(new_number)
 
     def update_description(self):

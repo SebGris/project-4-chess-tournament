@@ -10,7 +10,7 @@ class TournamentDTO:
     start_date: str
     end_date: str
     description: str
-    number_of_rounds: int
+    total_rounds: int
     player_ids: List[str]
     round_ids: List[str]
 
@@ -23,7 +23,7 @@ class TournamentDTO:
             tournament_data["start_date"],
             tournament_data["end_date"],
             tournament_data["description"],
-            tournament_data["number_of_rounds"],
+            tournament_data["total_rounds"],
             tournament_data["player_ids"],
             tournament_data["round_ids"]
         )

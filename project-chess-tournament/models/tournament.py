@@ -10,13 +10,13 @@ from repositories.match_repository import MatchRepository
 
 class Tournament:
 
-    def __init__(self, name, location, start_date, end_date, number_of_rounds,
+    def __init__(self, name, location, start_date, end_date, total_rounds,
                  tournament_id=None):
         self.name = name
         self.location = location
         self.start_date = start_date
         self.end_date = end_date
-        self.number_of_rounds = number_of_rounds
+        self.total_rounds = total_rounds
         self._id = tournament_id or uuid.uuid4()
         self.players: List[Player] = []
         self.rounds: List[Round] = []
@@ -37,8 +37,8 @@ class Tournament:
     def set_description(self, description):
         self.description = description
 
-    def set_number_of_rounds(self, number_of_rounds):
-        self.number_of_rounds = number_of_rounds
+    def set_total_of_rounds(self, total_rounds):
+        self.total_rounds = total_rounds
 
     @property
     def id(self):
@@ -56,7 +56,7 @@ class Tournament:
             tournament_dto.location,
             tournament_dto.start_date,
             tournament_dto.end_date,
-            tournament_dto.number_of_rounds,
+            tournament_dto.total_rounds,
             uuid.UUID(tournament_dto.id)
         )
         players_dto = player_repo.get_players_by_ids(tournament_dto.player_ids)
@@ -75,7 +75,7 @@ class Tournament:
             self.start_date,
             self.end_date,
             self.description,
-            self.number_of_rounds,
+            self.total_rounds,
             [p.id for p in self.players],
             [r.id for r in self.rounds]
         )
