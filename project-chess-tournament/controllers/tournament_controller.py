@@ -163,7 +163,9 @@ class TournamentController:
 
     def enter_scores(self):
         round = self.get_active_round()
-        if round.is_finished():
+        if round is None:
+            self.view.display_no_round_error()
+        elif round.is_finished():
             self.view.display_round_finished_message()
         else:
             self.view.display_record_results_message(round.name)

@@ -1,19 +1,4 @@
 from controllers.tournament_controller import TournamentController
-from commands.composite_command import CompositeCommand
-from menu_commands.add_players_command import AddPlayersCommand
-from menu_commands.new_tournament_command import NewTournamentCommand
-from menu_commands.enter_scores_command import EnterScoresCommand
-from menu_commands.quit_command import QuitCommand
-from menu_commands.select_tournament_command import SelectTournamentCommand
-from menu_commands.show_current_round import ShowCurrentRound
-from menu_commands.show_player_names_command import ShowPlayerNamesCommand
-from menu_commands.show_player_pairs_command import ShowPlayerPairsCommand
-from menu_commands.show_players_command import ShowPlayersCommand
-from menu_commands.show_tournament_details_command import ShowTournamentDetailsCommand
-from menu_commands.show_tournaments_details_command import ShowTournamentsDetailsCommand
-from menu_commands.start_tournament_command import StartRoundCommand
-from menu_commands.update_description_command import UpdateDescriptionCommand
-from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
 from models.application_menu import ApplicationMenu
 from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
@@ -48,43 +33,41 @@ class Application:
         return self.application_menu
 
     def _add_tournament_menu(self, name):
-        show_tournament_composite_com = CompositeCommand()
-        show_tournament_composite_com.add_commands([
-            ShowTournamentDetailsCommand(self.tournament_controller),
-            ShowPlayerNamesCommand(self.tournament_controller),
-            ShowCurrentRound(self.tournament_controller),
-            ShowPlayerPairsCommand(self.tournament_controller)
-        ])
+        def show_tournament():
+            self.tournament_controller.display_active_tournament_details()
+            self.tournament_controller.display_player_names()
+            self.tournament_controller.display_current_round_info()
+            self.tournament_controller.display_player_pairs()
         self.application_menu.add_group(
             "Menu Tournoi : {}".format(name),
             [
                 {
                     "label": "Afficher le tournoi",
-                    "command": show_tournament_composite_com.execute,
+                    "command": show_tournament,
                 },
                 {
                     "label": "Afficher les joueurs",
-                    "command": ShowPlayersCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.display_players,
                 },
                 {
                     "label": "Modifier la description",
-                    "command": UpdateDescriptionCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.update_description,
                 },
                 {
                     "label": "Ajouter des joueurs",
-                    "command": AddPlayersCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.add_players,
                 },
                 {
                     "label": "Démarrer un round",
-                    "command": StartRoundCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.start_round,
                 },
                 {
                     "label": "Modifier le nombre de tours",
-                    "command": UpdateNumberOfRoundsCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.update_total_of_rounds,
                 },
                 {
                     "label": "Saisir les scores",
-                    "command": EnterScoresCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.enter_scores
                 },
             ],
         )
@@ -95,19 +78,23 @@ class Application:
             [
                 {
                     "label": "Nouveau tournoi",
-                    "command": NewTournamentCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.create_new_tournament,
                 },
                 {
                     "label": "Sélectionner un tournoi",
-                    "command": SelectTournamentCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.select_tournament,
                 },
                 {
                     "label": "Afficher tous les tournois",
-                    "command": ShowTournamentsDetailsCommand(self.tournament_controller).execute,
+                    "command": self.tournament_controller.display_all_tournaments_details,
                 },
                 {
                     "label": "Quitter",
-                    "command": QuitCommand().execute
+                    "command": self.quit,
                 },
             ],
         )
+
+    def quit(self):
+        print("Au revoir !")
+        exit()

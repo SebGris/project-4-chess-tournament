@@ -91,6 +91,9 @@ class TournamentView(BasePlayerView):
     def display_record_results_message(self, round_name):
         self.write_line(f"Enregistrement des résultats du {round_name}:")
 
+    def display_no_round_error(self):
+        self.write_line("Aucun round en cours. Créer un round pour saisir les scores.")
+
     def display_round_finished_message(self):
         self.write_line("Le round est terminé (scores déjà saisis).")
 
