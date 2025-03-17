@@ -1,11 +1,13 @@
+from typing import List
 from controllers.pairing import Pairing
+from models.match import Match
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
 from repositories.match_repository import MatchRepository
-from repositories.tournament_repository import TournamentRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
+from repositories.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
 
 
@@ -63,8 +65,12 @@ class TournamentController:
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(self, name, location, start_date, end_date, total_rounds):
-        tournament = Tournament(name, location, start_date, end_date, total_rounds)
+    def create_tournament(
+        self, name, location, start_date, end_date, total_rounds
+    ):
+        tournament = Tournament(
+            name, location, start_date, end_date, total_rounds
+        )
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
@@ -73,9 +79,12 @@ class TournamentController:
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
+        self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
-        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
+        tournaments_dto = [
+            tournament.to_dto() for tournament in self.tournaments
+        ]
         self.tournament_repository.write_tournaments_to_file(tournaments_dto)
 
     def add_players(self):
@@ -86,31 +95,47 @@ class TournamentController:
         self.player_repository.save(players_dto)
         self.save_tournaments()
 
-    def start_tournament(self):
+    def start_round(self):
         if self.__check_if_start():
             self.add_round()
             active_round = self.get_active_round()
-            matches_dto = [match.to_dto() for match in active_round.matches]
             self.round_repository.save(active_round.to_dto())
-            self.match_repository.save(matches_dto)
+            matches_dto = [match.to_dto() for match in active_round.matches]
+            self.match_repository.save_a_list(matches_dto)
             self.save_tournaments()
 
     def __check_if_start(self):
-        # Check if there are players in the tournament
-        if not self.active_tournament.players:
+        if not self.__has_players():
             self.view.display_start_error_without_players()
             return False
-        # Check if the number of players is odd
-        elif len(self.active_tournament.players) % 2 != 0:
+        if self.__has_odd_number_of_players():
             self.view.display_start_error_even_players()
             return False
+        if self.__has_unfinished_matches():
+            self.view.display_start_error_unfinished_match()
+            return False
         return True
+
+    def __has_players(self):
+        return bool(self.active_tournament.players)
+
+    def __has_odd_number_of_players(self):
+        return len(self.active_tournament.players) % 2 != 0
+
+    def __has_unfinished_matches(self):
+        for round in self.active_tournament.rounds:
+            for match in round.matches:
+                if not match.is_finished():
+                    return True
+        return False
 
     def add_round(self):
         number_rounds = len(self.active_tournament.rounds)
         new_round = Round(f"Round {number_rounds + 1}")
         if number_rounds == 0:
-            pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
+            pairs = Pairing.generate_first_round_pairs(
+                self.active_tournament.players
+            )
         else:
             previous_matches = {
                 (match.player1.id, match.player2.id)
@@ -138,8 +163,10 @@ class TournamentController:
 
     def enter_scores(self):
         round = self.get_active_round()
-        self.view.display_record_results_message(round.name)
-        if not round.is_finished():
+        if round.is_finished():
+            self.view.display_round_finished_message()
+        else:
+            self.view.display_record_results_message(round.name)
             for match in round.matches:
                 if not match.is_finished():
                     self.view.display_match_summary(match.get_player_names())
@@ -155,32 +182,35 @@ class TournamentController:
                     self.match_repository.save(match.to_dto())
             round.end_round()
             self.round_repository.save(round.to_dto())
+            self.update_scores(round.matches)
 
-    def display_available_tournaments(self):
-        self.view.display_tournaments(self.tournaments)
+    def update_scores(self, matches: List[Match]):
+        for match in matches:
+            player1_id, player1_score = match.get_player1()
+            player2_id, player2_score = match.get_player2()
+            for player in self.active_tournament.players:
+                if player.id == player1_id:
+                    player.score += player1_score
+                elif player.id == player2_id:
+                    player.score += player2_score
 
-    def display_active_tournament(self):
+    def display_active_tournament_details(self):
         self.view.display_tournament_details(self.active_tournament)
 
-    def display_players(self):
-        self.view.display_players(self.active_tournament.players)
+    def display_all_tournaments_details(self):
+        self.view.display_tournaments_details(self.tournaments)
+
+    def display_all_tournaments(self):
+        self.view.display_tournaments(self.tournaments)
+
+    def display_current_round_info(self):
+        self.view.display_current_round_info(self.active_tournament)
 
     def display_player_names(self):
         self.view.display_players_name(self.active_tournament.players)
 
-    def display_current_round(self):
-        active_round = self.get_active_round()
-        if active_round:
-            self.view.display_round_info(active_round)
-        self.view.display_current_round_number(self.active_tournament)
-
     def display_player_pairs(self):
-        """Display pairs of players for the current round."""
-        active_round = self.get_active_round()
-        if active_round:
-            round_name, pairs = active_round.get_pairs_players()
-            self.view.display_player_pairs(round_name, pairs)
+        self.view.display_player_pairs(self.get_active_round())
 
-    def display_tournaments_details(self):
-        for tournament in self.tournaments:
-            self.view.display_tournament_details(tournament)
+    def display_players(self):
+        self.view.display_players_details(self.active_tournament.players)

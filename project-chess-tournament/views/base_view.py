@@ -11,10 +11,9 @@ class BaseView:
         os.system("cls")
 
     @staticmethod
-    def input(prompt):
+    def input(prompt: str):
         """Requests a user input with a specific message."""
-        prompt = prompt.rstrip() + " "
-        return input(prompt).strip()
+        return input(prompt.rstrip() + " ").strip()
 
     @staticmethod
     def input_date(prompt):

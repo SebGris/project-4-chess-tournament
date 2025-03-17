@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-from dtos.player_dto import PlayerDTO
 from typing import Optional
+from dtos.player_dto import PlayerDTO
 
 
 class Player:
@@ -11,6 +11,7 @@ class Player:
         self.first_name = first_name
         self.birth_date = birth_date
         self.chess_id = chess_id
+        self.score = 0.0
         self._id = player_id or uuid.uuid4()
         self.full_name = f"{self.first_name} {self.last_name}"
 

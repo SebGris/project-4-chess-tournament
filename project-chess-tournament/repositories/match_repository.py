@@ -1,7 +1,7 @@
+from typing import List
 from dtos.match_dto import MatchDTO
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
-from typing import List
 
 
 class MatchRepository(BaseRepository):
@@ -34,8 +34,14 @@ class MatchRepository(BaseRepository):
         self.write_matches_to_file(matches)
 
     def save(self, updated_match: MatchDTO):
+        self.save_a_list([updated_match])
+
+    def save_a_list(self, updated_matches: List[MatchDTO]):
         old_matches = self.get_matches()
-        # deletes the match in matches that has the same id as updated_match
-        matches = [m for m in old_matches if m.id != updated_match.id]
-        matches.append(updated_match)
+        # deletes matches with the same identifier as those in updated_matches
+        matches = [
+            o for o in old_matches
+            if o.id not in [u.id for u in updated_matches]
+        ]
+        matches.extend(updated_matches)
         self.write_matches_to_file(matches)

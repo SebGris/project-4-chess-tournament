@@ -7,4 +7,4 @@ class ShowTournamentDetailsCommand(Command):
         self.controller = controller
 
     def execute(self):
-        self.controller.display_active_tournament()
+        self.controller.display_active_tournament_details()

@@ -7,4 +7,4 @@ class ShowCurrentRound(Command):
         self.controller = controller
 
     def execute(self):
-        self.controller.display_current_round()
+        self.controller.display_current_round_info()

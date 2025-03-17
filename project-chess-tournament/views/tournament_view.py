@@ -1,7 +1,7 @@
-from models.tournament import Tournament
+from typing import List
 from models.player import Player
 from models.round import Round
-from typing import List
+from models.tournament import Tournament
 from views.base_player_view import BasePlayerView
 
 
@@ -65,6 +65,11 @@ class TournamentView(BasePlayerView):
             except ValueError:
                 print("Entrée invalide, veuillez entrer un numéro.")
 
+    def display_tournaments_details(self, tournaments: List[Tournament]):
+        """Display the details of a list of tournaments."""
+        for tournament in tournaments:
+            self.display_tournament_details(tournament)
+
     def display_tournament_details(self, tournament: Tournament):
         """Display tournament information."""
         print("--- Informations sur le tournoi ---")
@@ -79,17 +84,15 @@ class TournamentView(BasePlayerView):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
-    def display_current_round_number(self, tournament: Tournament):
-        print(
-            f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
-        )
-
     def display_match_summary(self, match):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
 
     def display_record_results_message(self, round_name):
         self.write_line(f"Enregistrement des résultats du {round_name}:")
+
+    def display_round_finished_message(self):
+        self.write_line("Le round est terminé (scores déjà saisis).")
 
     def display_updated_number_rounds_message(self, number):
         self.write_line(f"Le nombre de tours a été mis à jour à {number}.")
@@ -112,7 +115,9 @@ class TournamentView(BasePlayerView):
         self.write_line(f"Nouveau tournoi {name} créé.")
 
     def display_save_success_message(self, filename):
-        self.write_line(f"Tournoi sauvegardé avec succès dans le fichier {filename}")
+        self.write_line(
+            f"Tournoi sauvegardé avec succès dans le fichier {filename}"
+        )
 
     def display_save_error_message(self, error):
         self.write_line(f"Erreur lors de la sauvegarde du tournoi : {error}")
@@ -123,6 +128,12 @@ class TournamentView(BasePlayerView):
     def display_start_error_even_players(self):
         self.write_line(
             "Le nombre de joueurs doit être pair pour commencer le tournoi."
+        )
+
+    def display_start_error_unfinished_match(self):
+        self.write_line(
+            "Un nouveau round ne peut pas commencer tant que tous les matchs "
+            "du round précédent ne sont pas terminés."
         )
 
     def display_invalid_result_message(self):
@@ -143,35 +154,46 @@ class TournamentView(BasePlayerView):
             print(f"Joueurs : {', '.join(player.full_name for player in players)}")
             self.display_number_of_players(players)
 
-    def display_players(self, players: List[Player]):
+    def display_players_details(self, players: List[Player]):
         """Display a list of players."""
         print("--- Joueurs du tournoi ---")
         if not players:
             print("Aucun joueur enregistré.")
         else:
+            players = sorted(players, key=lambda ply: ply.score, reverse=True)
+            total_score = sum(player.score for player in players)
             for player in players:
-                print(f"{player.full_name} | Né(e) le {player.birth_date} | ID échecs {player.chess_id}")
+                print(
+                    f"{player.full_name} | Né(e) le {player.birth_date} | "
+                    f"ID échecs {player.chess_id} | Score : {player.score}"
+                )
             self.display_number_of_players(players)
+            print(f"Score total des joueurs : {total_score}")
 
     def display_number_of_players(self, player_list):
         """Display the number of players."""
         print(f"Nombre de joueurs : {len(player_list)}")
 
-    def display_round_info(self, round: Round):
-        """Display information about a round."""
-        round_name = round.name
-        if round_name == "Round 1":
-            print("--- Liste des rounds ---")
-        print(f"--- {round_name} ---")
-        if round.start_datetime:
-            print(f"Date de début : {round.start_datetime}")
-            print(f"Date de fin : {round.end_datetime or 'round en cours'}")
+    def display_current_round_info(self, tournament: Tournament):
+        """Display information active round."""
+        round = tournament.rounds[-1]
+        if round:
+            round_name = round.name
+            print(f"--- {round_name} ---")
+            if round.start_datetime:
+                print(f"Date de début : {round.start_datetime}")
+                print(f"Date de fin : {round.end_datetime or 'round en cours'}")
+        print(
+            f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
+        )
 
-    def display_player_pairs(self, round_name, pairs):
+    def display_player_pairs(self, round: Round):
         """Display pairs of players for a round."""
-        print(f"{round_name} avec les paires suivantes :")
-        for index, pair in enumerate(pairs, start=1):
-            if len(pair) == 2:
-                print(f"{index}. {pair[0]} vs {pair[1]}")
-            else:
-                print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
+        if round:
+            round_name, pairs = round.get_pairs_players()
+            print(f"{round_name} avec les paires suivantes :")
+            for index, pair in enumerate(pairs, start=1):
+                if len(pair) == 2:
+                    print(f"{index}. {pair[0]} vs {pair[1]}")
+                else:
+                    print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")

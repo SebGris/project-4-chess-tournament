@@ -1,11 +1,11 @@
 import uuid
 from typing import List
+from dtos.tournament_dto import TournamentDTO
 from models.player import Player
 from models.round import Round
-from dtos.tournament_dto import TournamentDTO
+from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
-from repositories.match_repository import MatchRepository
 
 
 class Tournament:
@@ -21,6 +21,12 @@ class Tournament:
         self.players: List[Player] = []
         self.rounds: List[Round] = []
         self.description = None
+
+    def get_all_matches(self):
+        matches = []
+        for round in self.rounds:
+            matches.extend(round.matches)
+        return matches
 
     def add_player(self, player: Player):
         self.players.append(player)
@@ -76,6 +82,6 @@ class Tournament:
             self.end_date,
             self.description,
             self.total_rounds,
-            [p.id for p in self.players],
-            [r.id for r in self.rounds]
+            [player.id for player in self.players],
+            [round.id for round in self.rounds]
         )

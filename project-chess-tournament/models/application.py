@@ -11,9 +11,10 @@ from menu_commands.show_player_pairs_command import ShowPlayerPairsCommand
 from menu_commands.show_players_command import ShowPlayersCommand
 from menu_commands.show_tournament_details_command import ShowTournamentDetailsCommand
 from menu_commands.show_tournaments_details_command import ShowTournamentsDetailsCommand
-from menu_commands.start_tournament_command import StartTournamentCommand
+from menu_commands.start_tournament_command import StartRoundCommand
 from menu_commands.update_description_command import UpdateDescriptionCommand
 from menu_commands.update_number_of_rounds_command import UpdateNumberOfRoundsCommand
+from models.application_menu import ApplicationMenu
 from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
@@ -22,7 +23,7 @@ from views.tournament_view import TournamentView
 
 
 class Application:
-    def __init__(self, application_menu):
+    def __init__(self, application_menu: ApplicationMenu):
         self.application_menu = application_menu
         player_repository = PlayerRepository()
         tournament_repository = TournamentRepository()
@@ -74,8 +75,8 @@ class Application:
                     "command": AddPlayersCommand(self.tournament_controller).execute,
                 },
                 {
-                    "label": "Démarrer un tournoi",
-                    "command": StartTournamentCommand(self.tournament_controller).execute,
+                    "label": "Démarrer un round",
+                    "command": StartRoundCommand(self.tournament_controller).execute,
                 },
                 {
                     "label": "Modifier le nombre de tours",
@@ -90,7 +91,7 @@ class Application:
 
     def _add_general_menu(self):
         self.application_menu.add_group(
-            "Menu Général",
+            "Menu Fichier",
             [
                 {
                     "label": "Nouveau tournoi",

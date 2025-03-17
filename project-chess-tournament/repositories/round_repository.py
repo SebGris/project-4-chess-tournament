@@ -1,7 +1,7 @@
+from typing import List
 from dtos.round_dto import RoundDTO
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
-from typing import List
 
 
 class RoundRepository(BaseRepository):

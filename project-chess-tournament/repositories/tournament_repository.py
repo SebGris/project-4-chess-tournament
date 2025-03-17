@@ -1,7 +1,7 @@
+from typing import List
 from dtos.tournament_dto import TournamentDTO
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
-from typing import List
 
 
 class TournamentRepository(BaseRepository):
