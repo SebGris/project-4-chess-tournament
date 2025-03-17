@@ -160,9 +160,9 @@ class TournamentView(BasePlayerView):
         if round_name == "Round 1":
             print("--- Liste des rounds ---")
         print(f"--- {round_name} ---")
-        if round.start_date:
-            print(f"Date de début : {round.start_date}")
-            print(f"Date de fin : {round.end_date or 'round en cours'}")
+        if round.start_datetime:
+            print(f"Date de début : {round.start_datetime}")
+            print(f"Date de fin : {round.end_datetime or 'round en cours'}")
 
     def display_player_pairs(self, round_name, pairs):
         """Display pairs of players for a round."""

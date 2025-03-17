@@ -5,6 +5,7 @@ from models.round import Round
 from dtos.tournament_dto import TournamentDTO
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
+from repositories.match_repository import MatchRepository
 
 
 class Tournament:
@@ -47,7 +48,8 @@ class Tournament:
     def from_dto(
         tournament_dto: TournamentDTO,
         player_repo: PlayerRepository,
-        round_repo: RoundRepository
+        round_repo: RoundRepository,
+        match_repo: MatchRepository
     ):
         tournament = Tournament(
             tournament_dto.name,
@@ -57,10 +59,12 @@ class Tournament:
             tournament_dto.number_of_rounds,
             uuid.UUID(tournament_dto.id)
         )
-        players = player_repo.get_players_by_ids(tournament_dto.player_ids)
-        tournament.players.extend([Player.from_dto(p) for p in players])
-        rounds = round_repo.get_rounds_by_ids(tournament_dto.round_ids)
-        tournament.rounds.extend([Round.from_dto(r) for r in rounds])
+        players_dto = player_repo.get_players_by_ids(tournament_dto.player_ids)
+        tournament.players.extend([Player.from_dto(p) for p in players_dto])
+        rounds_dto = round_repo.get_rounds_by_ids(tournament_dto.round_ids)
+        tournament.rounds.extend(
+            [Round.from_dto(r, match_repo, player_repo) for r in rounds_dto]
+        )
         return tournament
 
     def to_dto(self):

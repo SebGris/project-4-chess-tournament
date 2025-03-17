@@ -1,8 +1,10 @@
 import uuid
 from datetime import datetime
 from typing import List
-from models.match import Match
 from dtos.round_dto import RoundDTO
+from models.match import Match
+from repositories.match_repository import MatchRepository
+from repositories.player_repository import PlayerRepository
 
 
 class Round:
@@ -18,6 +20,12 @@ class Round:
     def add_match(self, player1, player2):
         match = Match(player1, player2)
         self.matches.append(match)
+
+    def set_start_date(self, start_datetime):
+        self.start_datetime = start_datetime
+
+    def set_end_date(self, end_datetime):
+        self.end_datetime = end_datetime
 
     def end_round(self):
         """Marks the lap as completed and records the end time."""
@@ -46,14 +54,22 @@ class Round:
         return str(self._id)
 
     @staticmethod
-    def from_dto(round_dto: RoundDTO):
-        return Round(
+    def from_dto(
+        round_dto: RoundDTO,
+        match_repo: MatchRepository,
+        player_repo: PlayerRepository
+    ):
+        round = Round(
             round_dto.name,
-            round_dto.start_datetime,
-            round_dto.end_datetime,
-            round_dto.id,
             uuid.UUID(round_dto.id)
         )
+        matches_dto = match_repo.get_matches_by_ids(round_dto.match_ids)
+        round.matches.extend(
+            [Match.from_dto(m, player_repo) for m in matches_dto]
+        )
+        round.set_start_date(round_dto.start_datetime)
+        round.set_end_date(round_dto.end_datetime)
+        return round
 
     def to_dto(self):
         return RoundDTO(
