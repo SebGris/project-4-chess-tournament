@@ -1,5 +1,6 @@
 from controllers.tournament_controller import TournamentController
 from models.application_menu import ApplicationMenu
+from reports.report_generator import ReportGenerator
 from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
@@ -73,6 +74,7 @@ class Application:
         )
 
     def _add_general_menu(self):
+        report_generator = ReportGenerator()
         self.application_menu.add_group(
             "Menu Fichier",
             [
@@ -87,6 +89,10 @@ class Application:
                 {
                     "label": "Afficher tous les tournois",
                     "command": self.tournament_controller.display_all_tournaments_details,
+                },
+                {
+                    "label": "Exemple de rapport",
+                    "command": report_generator.generate_report,
                 },
                 {
                     "label": "Quitter",
