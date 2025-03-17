@@ -36,8 +36,8 @@ class TournamentReportGenerator:
                     </tr>
                     {% for player in tournament.players %}
                         <tr>
-                            <td>{{ player.player_id }}</td>
-                            <td>{{ player.name }}</td>
+                            <td>{{ player.id }}</td>
+                            <td>{{ player.full_name }}</td>
                             <td>{{ player.score }}</td>
                         </tr>
                     {% endfor %}

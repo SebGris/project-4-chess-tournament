@@ -1,4 +1,5 @@
 import uuid
+from dataclasses import dataclass, asdict
 from typing import List
 from dtos.tournament_dto import TournamentDTO
 from models.player import Player
@@ -8,6 +9,7 @@ from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 
 
+@dataclass
 class Tournament:
 
     def __init__(self, name, location, start_date, end_date, total_rounds,
@@ -21,12 +23,6 @@ class Tournament:
         self.players: List[Player] = []
         self.rounds: List[Round] = []
         self.description = None
-
-    def get_all_matches(self):
-        matches = []
-        for round in self.rounds:
-            matches.extend(round.matches)
-        return matches
 
     def add_player(self, player: Player):
         self.players.append(player)
@@ -45,6 +41,17 @@ class Tournament:
 
     def set_total_of_rounds(self, total_rounds):
         self.total_rounds = total_rounds
+
+    def update_scores(self):
+        matches = [match for round in self.rounds for match in round.matches]
+        for match in matches:
+            player1_id, player1_score = match.get_player1()
+            player2_id, player2_score = match.get_player2()
+            for player in self.players:
+                if player.id == player1_id:
+                    player.score += player1_score
+                elif player.id == player2_id:
+                    player.score += player2_score
 
     @property
     def id(self):
@@ -85,3 +92,6 @@ class Tournament:
             [player.id for player in self.players],
             [round.id for round in self.rounds]
         )
+    
+    def to_dict(self):
+        return asdict(self)

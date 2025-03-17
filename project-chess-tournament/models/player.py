@@ -1,9 +1,11 @@
 import uuid
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
 from dtos.player_dto import PlayerDTO
 
 
+@dataclass
 class Player:
     def __init__(self, last_name, first_name, birth_date, chess_id,
                  player_id=None):
@@ -47,3 +49,6 @@ class Player:
             self.birth_date,
             self.chess_id
         )
+
+    def to_dict(self):
+        return asdict(self)

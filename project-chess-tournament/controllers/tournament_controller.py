@@ -1,6 +1,4 @@
-from typing import List
 from controllers.pairing import Pairing
-from models.match import Match
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
@@ -79,7 +77,7 @@ class TournamentController:
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
-        self.update_scores(self.active_tournament.get_all_matches())
+        self.active_tournament.update_scores()
 
     def save_tournaments(self):
         tournaments_dto = [
@@ -184,17 +182,7 @@ class TournamentController:
                     self.match_repository.save(match.to_dto())
             round.end_round()
             self.round_repository.save(round.to_dto())
-            self.update_scores(round.matches)
-
-    def update_scores(self, matches: List[Match]):
-        for match in matches:
-            player1_id, player1_score = match.get_player1()
-            player2_id, player2_score = match.get_player2()
-            for player in self.active_tournament.players:
-                if player.id == player1_id:
-                    player.score += player1_score
-                elif player.id == player2_id:
-                    player.score += player2_score
+            self.active_tournament.update_scores()
 
     def display_active_tournament_details(self):
         self.view.display_tournament_details(self.active_tournament)

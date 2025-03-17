@@ -14,7 +14,7 @@ class RoundRepository(BaseRepository):
     def get_rounds(self):
         return [
             RoundDTO.from_dict(round_dict)
-            for round_dict in self.file_service.read_from_file()
+            for round_dict in self.file_service.read_from_file() #TODO ou self.read_json_file() ?
         ]
 
     def get_round_by_id(self, id: str):
