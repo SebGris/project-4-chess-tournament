@@ -179,16 +179,19 @@ class TournamentView(BasePlayerView):
 
     def display_current_round_info(self, tournament: Tournament):
         """Display information active round."""
-        round = tournament.rounds[-1]
-        if round:
-            round_name = round.name
-            print(f"--- {round_name} ---")
-            if round.start_datetime:
-                print(f"Date de début : {round.start_datetime}")
-                print(f"Date de fin : {round.end_datetime or 'round en cours'}")
-        print(
-            f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
-        )
+        if len(tournament.rounds) != 0:
+            round = tournament.rounds[-1]
+            if round:
+                round_name = round.name
+                print(f"--- {round_name} ---")
+                if round.start_datetime:
+                    print(f"Date de début : {round.start_datetime}")
+                    print(f"Date de fin : {round.end_datetime or 'round en cours'}")
+            print(
+                f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
+            )
+        else:
+            print("Aucun round n'a été créé pour ce tournoi.")
 
     def display_player_pairs(self, round: Round):
         """Display pairs of players for a round."""
