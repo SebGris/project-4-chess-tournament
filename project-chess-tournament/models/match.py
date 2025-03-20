@@ -1,5 +1,4 @@
 import uuid
-from dtos.match_dto import MatchDTO
 from models.player import Player
 from repositories.player_repository import PlayerRepository
 
@@ -8,8 +7,12 @@ class Match:
     """Represents a match between two players in a chess tournament."""
 
     def __init__(
-        self, player1: Player, player2: Player,
-        player1_score=0.0, player2_score=0.0, match_id=None
+        self,
+        player1: Player,
+        player2: Player,
+        player1_score=0.0,
+        player2_score=0.0,
+        match_id=None,
     ):
         self.player1 = player1
         self.player2 = player2
@@ -45,23 +48,32 @@ class Match:
     def id(self):
         return str(self._id)
 
-    @staticmethod
-    def from_dto(match_dto: MatchDTO, player_repo: PlayerRepository):
-        player1_dto = player_repo.get_player_by_id(match_dto.player1)
-        player2_dto = player_repo.get_player_by_id(match_dto.player2)
+    def from_repo(self, player_repo: PlayerRepository):
+        player1_dto = player_repo.get_player_by_id(self.player1)
+        player2_dto = player_repo.get_player_by_id(self.player2)
         return Match(
             Player.from_dto(player1_dto),
             Player.from_dto(player2_dto),
-            match_dto.player1_score,
-            match_dto.player2_score,
-            uuid.UUID(match_dto.id)
+            self.player1_score,
+            self.player2_score,
+            uuid.UUID(self.id),
         )
 
-    def to_dto(self):
-        return MatchDTO(
-            self.id,
-            self.player1.id,
-            self.player2.id,
-            self.player1_score,
-            self.player2_score
+    @classmethod
+    def from_dict(cls, match_data):
+        return Match(
+            match_data["player1"],
+            match_data["player2"],
+            match_data["player1_score"],
+            match_data["player2_score"],
+            match_data["id"],
         )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "player1": self.player1.id,
+            "player2": self.player2.id,
+            "player1_score": self.player1_score,
+            "player2_score": self.player2_score,
+        }

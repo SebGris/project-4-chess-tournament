@@ -1,5 +1,5 @@
 from typing import List
-from dtos.match_dto import MatchDTO
+from models.match import Match
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
 
@@ -13,7 +13,7 @@ class MatchRepository(BaseRepository):
 
     def get_matches(self):
         return [
-            MatchDTO.from_dict(match_dic)
+            Match.from_dict(match_dic)
             for match_dic in self.file_service.read_from_file()
         ]
 
@@ -23,25 +23,22 @@ class MatchRepository(BaseRepository):
     def get_matches_by_ids(self, ids: List[str]):
         return [match for match in self.get_matches() if match.id in ids]
 
-    def write_matches_to_file(self, matches: List[MatchDTO]):
-        self.file_service.write_to_file(
-            [match.to_dict() for match in matches]
-        )
+    def write_matches_to_file(self, matches: List[Match]):
+        self.file_service.write_to_file([match.to_dict() for match in matches])
 
-    def create(self, new_match: MatchDTO):
+    def create(self, new_match: Match):
         matches = self.get_matches()
         matches.append(new_match)
         self.write_matches_to_file(matches)
 
-    def save(self, updated_match: MatchDTO):
+    def save(self, updated_match: Match):
         self.save_a_list([updated_match])
 
-    def save_a_list(self, updated_matches: List[MatchDTO]):
+    def save_a_list(self, updated_matches: List[Match]):
         old_matches = self.get_matches()
         # deletes matches with the same identifier as those in updated_matches
         matches = [
-            o for o in old_matches
-            if o.id not in [u.id for u in updated_matches]
+            o for o in old_matches if o.id not in [u.id for u in updated_matches]
         ]
         matches.extend(updated_matches)
         self.write_matches_to_file(matches)

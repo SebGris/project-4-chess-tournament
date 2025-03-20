@@ -19,7 +19,7 @@ class TournamentController:
         player_repository: PlayerRepository,
         round_repository: RoundRepository,
         match_repository: MatchRepository,
-        view: TournamentView
+        view: TournamentView,
     ):
         self.tournament_repository = tournament_repository
         self.player_repository = player_repository
@@ -35,7 +35,7 @@ class TournamentController:
                 tournament_dto,
                 self.player_repository,
                 self.round_repository,
-                self.match_repository
+                self.match_repository,
             )
             for tournament_dto in self.tournament_repository.get_tournaments()
         ]
@@ -45,9 +45,7 @@ class TournamentController:
 
     def get_active_round(self):
         return (
-            self.active_tournament.rounds[-1]
-            if self.active_tournament.rounds
-            else None
+            self.active_tournament.rounds[-1] if self.active_tournament.rounds else None
         )
 
     def collect_tournament_info(self):
@@ -65,12 +63,8 @@ class TournamentController:
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(
-        self, name, location, start_date, end_date, total_rounds
-    ):
-        tournament = Tournament(
-            name, location, start_date, end_date, total_rounds
-        )
+    def create_tournament(self, name, location, start_date, end_date, total_rounds):
+        tournament = Tournament(name, location, start_date, end_date, total_rounds)
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
@@ -82,9 +76,7 @@ class TournamentController:
         self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
-        tournaments_dto = [
-            tournament.to_dto() for tournament in self.tournaments
-        ]
+        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
         self.tournament_repository.write_tournaments_to_file(tournaments_dto)
 
     def add_players(self):
@@ -100,8 +92,7 @@ class TournamentController:
             self.add_round()
             active_round = self.get_active_round()
             self.round_repository.save(active_round.to_dto())
-            matches_dto = [match.to_dto() for match in active_round.matches]
-            self.match_repository.save_a_list(matches_dto)
+            self.match_repository.save_a_list(active_round.matches)
             self.save_tournaments()
 
     def __check_if_start(self):
@@ -133,9 +124,7 @@ class TournamentController:
         number_rounds = len(self.active_tournament.rounds)
         new_round = Round(f"Round {number_rounds + 1}")
         if number_rounds == 0:
-            pairs = Pairing.generate_first_round_pairs(
-                self.active_tournament.players
-            )
+            pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
         else:
             previous_matches = {
                 (match.player1.id, match.player2.id)
@@ -181,7 +170,7 @@ class TournamentController:
                         match.set_score(0.5, 0.5)
                     else:
                         self.view.display_invalid_result_message()
-                    self.match_repository.save(match.to_dto())
+                    self.match_repository.save(match)
             round.end_round()
             self.round_repository.save(round.to_dto())
             self.update_scores(round.matches)
