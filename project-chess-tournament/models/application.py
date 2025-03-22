@@ -1,10 +1,11 @@
+from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
 from models.application_menu import ApplicationMenu
-from reports.report_generator import ReportGenerator
 from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
+from views.player_view import PlayerView
 from views.tournament_view import TournamentView
 
 
@@ -16,6 +17,10 @@ class Application:
         round_repository = RoundRepository()
         match_repository = MatchRepository()
         tournament_view = TournamentView()
+        player_view = PlayerView()
+        self.player_controller = PlayerController(
+            player_repository, player_view
+        )
         self.tournament_controller = TournamentController(
             tournament_repository,
             player_repository,
@@ -31,6 +36,7 @@ class Application:
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
             self._add_tournament_menu(active_tournament.name)
+        self._add_report_menu()
         return self.application_menu
 
     def _add_tournament_menu(self, name):
@@ -74,10 +80,16 @@ class Application:
         )
 
     def _add_general_menu(self):
-        report_generator = ReportGenerator()
+        def quit():
+            print("Au revoir !")
+            exit()
         self.application_menu.add_group(
             "Menu Fichier",
             [
+                {
+                    "label": "Saisir des joueurs",
+                    "command": self.player_controller.add_players,
+                },
                 {
                     "label": "Nouveau tournoi",
                     "command": self.tournament_controller.create_new_tournament,
@@ -91,16 +103,35 @@ class Application:
                     "command": self.tournament_controller.display_all_tournaments_details,
                 },
                 {
-                    "label": "Exemple de rapport",
-                    "command": report_generator.generate_report,
-                },
-                {
                     "label": "Quitter",
-                    "command": self.quit,
+                    "command": quit,
                 },
             ],
         )
 
-    def quit(self):
-        print("Au revoir !")
-        exit()
+    def _add_report_menu(self):
+        self.application_menu.add_group(
+            "Menu Rapports",
+            [
+                {
+                    "label": "Liste de tous les joueurs",
+                    "command": self.player_controller.report_players,
+                },
+                {
+                    "label": "Liste de tous les tournois",
+                    "command": self.tournament_controller.display_players,
+                },
+                {
+                    "label": "Nom et dates du tournoi",
+                    "command": self.tournament_controller.display_players,
+                },
+                {
+                    "label": "Liste des joueurs du tournoi",
+                    "command": self.tournament_controller.display_players,
+                },
+                {
+                    "label": "Liste de tous les tours du tournoi et de tous les matchs du tour",
+                    "command": self.tournament_controller.display_players,
+                },
+            ],
+        )

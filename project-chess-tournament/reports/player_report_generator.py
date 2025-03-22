@@ -4,9 +4,9 @@ import http.server
 import socketserver
 
 
-class TournamentReportGenerator:
-    def __init__(self, tournaments):
-        self.tournaments = tournaments
+class PlayerReportGenerator:
+    def __init__(self, players):
+        self.players = players
         self.html_content = ""
 
     def generate_report(self):
@@ -25,32 +25,32 @@ class TournamentReportGenerator:
             </style>
         </head>
         <body>
-            <h1>Rapport des Tournois</h1>
-            {% for tournament in tournaments %}
-                <h2>{{ tournament.name }}</h2>
+            <h1>Liste de tous les joueurs par ordre alphabétique</h1>
                 <table>
                     <tr>
                         <th>ID Joueur</th>
                         <th>Nom</th>
-                        <th>Score</th>
+                        <th>Prénom</th>
+                        <th>Date de naissance</th>
+                        <th>ID échecs</th>
                     </tr>
-                    {% for player in tournament.players %}
+                    {% for player in players %}
                         <tr>
                             <td>{{ player.id }}</td>
-                            <td>{{ player.full_name }}</td>
-                            <td>{{ player.score }}</td>
+                            <td>{{ player.last_name }}</td>
+                            <td>{{ player.first_name }}</td>
+                            <td>{{ player.birth_date }}</td>
+                            <td>{{ player.chess_id }}</td>
                         </tr>
                     {% endfor %}
                 </table>
                 <br>
-            {% endfor %}
         </body>
         </html>
         """
-
         # Générer le rapport HTML
         template = Template(html_template)
-        self.html_content = template.render(tournaments=self.tournaments)
+        self.html_content = template.render(players=self.players)
 
     def serve_report(self):
         # Serveur HTTP temporaire pour afficher le rapport

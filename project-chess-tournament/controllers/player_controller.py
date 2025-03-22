@@ -9,9 +9,6 @@ class PlayerController:
         self.view = view
         self.added_players = []
 
-    def get_players_from_repository(self):
-        return self.repository.get_players()
-
     def add_players(self):
         self.added_players.clear()
         players_data = []
@@ -26,3 +23,10 @@ class PlayerController:
             self.added_players.append(player)
             self.view.display_add_player_message(player)
         self.repository.save(self.added_players)
+
+    def report_players(self):
+        players = self.repository.get_players()
+        players.sort(key=lambda player: player.last_name)
+        # Convert the list of players to a list of dictionaries
+        players = [player.to_dict() for player in players]
+        self.view.report_players(players)
