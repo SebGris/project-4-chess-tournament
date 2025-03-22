@@ -48,26 +48,19 @@ class Match:
     def id(self):
         return str(self._id)
 
-    def from_repo(self, player_repo: PlayerRepository):
-        player1_dto = player_repo.get_player_by_id(self.player1)
-        player2_dto = player_repo.get_player_by_id(self.player2)
-        return Match(
+    @staticmethod
+    def from_dict(match_data):
+        player_repo = PlayerRepository()
+        player1_dto = player_repo.get_player_by_id(match_data["player1"])
+        player2_dto = player_repo.get_player_by_id(match_data["player2"])
+        match = Match(
             Player.from_dto(player1_dto),
             Player.from_dto(player2_dto),
-            self.player1_score,
-            self.player2_score,
-            uuid.UUID(self.id),
-        )
-
-    @classmethod
-    def from_dict(cls, match_data):
-        return Match(
-            match_data["player1"],
-            match_data["player2"],
             match_data["player1_score"],
             match_data["player2_score"],
             match_data["id"],
         )
+        return match
 
     def to_dict(self):
         return {

@@ -59,11 +59,11 @@ class Round:
 
     @staticmethod
     def from_dto(
-        round_dto: RoundDTO, match_repo: MatchRepository, player_repo: PlayerRepository
+        round_dto: RoundDTO, match_repo: MatchRepository
     ):
         round = Round(round_dto.name, uuid.UUID(round_dto.id))
-        matches_dto = match_repo.get_matches_by_ids(round_dto.match_ids)
-        round.matches.extend([match.from_repo(player_repo) for match in matches_dto])
+        matches = match_repo.get_matches_by_ids(round_dto.match_ids)
+        round.matches.extend(matches)
         round.set_start_date(round_dto.start_datetime)
         round.set_end_date(round_dto.end_datetime)
         return round

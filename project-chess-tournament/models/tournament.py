@@ -1,6 +1,5 @@
 import uuid
 from typing import List
-from dtos.tournament_dto import TournamentDTO
 from models.player import Player
 from models.round import Round
 from repositories.match_repository import MatchRepository
@@ -51,37 +50,36 @@ class Tournament:
         return str(self._id)
 
     @staticmethod
-    def from_dto(
-        tournament_dto: TournamentDTO,
-        player_repo: PlayerRepository,
-        round_repo: RoundRepository,
-        match_repo: MatchRepository
-    ):
+    def from_dict(tournament_data):
         tournament = Tournament(
-            tournament_dto.name,
-            tournament_dto.location,
-            tournament_dto.start_date,
-            tournament_dto.end_date,
-            tournament_dto.total_rounds,
-            uuid.UUID(tournament_dto.id)
+            tournament_data["name"],
+            tournament_data["location"],
+            tournament_data["start_date"],
+            tournament_data["end_date"],
+            tournament_data["total_rounds"],
+            uuid.UUID(tournament_data["id"])
         )
-        players_dto = player_repo.get_players_by_ids(tournament_dto.player_ids)
+        player_repo = PlayerRepository()
+        round_repo = RoundRepository()
+        match_repo = MatchRepository()
+        tournament.set_description(tournament_data["description"])
+        players_dto = player_repo.get_players_by_ids(tournament_data["player_ids"])
         tournament.players.extend([Player.from_dto(p) for p in players_dto])
-        rounds_dto = round_repo.get_rounds_by_ids(tournament_dto.round_ids)
+        rounds_dto = round_repo.get_rounds_by_ids(tournament_data["round_ids"])
         tournament.rounds.extend(
-            [Round.from_dto(r, match_repo, player_repo) for r in rounds_dto]
+            [Round.from_dto(r, match_repo) for r in rounds_dto]
         )
         return tournament
 
-    def to_dto(self):
-        return TournamentDTO(
-            self.id,
-            self.name,
-            self.location,
-            self.start_date,
-            self.end_date,
-            self.description,
-            self.total_rounds,
-            [player.id for player in self.players],
-            [round.id for round in self.rounds]
-        )
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "location": self.location,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "description": self.description,
+            "total_rounds": self.total_rounds,
+            "player_ids": [player.id for player in self.players],
+            "round_ids": [round.id for round in self.rounds]
+        }

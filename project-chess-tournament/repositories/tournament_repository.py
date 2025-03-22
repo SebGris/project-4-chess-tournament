@@ -1,5 +1,5 @@
 from typing import List
-from dtos.tournament_dto import TournamentDTO
+from models.tournament import Tournament
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
 
@@ -13,11 +13,11 @@ class TournamentRepository(BaseRepository):
 
     def get_tournaments(self):
         return [
-            TournamentDTO.from_dict(tournament_dict)
+            Tournament.from_dict(tournament_dict)
             for tournament_dict in self.file_service.read_from_file()
         ]
 
-    def write_tournaments_to_file(self, tournaments: List[TournamentDTO]):
+    def write_tournaments_to_file(self, tournaments: List[Tournament]):
         self.file_service.write_to_file(
             [tournament.to_dict() for tournament in tournaments]
         )

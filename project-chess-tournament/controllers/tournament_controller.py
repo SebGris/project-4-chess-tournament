@@ -31,13 +31,8 @@ class TournamentController:
 
     def get_tournaments(self):
         return [
-            Tournament.from_dto(
-                tournament_dto,
-                self.player_repository,
-                self.round_repository,
-                self.match_repository,
-            )
-            for tournament_dto in self.tournament_repository.get_tournaments()
+            tournament
+            for tournament in self.tournament_repository.get_tournaments()
         ]
 
     def get_active_tournament(self):
