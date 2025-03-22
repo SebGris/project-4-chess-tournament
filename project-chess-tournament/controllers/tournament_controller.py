@@ -1,4 +1,6 @@
+from typing import List
 from controllers.pairing import Pairing
+from models.match import Match
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
