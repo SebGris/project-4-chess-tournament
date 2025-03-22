@@ -68,7 +68,7 @@ class TournamentController:
     def select_tournament(self):
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
-        self.active_tournament.update_scores()
+        self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
         self.tournament_repository.write_tournaments_to_file(self.tournaments)
