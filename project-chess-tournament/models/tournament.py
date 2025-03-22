@@ -63,8 +63,8 @@ class Tournament:
         round_repo = RoundRepository()
         match_repo = MatchRepository()
         tournament.set_description(tournament_data["description"])
-        players_dto = player_repo.get_players_by_ids(tournament_data["player_ids"])
-        tournament.players.extend([Player.from_dto(p) for p in players_dto])
+        players = player_repo.get_players_by_ids(tournament_data["player_ids"])
+        tournament.players.extend(players)
         rounds_dto = round_repo.get_rounds_by_ids(tournament_data["round_ids"])
         tournament.rounds.extend(
             [Round.from_dto(r, match_repo) for r in rounds_dto]

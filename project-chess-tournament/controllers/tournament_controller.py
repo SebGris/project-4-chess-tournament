@@ -78,8 +78,7 @@ class TournamentController:
         players_data = iter(self.view.get_player_data, None)
         players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)
-        players_dto = [player.to_dto() for player in players]
-        self.player_repository.save(players_dto)
+        self.player_repository.save(players)
         self.save_tournaments()
 
     def start_round(self):
