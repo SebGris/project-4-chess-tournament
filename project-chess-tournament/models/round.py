@@ -1,10 +1,8 @@
 import uuid
 from datetime import datetime
 from typing import List
-from dtos.round_dto import RoundDTO
 from models.match import Match
 from repositories.match_repository import MatchRepository
-from repositories.player_repository import PlayerRepository
 
 
 class Round:
@@ -58,25 +56,24 @@ class Round:
         return str(self._id)
 
     @staticmethod
-    def from_dto(
-        round_dto: RoundDTO, match_repo: MatchRepository
-    ):
-        round = Round(round_dto.name, uuid.UUID(round_dto.id))
-        matches = match_repo.get_matches_by_ids(round_dto.match_ids)
+    def from_dict(round_data):
+        match_repo = MatchRepository()
+        round = Round(round_data["name"], round_data["id"])
+        matches = match_repo.get_matches_by_ids(round_data["match_ids"])
         round.matches.extend(matches)
-        round.set_start_date(round_dto.start_datetime)
-        round.set_end_date(round_dto.end_datetime)
+        round.set_start_date(round_data["start_datetime"])
+        round.set_end_date(round_data["end_datetime"])
         return round
 
-    def to_dto(self):
-        return RoundDTO(
-            self.id,
-            self.name,
-            [match.id for match in self.matches],
-            self.start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-            (
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "match_ids": [match.id for match in self.matches],
+            "start_datetime": self.start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            "end_datetime": (
                 self.end_datetime.strftime("%Y-%m-%d %H:%M:%S")
                 if self.end_datetime
                 else None
             ),
-        )
+        }

@@ -2,7 +2,6 @@ import uuid
 from typing import List
 from models.player import Player
 from models.round import Round
-from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 
@@ -61,14 +60,11 @@ class Tournament:
         )
         player_repo = PlayerRepository()
         round_repo = RoundRepository()
-        match_repo = MatchRepository()
         tournament.set_description(tournament_data["description"])
         players = player_repo.get_players_by_ids(tournament_data["player_ids"])
         tournament.players.extend(players)
-        rounds_dto = round_repo.get_rounds_by_ids(tournament_data["round_ids"])
-        tournament.rounds.extend(
-            [Round.from_dto(r, match_repo) for r in rounds_dto]
-        )
+        rounds = round_repo.get_rounds_by_ids(tournament_data["round_ids"])
+        tournament.rounds.extend(rounds)
         return tournament
 
     def to_dict(self):

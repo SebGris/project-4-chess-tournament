@@ -71,8 +71,7 @@ class TournamentController:
         self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
-        tournaments_dto = [tournament.to_dto() for tournament in self.tournaments]
-        self.tournament_repository.write_tournaments_to_file(tournaments_dto)
+        self.tournament_repository.write_tournaments_to_file(self.tournaments)
 
     def add_players(self):
         players_data = iter(self.view.get_player_data, None)
@@ -85,7 +84,7 @@ class TournamentController:
         if self.__check_if_start():
             self.add_round()
             active_round = self.get_active_round()
-            self.round_repository.save(active_round.to_dto())
+            self.round_repository.save(active_round)
             self.match_repository.save_a_list(active_round.matches)
             self.save_tournaments()
 
@@ -166,7 +165,7 @@ class TournamentController:
                         self.view.display_invalid_result_message()
                     self.match_repository.save(match)
             round.end_round()
-            self.round_repository.save(round.to_dto())
+            self.round_repository.save(round)
             self.update_scores(round.matches)
 
     def update_scores(self, matches: List[Match]):
