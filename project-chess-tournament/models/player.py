@@ -1,11 +1,8 @@
 import uuid
-from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
-from dtos.player_dto import PlayerDTO
 
 
-@dataclass
 class Player:
     def __init__(self, last_name, first_name, birth_date, chess_id,
                  player_id=None):
@@ -31,24 +28,21 @@ class Player:
     def id(self):
         return str(self._id)
 
-    @staticmethod
-    def from_dto(player_dto: PlayerDTO):
-        return Player(
-            player_dto.last_name,
-            player_dto.first_name,
-            player_dto.birth_date,
-            player_dto.chess_id,
-            uuid.UUID(player_dto.id)
-        )
-
-    def to_dto(self):
-        return PlayerDTO(
-            self.id,
-            self.last_name,
-            self.first_name,
-            self.birth_date,
-            self.chess_id
+    @classmethod
+    def from_dict(cls, player_data):
+        return cls(
+            player_data["last_name"],
+            player_data["first_name"],
+            player_data["birth_date"],
+            player_data["chess_id"],
+            player_data.get("id"),
         )
 
     def to_dict(self):
-        return asdict(self)
+        return {
+            "id": self.id,
+            "last_name": self.last_name,
+            "first_name": self.first_name,
+            "birth_date": self.birth_date,
+            "chess_id": self.chess_id,
+        }

@@ -1,5 +1,5 @@
 from typing import List
-from dtos.player_dto import PlayerDTO
+from models.player import Player
 from repositories.base_repository import BaseRepository
 from services.file_service import FileService
 
@@ -13,7 +13,7 @@ class PlayerRepository(BaseRepository):
 
     def get_players(self):
         return [
-            PlayerDTO.from_dict(player_dict)
+            Player.from_dict(player_dict)
             for player_dict in self.file_service.read_from_file()
         ]
 
@@ -23,12 +23,12 @@ class PlayerRepository(BaseRepository):
     def get_players_by_ids(self, ids: List[str]):
         return [player for player in self.get_players() if player.id in ids]
 
-    def write_players_to_file(self, players: List[PlayerDTO]):
+    def write_players_to_file(self, players: List[Player]):
         self.file_service.write_to_file(
             [player.to_dict() for player in players]
         )
 
-    def save(self, new_players: List[PlayerDTO]):
+    def save(self, new_players: List[Player]):
         players = self.get_players()
         players.extend(new_players)
         self.write_players_to_file(players)

@@ -59,27 +59,83 @@
         "id": "d42fc903-dddc-4a31-bad8-4471d9de503f",
         "player1": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
         "player2": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 1,
+        "player2_score": 0
     },
     {
         "id": "48c087dc-40df-4627-86be-4a6b01740f9a",
         "player1": "812160aa-8e0a-453a-a345-80335d77eb59",
         "player2": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 0.5,
+        "player2_score": 0.5
     },
     {
         "id": "85e6c655-70de-4b4c-be3b-c5c04e2339c6",
         "player1": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
         "player2": "52995956-a29c-471d-aa81-e393c16c3ce5",
-        "player1_score": 0.0,
-        "player2_score": 0.0
+        "player1_score": 0.5,
+        "player2_score": 0.5
     },
     {
         "id": "85bf32b9-560d-4f4c-bf6e-b2a42e70a729",
         "player1": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
         "player2": "350cf9b5-75db-4703-94c1-7c633ae1c490",
+        "player1_score": 0,
+        "player2_score": 1
+    },
+    {
+        "id": "a97bd365-6653-4511-b566-1db5bee619a6",
+        "player1": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+        "player2": "812160aa-8e0a-453a-a345-80335d77eb59",
+        "player1_score": 0,
+        "player2_score": 1
+    },
+    {
+        "id": "bb791afa-cc3d-4fa3-a628-f02bf2bb9f1e",
+        "player1": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+        "player2": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
+        "player1_score": 0,
+        "player2_score": 1
+    },
+    {
+        "id": "2bc97978-ebb3-4ad2-8b14-ae3c7f8dd3c8",
+        "player1": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+        "player2": "52995956-a29c-471d-aa81-e393c16c3ce5",
+        "player1_score": 1,
+        "player2_score": 0
+    },
+    {
+        "id": "4a7ddd24-533d-4522-8873-503a39f06ce1",
+        "player1": "350cf9b5-75db-4703-94c1-7c633ae1c490",
+        "player2": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
+        "player1_score": 0.5,
+        "player2_score": 0.5
+    },
+    {
+        "id": "74d8f2f6-3820-4693-8ab3-2fdcf2a5a326",
+        "player1": "812160aa-8e0a-453a-a345-80335d77eb59",
+        "player2": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
+        "player1_score": 0.0,
+        "player2_score": 0.0
+    },
+    {
+        "id": "239c64fc-2a0e-49ae-b48b-43e4cd1e305d",
+        "player1": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
+        "player2": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
+        "player1_score": 0.0,
+        "player2_score": 0.0
+    },
+    {
+        "id": "acead443-ae0c-4588-ac20-c256b8e04697",
+        "player1": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
+        "player2": "52995956-a29c-471d-aa81-e393c16c3ce5",
+        "player1_score": 0.0,
+        "player2_score": 0.0
+    },
+    {
+        "id": "b2c9580a-4554-4a29-8620-0e2e4fb58a18",
+        "player1": "350cf9b5-75db-4703-94c1-7c633ae1c490",
+        "player2": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
         "player1_score": 0.0,
         "player2_score": 0.0
     }
