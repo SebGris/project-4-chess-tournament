@@ -119,7 +119,7 @@ class Application:
                 },
                 {
                     "label": "Liste de tous les tournois",
-                    "command": self.tournament_controller.display_players,
+                    "command": self.tournament_controller.report_tournaments,
                 },
                 {
                     "label": "Nom et dates du tournoi",

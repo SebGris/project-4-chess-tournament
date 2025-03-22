@@ -198,3 +198,9 @@ class TournamentController:
 
     def display_players(self):
         self.view.display_players_details(self.active_tournament.players)
+
+    def report_tournaments(self):
+        tournaments = self.tournament_repository.get_tournaments()
+        # Convert the list to a list of dictionaries
+        tournaments = [tournament.to_dict() for tournament in tournaments]
+        self.view.report_tournaments(tournaments)

@@ -19,13 +19,13 @@ class Tournament:
         self.players: List[Player] = []
         self.rounds: List[Round] = []
         self.description = None
-    
+
     def get_all_matches(self):
         matches = []
         for round in self.rounds:
             matches.extend(round.matches)
         return matches
-    
+
     def add_player(self, player: Player):
         self.players.append(player)
 

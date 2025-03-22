@@ -3,6 +3,7 @@ from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
 from views.base_player_view import BasePlayerView
+from reports.report_generator import ReportGenerator
 
 
 class TournamentView(BasePlayerView):
@@ -203,3 +204,7 @@ class TournamentView(BasePlayerView):
                     print(f"{index}. {pair[0]} vs {pair[1]}")
                 else:
                     print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
+
+    def report_tournaments(self, list_of_tournaments):
+        report_generator = ReportGenerator()
+        report_generator.generate_tournaments_report(list_of_tournaments)
