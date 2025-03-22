@@ -1,4 +1,4 @@
-from reports.tournament_report_generator import PlayerReportGenerator
+from reports.player_report_generator import PlayerReportGenerator
 
 
 class ReportGenerator:

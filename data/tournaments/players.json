@@ -68,12 +68,5 @@
         "first_name": "B",
         "birth_date": "",
         "chess_id": "AA12345"
-    },
-    {
-        "id": "e178e9da-cb23-4aa2-bf5a-df316adf632c",
-        "last_name": "a",
-        "first_name": "a",
-        "birth_date": "",
-        "chess_id": "AA00000"
     }
 ]
