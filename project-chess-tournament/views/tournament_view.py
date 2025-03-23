@@ -3,26 +3,27 @@ from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
 from views.base_player_view import BasePlayerView
+from reports.report_generator import ReportGenerator
 
 
 class TournamentView(BasePlayerView):
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.input("Entrez le nom du tournoi :")
 
-    def get_location(self):
+    def get_location(self) -> str:
         return self.input("Entrez le lieu du tournoi :")
 
-    def get_start_date(self):
+    def get_start_date(self) -> str:
         return self.input("Entrez la date de début du tournoi :")
 
-    def get_end_date(self):
+    def get_end_date(self) -> str:
         return self.input("Entrez la date de fin du tournoi :")
 
-    def get_tournament_description(self):
+    def get_tournament_description(self) -> str:
         return self.input("Entrez la description du tournoi :")
 
-    def get_total_of_rounds(self):
+    def get_total_of_rounds(self) -> int:
         while True:
             try:
                 rounds = self.input(
@@ -38,7 +39,7 @@ class TournamentView(BasePlayerView):
             except ValueError:
                 print("Entrée invalide. Veuillez entrer un chiffre.")
 
-    def get_match_result(self):
+    def get_match_result(self) -> str:
         """Asks the user to enter the result of a match."""
         while True:
             result = self.input(
@@ -88,8 +89,8 @@ class TournamentView(BasePlayerView):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
 
-    def display_record_results_message(self, round_name):
-        self.write_line(f"Enregistrement des résultats du {round_name}:")
+    def display_record_results_message(self, round: Round):
+        self.write_line(f"Enregistrement des résultats du {round.name}:")
 
     def display_no_round_error(self):
         self.write_line("Aucun round en cours. Créer un round pour saisir les scores.")
@@ -145,9 +146,6 @@ class TournamentView(BasePlayerView):
     def display_successful_description_message(self):
         self.write_line("Description ajoutée avec succès.")
 
-    def display_tournament_selected(self, name):
-        self.write_line(f"Tournoi sélectionné : {name}")
-
     def display_players_name(self, players: List[Player]):
         """Display the players of a tournament."""
         print("--- Joueurs du tournoi ---")
@@ -173,9 +171,9 @@ class TournamentView(BasePlayerView):
             self.display_number_of_players(players)
             print(f"Score total des joueurs : {total_score}")
 
-    def display_number_of_players(self, player_list):
+    def display_number_of_players(self, players: List[Player]):
         """Display the number of players."""
-        print(f"Nombre de joueurs : {len(player_list)}")
+        print(f"Nombre de joueurs : {len(players)}")
 
     def display_current_round_info(self, tournament: Tournament):
         """Display information active round."""
@@ -203,3 +201,23 @@ class TournamentView(BasePlayerView):
                     print(f"{index}. {pair[0]} vs {pair[1]}")
                 else:
                     print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
+
+    def report_tournaments(self, tournament_dict):
+        report_generator = ReportGenerator()
+        report_generator.generate_tournaments_report(tournament_dict)
+
+    def report_name_and_dates(self, tournament_dict):
+        report_generator = ReportGenerator()
+        report_generator.generate_tournament_name_and_dates_report(
+            tournament_dict
+        )
+
+    def report_players(self, players_dict, tournament: Tournament):
+        report_generator = ReportGenerator()
+        report_generator.generate_tournament_players_report(
+            players_dict, tournament.name
+        )
+
+    def report_rounds_matches(self, rounds_dict):
+        report_generator = ReportGenerator()
+        report_generator.generate_rounds_matches_report(rounds_dict)

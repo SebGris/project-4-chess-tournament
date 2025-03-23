@@ -117,7 +117,9 @@ class TournamentController:
         number_rounds = len(self.active_tournament.rounds)
         new_round = Round(f"Round {number_rounds + 1}")
         if number_rounds == 0:
-            pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
+            pairs = Pairing.generate_first_round_pairs(
+                self.active_tournament.players
+            )
         else:
             previous_matches = {
                 (match.player1.id, match.player2.id)
@@ -133,7 +135,7 @@ class TournamentController:
         self.view.display_added_round_message(new_round)
         self.display_player_pairs()
 
-    def update_total_of_rounds(self):
+    def update_total_rounds(self):
         new_number = self.view.get_total_of_rounds()
         self.active_tournament.set_total_of_rounds(new_number)
         self.view.display_updated_number_rounds_message(new_number)
@@ -150,7 +152,7 @@ class TournamentController:
         elif round.is_finished():
             self.view.display_round_finished_message()
         else:
-            self.view.display_record_results_message(round.name)
+            self.view.display_record_results_message(round)
             for match in round.matches:
                 if not match.is_finished():
                     self.view.display_match_summary(match.get_player_names())
@@ -198,3 +200,33 @@ class TournamentController:
 
     def display_players(self):
         self.view.display_players_details(self.active_tournament.players)
+
+    def report_tournaments(self):
+        tournaments = self.tournament_repository.get_tournaments()
+        tournaments = [tournament.to_dict() for tournament in tournaments]
+        self.view.report_tournaments(tournaments)
+
+    def report_name_dates(self):
+        tournament = self.active_tournament.to_dict()
+        self.view.report_name_and_dates(tournament)
+
+    def report_players(self):
+        players = [
+            player.to_dict() for player in self.active_tournament.players
+        ]
+        self.view.report_players(players, self.active_tournament)
+
+    def report_rounds_matches(self):
+        rounds_dict = []
+        for round in self.active_tournament.rounds:
+            round_dict = round.to_dict()
+            matches_dict = []
+            for match in round.matches:
+                match_dict = match.to_dict()
+                match_dict["index"] = f"N° {round.matches.index(match) + 1}"
+                match_dict["player1"] = match.player1.full_name
+                match_dict["player2"] = match.player2.full_name
+                matches_dict.append(match_dict)
+            round_dict["matches"] = matches_dict
+            rounds_dict.append(round_dict)
+        self.view.report_rounds_matches(rounds_dict)

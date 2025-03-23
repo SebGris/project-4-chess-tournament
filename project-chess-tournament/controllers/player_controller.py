@@ -4,13 +4,10 @@ from views.player_view import PlayerView
 
 
 class PlayerController:
-    def __init__(self, repository: PlayerRepository, view: PlayerView):
-        self.repository = repository
+    def __init__(self, player_repository: PlayerRepository, view: PlayerView):
+        self.player_repository = player_repository
         self.view = view
         self.added_players = []
-
-    def get_players_from_repository(self):
-        return self.repository.get_players()
 
     def add_players(self):
         self.added_players.clear()
@@ -25,4 +22,11 @@ class PlayerController:
             player = Player(**player_data)
             self.added_players.append(player)
             self.view.display_add_player_message(player)
-        self.repository.save(self.added_players)
+        self.player_repository.save(self.added_players)
+
+    def report_players(self):
+        players = self.player_repository.get_players()
+        players.sort(key=lambda player: player.last_name)
+        # Convert the list of players to a list of dictionaries
+        players = [player.to_dict() for player in players]
+        self.view.report_players(players)

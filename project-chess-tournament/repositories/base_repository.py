@@ -14,3 +14,7 @@ class BaseRepository:
         data_folder = os.path.join(os.getcwd(), folder)
         os.makedirs(data_folder, exist_ok=True)
         return os.path.join(data_folder, self.FILE_PATH)
+
+    # def read_json_file(self):
+    #     with open(self.get_file_path(), "r") as file:
+    #         return json.load(file)

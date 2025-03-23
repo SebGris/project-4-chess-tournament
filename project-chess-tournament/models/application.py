@@ -1,9 +1,11 @@
+from controllers.player_controller import PlayerController
 from controllers.tournament_controller import TournamentController
 from models.application_menu import ApplicationMenu
 from repositories.match_repository import MatchRepository
 from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
+from views.player_view import PlayerView
 from views.tournament_view import TournamentView
 
 
@@ -15,6 +17,10 @@ class Application:
         round_repository = RoundRepository()
         match_repository = MatchRepository()
         tournament_view = TournamentView()
+        player_view = PlayerView()
+        self.player_controller = PlayerController(
+            player_repository, player_view
+        )
         self.tournament_controller = TournamentController(
             tournament_repository,
             player_repository,
@@ -26,13 +32,15 @@ class Application:
     def get_refresh_menu(self):
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
-        self._add_general_menu()
+        self.__add_file_menu()
+        self.__add_report_menu()
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
-            self._add_tournament_menu(active_tournament.name)
+            self.__add_tournament_menu(active_tournament.name)
+            self.__add_report_tournament_menu(active_tournament.name)
         return self.application_menu
 
-    def _add_tournament_menu(self, name):
+    def __add_tournament_menu(self, name):
         def show_tournament():
             self.tournament_controller.display_active_tournament_details()
             self.tournament_controller.display_player_names()
@@ -72,10 +80,36 @@ class Application:
             ],
         )
 
-    def _add_general_menu(self):
+    def __add_report_tournament_menu(self, name):
+        self.application_menu.add_group(
+            "Menu Rapport : {}".format(name),
+            [
+                {
+                    "label": "Nom et dates du tournoi",
+                    "command": self.tournament_controller.report_name_dates,
+                },
+                {
+                    "label": "Liste des joueurs du tournoi",
+                    "command": self.tournament_controller.report_players,
+                },
+                {
+                    "label": "Liste de tous les tours du tournoi et de tous les matchs du tour",
+                    "command": self.tournament_controller.report_rounds_matches,
+                },
+            ],
+        )
+
+    def __add_file_menu(self):
+        def quit():
+            print("Au revoir !")
+            exit()
         self.application_menu.add_group(
             "Menu Fichier",
             [
+                {
+                    "label": "Saisir des joueurs",
+                    "command": self.player_controller.add_players,
+                },
                 {
                     "label": "Nouveau tournoi",
                     "command": self.tournament_controller.create_new_tournament,
@@ -90,11 +124,22 @@ class Application:
                 },
                 {
                     "label": "Quitter",
-                    "command": self.quit,
+                    "command": quit,
                 },
             ],
         )
 
-    def quit(self):
-        print("Au revoir !")
-        exit()
+    def __add_report_menu(self):
+        self.application_menu.add_group(
+            "Menu Rapports",
+            [
+                {
+                    "label": "Liste de tous les joueurs",
+                    "command": self.player_controller.report_players,
+                },
+                {
+                    "label": "Liste de tous les tournois",
+                    "command": self.tournament_controller.report_tournaments,
+                },
+            ],
+        )
