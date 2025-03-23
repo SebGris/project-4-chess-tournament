@@ -15,16 +15,11 @@ class BaseRepository:
         self.model_class = model_class
         self.file_service = FileService(self.FOLDER, self.FILE_PATH)
 
-    # def get_all(self) -> list[T]:
-    #     with open(self.get_file_path(), "r") as file:
-    #         return [self.model_class.from_dict(obj) for obj in json.load(file)]
-
     def get_all(self) -> list[T]:
-        return [self.model_class.from_dict(obj) for obj in self.file_service.read_from_file()]
-
-    # def write_all(self, objects: list[T]):
-    #     with open(self.get_file_path(), "w") as file:
-    #         json.dump([obj.to_dict() for obj in objects], file)
+        return [
+            self.model_class.from_dict(obj)
+            for obj in self.file_service.read_from_file()
+        ]
 
     def write_all(self, objects: list[T]):
         self.file_service.write_to_file([obj.to_dict() for obj in objects])
