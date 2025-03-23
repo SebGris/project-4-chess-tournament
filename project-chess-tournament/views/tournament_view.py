@@ -95,7 +95,8 @@ class TournamentView(BasePlayerView):
         self.write_line(f"Enregistrement des résultats du {round.name}:")
 
     def display_no_round_error(self):
-        self.write_line("Aucun round en cours. Créer un round pour saisir les scores.")
+        self.write_line("Aucun round en cours. "
+                        "Créer un round pour saisir les scores.")
 
     def display_round_finished_message(self):
         self.write_line("Le round est terminé (scores déjà saisis).")
@@ -135,7 +136,8 @@ class TournamentView(BasePlayerView):
         if not players:
             print("Aucun joueur enregistré.")
         else:
-            print(f"Joueurs : {', '.join(player.full_name for player in players)}")
+            players_names = ', '.join(player.full_name for player in players)
+            print(f"Joueurs : {players_names}")
             self.display_number_of_players(players)
 
     def display_players_details(self, players: list[Player]):
@@ -167,9 +169,11 @@ class TournamentView(BasePlayerView):
                 print(f"--- {round_name} ---")
                 if round.start_datetime:
                     print(f"Date de début : {round.start_datetime}")
-                    print(f"Date de fin : {round.end_datetime or 'round en cours'}")
+                    end_date = round.end_datetime or 'round en cours'
+                    print(f"Date de fin : {end_date}")
             print(
-                f"Round actuel : {len(tournament.rounds)}/{tournament.total_rounds}"
+                f"Round actuel : {len(tournament.rounds)}/"
+                f"{tournament.total_rounds}"
             )
         else:
             print("Aucun round n'a été créé pour ce tournoi.")

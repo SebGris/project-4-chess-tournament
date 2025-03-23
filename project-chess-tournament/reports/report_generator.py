@@ -61,7 +61,10 @@ class ReportGenerator:
     def generate_players_report(self, players):
         html_template = self.__create_html_template(
             "Liste de tous les joueurs par ordre alphabétique",
-            ["N° du Joueur", "Nom", "Prénom", "Date de naissance", "ID échecs"],
+            [
+                "N° du Joueur", "Nom", "Prénom",
+                "Date de naissance", "ID échecs"
+            ],
             ["id", "last_name", "first_name", "birth_date", "chess_id"]
         )
         self.generate_html_report(html_template, players)
@@ -73,7 +76,10 @@ class ReportGenerator:
                 "N° du Tournoi", "Nom", "Emplacement",
                 "Date de début", "Date de fin", "Nombre de round"
             ],
-            ["id", "name", "location", "start_date", "end_date", "total_rounds"]
+            [
+                "id", "name", "location",
+                "start_date", "end_date", "total_rounds"
+            ]
         )
         self.generate_html_report(html_template, tournaments)
 
@@ -88,7 +94,10 @@ class ReportGenerator:
     def generate_tournament_players_report(self, players, title):
         html_template = self.__create_html_template(
             "Liste des joueurs du tournoi",
-            ["N° du Joueur", "Nom", "Prénom", "Date de naissance", "ID échecs"],
+            [
+                "N° du Joueur", "Nom", "Prénom",
+                "Date de naissance", "ID échecs"
+            ],
             ["id", "last_name", "first_name", "birth_date", "chess_id"],
             title
         )

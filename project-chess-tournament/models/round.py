@@ -19,7 +19,9 @@ class Round:
         self.matches.append(match)
 
     def set_start_date(self, start_datetime):
-        self.start_datetime = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
+        self.start_datetime = datetime.strptime(
+            start_datetime, "%Y-%m-%d %H:%M:%S"
+        )
 
     def set_end_date(self, end_datetime):
         self.end_datetime = (
@@ -63,7 +65,9 @@ class Round:
             "id": self.id,
             "name": self.name,
             "match_ids": [match.id for match in self.matches],
-            "start_datetime": self.start_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            "start_datetime": self.start_datetime.strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
             "end_datetime": (
                 self.end_datetime.strftime("%Y-%m-%d %H:%M:%S")
                 if self.end_datetime

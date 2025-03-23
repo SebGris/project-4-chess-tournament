@@ -15,7 +15,9 @@ class MenuController:
             try:
                 choice_index = int(choice) - 1
                 flat_menu = [
-                    item for group in menu.get_groups() for item in group["items"]
+                    item
+                    for group in menu.get_groups()
+                    for item in group["items"]
                 ]
                 if 0 <= choice_index < len(flat_menu):
                     command = flat_menu[choice_index]["command"]

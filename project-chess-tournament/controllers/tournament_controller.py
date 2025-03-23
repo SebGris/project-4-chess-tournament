@@ -36,9 +36,9 @@ class TournamentController:
         return self.active_tournament
 
     def get_active_round(self):
-        return (
-            self.active_tournament.rounds[-1] if self.active_tournament.rounds else None
-        )
+        if self.active_tournament.rounds:
+            return self.active_tournament.rounds[-1]
+        return None
 
     def collect_tournament_info(self):
         return {
@@ -55,8 +55,12 @@ class TournamentController:
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(self, name, location, start_date, end_date, total_rounds):
-        tournament = Tournament(name, location, start_date, end_date, total_rounds)
+    def create_tournament(
+        self, name, location, start_date, end_date, total_rounds
+    ):
+        tournament = Tournament(
+            name, location, start_date, end_date, total_rounds
+        )
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
