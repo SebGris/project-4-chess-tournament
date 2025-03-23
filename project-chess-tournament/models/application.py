@@ -32,14 +32,15 @@ class Application:
     def get_refresh_menu(self):
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
-        self._add_general_menu()
+        self.__add_file_menu()
+        self.__add_report_menu()
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
-            self._add_tournament_menu(active_tournament.name)
-        self._add_report_menu()
+            self.__add_tournament_menu(active_tournament.name)
+            self.__add_report_tournament_menu(active_tournament.name)
         return self.application_menu
 
-    def _add_tournament_menu(self, name):
+    def __add_tournament_menu(self, name):
         def show_tournament():
             self.tournament_controller.display_active_tournament_details()
             self.tournament_controller.display_player_names()
@@ -62,7 +63,7 @@ class Application:
                 },
                 {
                     "label": "Modifier le nombre de tours",
-                    "command": self.tournament_controller.update_total_of_rounds,
+                    "command": self.tournament_controller.update_total_rounds,
                 },
                 {
                     "label": "Ajouter des joueurs",
@@ -79,7 +80,26 @@ class Application:
             ],
         )
 
-    def _add_general_menu(self):
+    def __add_report_tournament_menu(self, name):
+        self.application_menu.add_group(
+            "Menu Rapport : {}".format(name),
+            [
+                {
+                    "label": "Nom et dates du tournoi",
+                    "command": self.tournament_controller.report_name_dates,
+                },
+                {
+                    "label": "Liste des joueurs du tournoi",
+                    "command": self.tournament_controller.report_players,
+                },
+                {
+                    "label": "Liste de tous les tours du tournoi et de tous les matchs du tour",
+                    "command": self.tournament_controller.report_rounds_matches,
+                },
+            ],
+        )
+
+    def __add_file_menu(self):
         def quit():
             print("Au revoir !")
             exit()
@@ -109,7 +129,7 @@ class Application:
             ],
         )
 
-    def _add_report_menu(self):
+    def __add_report_menu(self):
         self.application_menu.add_group(
             "Menu Rapports",
             [
@@ -120,18 +140,6 @@ class Application:
                 {
                     "label": "Liste de tous les tournois",
                     "command": self.tournament_controller.report_tournaments,
-                },
-                {
-                    "label": "Nom et dates du tournoi",
-                    "command": self.tournament_controller.display_players,
-                },
-                {
-                    "label": "Liste des joueurs du tournoi",
-                    "command": self.tournament_controller.display_players,
-                },
-                {
-                    "label": "Liste de tous les tours du tournoi et de tous les matchs du tour",
-                    "command": self.tournament_controller.display_players,
                 },
             ],
         )
