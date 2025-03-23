@@ -36,31 +36,34 @@ class Application:
     def get_refresh_menu(self):
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
-        self.__add_file_menu()
-        self.__add_report_menu()
+        self.application_menu.add_group(
+            "Menu Fichier", self.__get_file_menu_options()
+        )
+        self.application_menu.add_group(
+            "Menu Rapport", self.__get_report_menu_options()
+        )
         active_tournament = self.tournament_controller.get_active_tournament()
-        if (active_tournament):
-            self.__add_tournament_menu(active_tournament.name)
-            self.__add_report_tournament_menu(active_tournament.name)
+        if active_tournament:
+            self.application_menu.add_group(
+                f"Menu Tournoi : {active_tournament.name}",
+                self.__get_tournament_menu_options()
+            )
+            self.application_menu.add_group(
+                f"Menu Rapport : {active_tournament.name}",
+                self.__get_report_tournament_menu_options()
+            )
         return self.application_menu
 
-    def __add_menu_group(self, title, options):
-        """Ajoute un groupe de menu générique."""
-        self.application_menu.add_group(title, options)
-
-    def __add_tournament_menu(self, name):
-        self.__add_menu_group(
-            f"Menu Tournoi : {name}",
-            [
-                {"label": "Afficher le tournoi", "command": self._show_tournament},
-                {"label": "Afficher les joueurs", "command": self.tournament_controller.display_players},
-                {"label": "Modifier la description", "command": self.tournament_controller.update_description},
-                {"label": "Modifier le nombre de tours", "command": self.tournament_controller.update_total_rounds},
-                {"label": "Ajouter des joueurs", "command": self.tournament_controller.add_players},
-                {"label": "Démarrer un round", "command": self.tournament_controller.start_round},
-                {"label": "Saisir les scores", "command": self.tournament_controller.enter_scores},
-            ],
-        )
+    def __get_tournament_menu_options(self):
+        return [
+            {"label": "Afficher le tournoi", "command": self._show_tournament},
+            {"label": "Afficher les joueurs", "command": self.tournament_controller.display_players},
+            {"label": "Modifier la description", "command": self.tournament_controller.update_description},
+            {"label": "Modifier le nombre de tours", "command": self.tournament_controller.update_total_rounds},
+            {"label": "Ajouter des joueurs", "command": self.tournament_controller.add_players},
+            {"label": "Démarrer un round", "command": self.tournament_controller.start_round},
+            {"label": "Saisir les scores", "command": self.tournament_controller.enter_scores},
+        ]
 
     def _show_tournament(self):
         """Affiche les détails du tournoi actif."""
@@ -69,38 +72,29 @@ class Application:
         self.tournament_controller.display_current_round_info()
         self.tournament_controller.display_player_pairs()
 
-    def __add_report_tournament_menu(self, name):
-        self.__add_menu_group(
-            f"Menu Rapport : {name}",
-            [
-                {"label": "Nom et dates du tournoi", "command": self.tournament_controller.report_name_dates},
-                {"label": "Liste des joueurs du tournoi", "command": self.tournament_controller.report_players},
-                {"label": "Liste de tous les tours du tournoi et de tous les matchs du tour", "command": self.tournament_controller.report_rounds_matches},
-            ],
-        )
+    def __get_report_tournament_menu_options(self):
+        return [
+            {"label": "Nom et dates du tournoi", "command": self.tournament_controller.report_name_dates},
+            {"label": "Liste des joueurs du tournoi", "command": self.tournament_controller.report_players},
+            {"label": "Liste des tours du tournoi et de leurs matchs", "command": self.tournament_controller.report_rounds_matches},
+        ]
 
-    def __add_file_menu(self):
-        self.__add_menu_group(
-            "Menu Fichier",
-            [
-                {"label": "Saisir des joueurs", "command": self.player_controller.add_players},
-                {"label": "Nouveau tournoi", "command": self.tournament_controller.create_new_tournament},
-                {"label": "Sélectionner un tournoi", "command": self.tournament_controller.select_tournament},
-                {"label": "Afficher tous les tournois", "command": self.tournament_controller.display_all_tournaments_details},
-                {"label": "Quitter", "command": self._quit},
-            ],
-        )
+    def __get_file_menu_options(self):
+        return [
+            {"label": "Saisir des joueurs", "command": self.player_controller.add_players},
+            {"label": "Nouveau tournoi", "command": self.tournament_controller.create_new_tournament},
+            {"label": "Sélectionner un tournoi", "command": self.tournament_controller.select_tournament},
+            {"label": "Afficher tous les tournois", "command": self.tournament_controller.display_all_tournaments_details},
+            {"label": "Quitter", "command": self._quit},
+        ]
 
     def _quit(self):
         """Quitte l'application."""
         print("Au revoir !")
         exit()
 
-    def __add_report_menu(self):
-        self.__add_menu_group(
-            "Menu Rapport",
-            [
-                {"label": "Liste de tous les joueurs", "command": self.player_controller.report_players},
-                {"label": "Liste de tous les tournois", "command": self.tournament_controller.report_tournaments},
-            ],
-        )
+    def __get_report_menu_options(self):
+        return [
+            {"label": "Liste de tous les joueurs", "command": self.player_controller.report_players},
+            {"label": "Liste de tous les tournois", "command": self.tournament_controller.report_tournaments},
+        ]

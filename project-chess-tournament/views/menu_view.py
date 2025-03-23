@@ -16,12 +16,18 @@ class MenuView(BaseView):
     def display_menu(self, menu):
         """Affiche un menu encadré par une fenêtre de signes '='."""
         # Calcul de la largeur de la fenêtre
-        max_length = max(
+        max_title_length = max(
+            len(group['title'])
+            for group in menu.get_groups()
+        ) if menu.get_groups() else 0
+        max_item_label_length = max(
             len(f"{index}. {item['label']}")
             for group in menu.get_groups()
             for index, item in enumerate(group['items'], start=1)
         ) if menu.get_groups() else 0
-        window_width = max(max_length + 4, 10)  # Largeur minimale de 20
+        max_length = max(max_item_label_length, max_title_length)
+        # Largeur minimale de 20 caractères
+        window_width = max(max_length + 4, 20)
 
         # Ligne horizontale supérieure
         print("=" * window_width)
