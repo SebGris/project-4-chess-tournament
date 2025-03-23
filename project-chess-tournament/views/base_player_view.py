@@ -6,10 +6,8 @@ from views.base_view import BaseView
 class BasePlayerView(BaseView):
     def get_player_data(self):
         while True:
-            self.write_line(
-                "Entrez l'ID échecs "
-                "(format: deux lettres suivies de cinq chiffres),"
-            )
+            print("Entrez l'ID échecs "
+                  "(format: deux lettres suivies de cinq chiffres),")
             chess_id = self.input(
                 "ou appuyer sur Entrée pour arrêter l'ajout des joueurs :"
             )
@@ -18,11 +16,9 @@ class BasePlayerView(BaseView):
             if re.match(r'^[A-Z]{2}\d{5}$', chess_id):
                 break
             else:
-                self.write_line(
-                    "Identifiant invalide. "
-                    "Le format doit être composé de deux lettres "
-                    "suivies de cinq chiffres."
-                )
+                print("Identifiant invalide. "
+                      "Le format doit être composé de "
+                      "deux lettres suivies de cinq chiffres.")
         last_name = self.input("Entrez le nom de famille :")
         first_name = self.input("Entrez le prénom :")
         birth_date = self.input_date("Entrez la date de naissance :")
@@ -34,4 +30,4 @@ class BasePlayerView(BaseView):
         }
 
     def display_add_player_message(self, player: Player):
-        self.write_line(f"Joueur {player.full_name} ajouté.")
+        print(f"Joueur {player.full_name} ajouté.")

@@ -92,43 +92,39 @@ class TournamentView(BasePlayerView):
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
 
     def display_record_results_message(self, round: Round):
-        self.write_line(f"Enregistrement des résultats du {round.name}:")
+        print(f"Enregistrement des résultats du {round.name}:")
 
     def display_no_round_error(self):
-        self.write_line("Aucun round en cours. "
-                        "Créer un round pour saisir les scores.")
+        print("Aucun round en cours. Créer un round pour saisir les scores.")
 
     def display_round_finished_message(self):
-        self.write_line("Le round est terminé (scores déjà saisis).")
+        print("Le round est terminé (scores déjà saisis).")
 
     def display_updated_number_rounds_message(self, number):
-        self.write_line(f"Le nombre de tours a été mis à jour à {number}.")
+        print(f"Le nombre de tours a été mis à jour à {number}.")
 
     def display_added_round_message(self, round: Round):
-        self.write_line(f"Nom du round ajouté : {round.name}")
+        print(f"Nom du round ajouté : {round.name}")
 
     def display_tournament_created(self, name):
-        self.write_line(f"Nouveau tournoi {name} créé.")
+        print(f"Nouveau tournoi {name} créé.")
 
     def display_start_error_without_players(self):
-        self.write_line("Le tournoi ne peut pas commencer sans joueurs.")
+        print("Le tournoi ne peut pas commencer sans joueurs.")
 
     def display_start_error_even_players(self):
-        self.write_line(
-            "Le nombre de joueurs doit être pair pour commencer le tournoi."
-        )
+        print("Le nombre de joueurs doit être pair pour commencer le tournoi.")
 
     def display_start_error_unfinished_match(self):
-        self.write_line(
-            "Un nouveau round ne peut pas commencer tant que tous les matchs "
-            "du round précédent ne sont pas terminés."
-        )
+        print("Un nouveau round ne peut pas commencer "
+              "tant que tous les matchs du round précédent "
+              "ne sont pas terminés.")
 
     def display_invalid_result_message(self):
-        self.write_line("Score invalide. Veuillez entrer 1, 2 ou 0.")
+        print("Score invalide. Veuillez entrer 1, 2 ou 0.")
 
     def display_successful_description_message(self):
-        self.write_line("Description ajoutée avec succès.")
+        print("Description ajoutée avec succès.")
 
     def display_players_name(self, players: list[Player]):
         """Display the players of a tournament."""

@@ -56,13 +56,34 @@ class Application:
 
     def __get_tournament_menu_options(self):
         return [
-            {"label": "Afficher le tournoi", "command": self._show_tournament},
-            {"label": "Afficher les joueurs", "command": self.tournament_controller.display_players},
-            {"label": "Modifier la description", "command": self.tournament_controller.update_description},
-            {"label": "Modifier le nombre de tours", "command": self.tournament_controller.update_total_rounds},
-            {"label": "Ajouter des joueurs", "command": self.tournament_controller.add_players},
-            {"label": "Démarrer un round", "command": self.tournament_controller.start_round},
-            {"label": "Saisir les scores", "command": self.tournament_controller.enter_scores},
+            {
+                "label": "Afficher le tournoi",
+                "command": self._show_tournament
+            },
+            {
+                "label": "Afficher les joueurs",
+                "command": self.tournament_controller.display_players,
+            },
+            {
+                "label": "Modifier la description",
+                "command": self.tournament_controller.update_description
+            },
+            {
+                "label": "Modifier le nombre de tours",
+                "command": self.tournament_controller.update_total_rounds
+            },
+            {
+                "label": "Ajouter des joueurs",
+                "command": self.tournament_controller.add_players
+            },
+            {
+                "label": "Démarrer un round",
+                "command": self.tournament_controller.start_round
+            },
+            {
+                "label": "Saisir les scores",
+                "command": self.tournament_controller.enter_scores
+            },
         ]
 
     def _show_tournament(self):
@@ -74,18 +95,41 @@ class Application:
 
     def __get_report_tournament_menu_options(self):
         return [
-            {"label": "Nom et dates du tournoi", "command": self.tournament_controller.report_name_dates},
-            {"label": "Liste des joueurs du tournoi", "command": self.tournament_controller.report_players},
-            {"label": "Liste des tours du tournoi et de leurs matchs", "command": self.tournament_controller.report_rounds_matches},
+            {
+                "label": "Nom et dates du tournoi",
+                "command": self.tournament_controller.report_name_dates
+            },
+            {
+                "label": "Liste des joueurs du tournoi",
+                "command": self.tournament_controller.report_players
+            },
+            {
+                "label": "Liste des tours du tournoi et de leurs matchs",
+                "command": self.tournament_controller.report_rounds_matches
+            },
         ]
 
     def __get_file_menu_options(self):
         return [
-            {"label": "Saisir des joueurs", "command": self.player_controller.add_players},
-            {"label": "Nouveau tournoi", "command": self.tournament_controller.create_new_tournament},
-            {"label": "Sélectionner un tournoi", "command": self.tournament_controller.select_tournament},
-            {"label": "Afficher tous les tournois", "command": self.tournament_controller.display_all_tournaments_details},
-            {"label": "Quitter", "command": self._quit},
+            {
+                "label": "Saisir des joueurs",
+                "command": self.player_controller.add_players
+            },
+            {
+                "label": "Nouveau tournoi",
+                "command": self.tournament_controller.create_new_tournament
+            },
+            {
+                "label": "Sélectionner un tournoi",
+                "command": self.tournament_controller.select_tournament
+            },
+            {
+                "label": "Afficher tous les tournois",
+                "command": self.tournament_controller.
+                display_tournaments_details
+            },
+            {
+                "label": "Quitter", "command": self._quit},
         ]
 
     def _quit(self):
@@ -95,6 +139,12 @@ class Application:
 
     def __get_report_menu_options(self):
         return [
-            {"label": "Liste de tous les joueurs", "command": self.player_controller.report_players},
-            {"label": "Liste de tous les tournois", "command": self.tournament_controller.report_tournaments},
+            {
+                "label": "Liste de tous les joueurs",
+                "command": self.player_controller.report_players
+            },
+            {
+                "label": "Liste de tous les tournois",
+                "command": self.tournament_controller.report_tournaments
+            },
         ]

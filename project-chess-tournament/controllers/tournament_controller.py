@@ -184,7 +184,7 @@ class TournamentController:
     def display_active_tournament_details(self):
         self.view.display_tournament_details(self.active_tournament)
 
-    def display_all_tournaments_details(self):
+    def display_tournaments_details(self):
         self.view.display_tournaments_details(self.tournaments)
 
     def display_all_tournaments(self):
