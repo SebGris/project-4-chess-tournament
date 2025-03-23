@@ -36,8 +36,12 @@ class Application:
     def get_refresh_menu(self):
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
+        file_menu = self.__get_file_menu_options()
+        if len(self.tournament_controller.get_tournaments()) > 0:
+            file_menu.extend(self.__get_tournament_menu_options())
+        file_menu.extend(self.__get_quit_menu_option())
         self.application_menu.add_group(
-            "Menu Fichier", self.__get_file_menu_options()
+            "Menu Fichier", file_menu
         )
         self.application_menu.add_group(
             "Menu Rapport", self.__get_report_menu_options()
@@ -46,7 +50,7 @@ class Application:
         if active_tournament:
             self.application_menu.add_group(
                 f"Menu Tournoi : {active_tournament.name}",
-                self.__get_tournament_menu_options()
+                self.__get_tournament_active_menu_options()
             )
             self.application_menu.add_group(
                 f"Menu Rapport : {active_tournament.name}",
@@ -54,7 +58,7 @@ class Application:
             )
         return self.application_menu
 
-    def __get_tournament_menu_options(self):
+    def __get_tournament_active_menu_options(self):
         return [
             {
                 "label": "Afficher le tournoi",
@@ -119,6 +123,10 @@ class Application:
                 "label": "Nouveau tournoi",
                 "command": self.tournament_controller.create_new_tournament
             },
+        ]
+
+    def __get_tournament_menu_options(self):
+        return [
             {
                 "label": "Sélectionner un tournoi",
                 "command": self.tournament_controller.select_tournament
@@ -128,11 +136,17 @@ class Application:
                 "command": self.tournament_controller.
                 display_tournaments_details
             },
-            {
-                "label": "Quitter", "command": self._quit},
         ]
 
-    def _quit(self):
+    def __get_quit_menu_option(self):
+        return [
+            {
+                "label": "Quitter",
+                "command": self.__quit
+            }
+        ]
+
+    def __quit(self):
         """Quitte l'application."""
         print("Au revoir !")
         exit()

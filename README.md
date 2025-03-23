@@ -42,7 +42,7 @@ Pour générer un nouveau fichier flake8-html dans le dossier "flake8-html-repor
 Cela générera un fichier HTML dans le dossier "flake8-html-report". Vous pouvez ensuite ouvrir ce fichier dans un navigateur pour consulter le rapport.
 
 
-# Installation
+# Installation de l'application
 ## Installation avec l'environnement virtuel
 ### 1e étape : Comment créer l'environnement virtuel ?
 1. Dans l'__Explorateur de fichiers__, ouvrir votre dossier Windows "__Documents__"
