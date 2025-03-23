@@ -12,6 +12,10 @@ from views.tournament_view import TournamentView
 class Application:
     def __init__(self, application_menu: ApplicationMenu):
         self.application_menu = application_menu
+        self._initialize_controllers()
+
+    def _initialize_controllers(self):
+        """Initialise les contrôleurs et les dépendances."""
         player_repository = PlayerRepository()
         tournament_repository = TournamentRepository()
         round_repository = RoundRepository()
@@ -35,111 +39,68 @@ class Application:
         self.__add_file_menu()
         self.__add_report_menu()
         active_tournament = self.tournament_controller.get_active_tournament()
-        if active_tournament:
+        if (active_tournament):
             self.__add_tournament_menu(active_tournament.name)
             self.__add_report_tournament_menu(active_tournament.name)
         return self.application_menu
 
+    def __add_menu_group(self, title, options):
+        """Ajoute un groupe de menu générique."""
+        self.application_menu.add_group(title, options)
+
     def __add_tournament_menu(self, name):
-        def show_tournament():
-            self.tournament_controller.display_active_tournament_details()
-            self.tournament_controller.display_player_names()
-            self.tournament_controller.display_current_round_info()
-            self.tournament_controller.display_player_pairs()
-        self.application_menu.add_group(
-            "Menu Tournoi : {}".format(name),
+        self.__add_menu_group(
+            f"Menu Tournoi : {name}",
             [
-                {
-                    "label": "Afficher le tournoi",
-                    "command": show_tournament,
-                },
-                {
-                    "label": "Afficher les joueurs",
-                    "command": self.tournament_controller.display_players,
-                },
-                {
-                    "label": "Modifier la description",
-                    "command": self.tournament_controller.update_description,
-                },
-                {
-                    "label": "Modifier le nombre de tours",
-                    "command": self.tournament_controller.update_total_rounds,
-                },
-                {
-                    "label": "Ajouter des joueurs",
-                    "command": self.tournament_controller.add_players,
-                },
-                {
-                    "label": "Démarrer un round",
-                    "command": self.tournament_controller.start_round,
-                },
-                {
-                    "label": "Saisir les scores",
-                    "command": self.tournament_controller.enter_scores
-                },
+                {"label": "Afficher le tournoi", "command": self._show_tournament},
+                {"label": "Afficher les joueurs", "command": self.tournament_controller.display_players},
+                {"label": "Modifier la description", "command": self.tournament_controller.update_description},
+                {"label": "Modifier le nombre de tours", "command": self.tournament_controller.update_total_rounds},
+                {"label": "Ajouter des joueurs", "command": self.tournament_controller.add_players},
+                {"label": "Démarrer un round", "command": self.tournament_controller.start_round},
+                {"label": "Saisir les scores", "command": self.tournament_controller.enter_scores},
             ],
         )
 
+    def _show_tournament(self):
+        """Affiche les détails du tournoi actif."""
+        self.tournament_controller.display_active_tournament_details()
+        self.tournament_controller.display_player_names()
+        self.tournament_controller.display_current_round_info()
+        self.tournament_controller.display_player_pairs()
+
     def __add_report_tournament_menu(self, name):
-        self.application_menu.add_group(
-            "Menu Rapport : {}".format(name),
+        self.__add_menu_group(
+            f"Menu Rapport : {name}",
             [
-                {
-                    "label": "Nom et dates du tournoi",
-                    "command": self.tournament_controller.report_name_dates,
-                },
-                {
-                    "label": "Liste des joueurs du tournoi",
-                    "command": self.tournament_controller.report_players,
-                },
-                {
-                    "label": "Liste de tous les tours du tournoi et de tous les matchs du tour",
-                    "command": self.tournament_controller.report_rounds_matches,
-                },
+                {"label": "Nom et dates du tournoi", "command": self.tournament_controller.report_name_dates},
+                {"label": "Liste des joueurs du tournoi", "command": self.tournament_controller.report_players},
+                {"label": "Liste de tous les tours du tournoi et de tous les matchs du tour", "command": self.tournament_controller.report_rounds_matches},
             ],
         )
 
     def __add_file_menu(self):
-        def quit():
-            print("Au revoir !")
-            exit()
-        self.application_menu.add_group(
+        self.__add_menu_group(
             "Menu Fichier",
             [
-                {
-                    "label": "Saisir des joueurs",
-                    "command": self.player_controller.add_players,
-                },
-                {
-                    "label": "Nouveau tournoi",
-                    "command": self.tournament_controller.create_new_tournament,
-                },
-                {
-                    "label": "Sélectionner un tournoi",
-                    "command": self.tournament_controller.select_tournament,
-                },
-                {
-                    "label": "Afficher tous les tournois",
-                    "command": self.tournament_controller.display_all_tournaments_details,
-                },
-                {
-                    "label": "Quitter",
-                    "command": quit,
-                },
+                {"label": "Saisir des joueurs", "command": self.player_controller.add_players},
+                {"label": "Nouveau tournoi", "command": self.tournament_controller.create_new_tournament},
+                {"label": "Sélectionner un tournoi", "command": self.tournament_controller.select_tournament},
+                {"label": "Afficher tous les tournois", "command": self.tournament_controller.display_all_tournaments_details},
+                {"label": "Quitter", "command": self._quit},
             ],
         )
 
+    def _quit(self):
+        """Quitte l'application."""
+        print("Au revoir !")
+        exit()
+
     def __add_report_menu(self):
-        self.application_menu.add_group(
+        self.__add_menu_group(
             "Menu Rapports",
             [
-                {
-                    "label": "Liste de tous les joueurs",
-                    "command": self.player_controller.report_players,
-                },
-                {
-                    "label": "Liste de tous les tournois",
-                    "command": self.tournament_controller.report_tournaments,
-                },
+                {"label": "Liste de tous les joueurs", "command": self.player_controller.report_players},
+                {"label": "Liste de tous les tournois", "command": self.tournament_controller.report_tournaments},
             ],
         )
