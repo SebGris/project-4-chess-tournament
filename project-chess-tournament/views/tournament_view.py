@@ -104,27 +104,8 @@ class TournamentView(BasePlayerView):
     def display_added_round_message(self, round: Round):
         self.write_line(f"Nom du round ajouté : {round.name}")
 
-    def display_no_tournament_message(self):
-        self.write_line("Aucun tournoi n'est chargé.")
-
-    def display_no_round_message(self):
-        self.write_line("Aucun round en cours.")
-
-    def display_for_file_not_found(self, error):
-        self.write_line(
-            f"=== Information ===\n{error}\nVeuillez créer un nouveau tournoi."
-        )
-
     def display_tournament_created(self, name):
         self.write_line(f"Nouveau tournoi {name} créé.")
-
-    def display_save_success_message(self, filename):
-        self.write_line(
-            f"Tournoi sauvegardé avec succès dans le fichier {filename}"
-        )
-
-    def display_save_error_message(self, error):
-        self.write_line(f"Erreur lors de la sauvegarde du tournoi : {error}")
 
     def display_start_error_without_players(self):
         self.write_line("Le tournoi ne peut pas commencer sans joueurs.")
@@ -194,9 +175,8 @@ class TournamentView(BasePlayerView):
     def display_player_pairs(self, round: Round):
         """Display pairs of players for a round."""
         if round:
-            round_name, pairs = round.get_pairs_players()
-            print(f"{round_name} avec les paires suivantes :")
-            for index, pair in enumerate(pairs, start=1):
+            print(f"{round.name} avec les paires suivantes :")
+            for index, pair in enumerate(round.get_pairs_players(), start=1):
                 if len(pair) == 2:
                     print(f"{index}. {pair[0]} vs {pair[1]}")
                 else:

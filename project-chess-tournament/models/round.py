@@ -39,17 +39,11 @@ class Round:
 
     def get_pairs_players(self):
         """Returns the pairs of players (full name)."""
-        return (
-            self.name,
-            [
-                (
-                    match.get_player_names_and_scores()
-                    if match.is_finished()
-                    else match.get_player_names()
-                )
-                for match in self.matches
-            ],
-        )
+        return [
+            match.get_player_names_and_scores() if match.is_finished()
+            else match.get_player_names()
+            for match in self.matches
+        ]
 
     @property
     def id(self):
