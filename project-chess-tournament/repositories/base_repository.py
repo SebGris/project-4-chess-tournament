@@ -6,7 +6,6 @@ T = TypeVar("T")  # Generic type for models
 
 
 class BaseRepository:
-    FOLDER = "data/tournaments"
     FILE_PATH = ""
 
     def __init__(self, model_class: Type[T]):
@@ -14,7 +13,7 @@ class BaseRepository:
         Initializes the repository with a model class
         """
         self.model_class = model_class
-        self.file_service = FileService(self.FOLDER, self.FILE_PATH)
+        self.file_service = FileService(self.FILE_PATH)
 
     def get_all(self) -> list[T]:
         return [
