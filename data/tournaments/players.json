@@ -3,70 +3,56 @@
         "id": "8e1bf23f-06f1-4c53-af1f-0ad2e4f35b3a",
         "last_name": "Holder",
         "first_name": "Daugherty",
-        "birth_date": "1973-06-26T06:31:42",
+        "birth_date": "26/06/1973",
         "chess_id": "AZ66827"
     },
     {
         "id": "c48fa7d1-17e9-45ae-bc91-fd147d511bc5",
         "last_name": "Graham",
         "first_name": "Fitzgerald",
-        "birth_date": "1994-05-31T07:09:23",
+        "birth_date": "31/05/1994",
         "chess_id": "AZ20957"
     },
     {
         "id": "03b5eef5-caa6-421f-8e2a-e645a57eaa5f",
         "last_name": "Herrera",
         "first_name": "Ivy",
-        "birth_date": "1975-10-24T02:14:21",
+        "birth_date": "24/10/1975",
         "chess_id": "AZ74090"
     },
     {
         "id": "1698dd71-58c2-407f-8550-dd3a44c5cd0e",
         "last_name": "Bartlett",
         "first_name": "Gayle",
-        "birth_date": "1950-01-12T04:11:00",
+        "birth_date": "12/01/1950",
         "chess_id": "AZ53470"
     },
     {
         "id": "52995956-a29c-471d-aa81-e393c16c3ce5",
         "last_name": "Russo",
         "first_name": "Jacklyn",
-        "birth_date": "1960-05-08T01:54:55",
+        "birth_date": "08/05/1960",
         "chess_id": "AZ96519"
     },
     {
         "id": "812160aa-8e0a-453a-a345-80335d77eb59",
         "last_name": "Thomas",
         "first_name": "Hayes",
-        "birth_date": "1965-01-30T08:46:33",
+        "birth_date": "30-01/1965",
         "chess_id": "AZ22840"
     },
     {
         "id": "2942e6df-4e68-4cdb-9bc4-0912738ccaa6",
         "last_name": "Harvey",
         "first_name": "Brady",
-        "birth_date": "1981-09-02T07:27:03",
+        "birth_date": "02/09/1981",
         "chess_id": "AZ69727"
     },
     {
         "id": "350cf9b5-75db-4703-94c1-7c633ae1c490",
         "last_name": "Hull",
         "first_name": "Geraldine",
-        "birth_date": "1999-12-31T01:50:05",
+        "birth_date": "31/12/1999",
         "chess_id": "AZ81641"
-    },
-    {
-        "id": "6d02bc33-dd01-40dd-a53e-fb995d442773",
-        "last_name": "Dallas",
-        "first_name": "Sue",
-        "birth_date": "15/08/2020",
-        "chess_id": "DD12345"
-    },
-    {
-        "id": "3971f481-f354-4b48-81a9-6143bfed65c1",
-        "last_name": "Dad",
-        "first_name": "B",
-        "birth_date": "",
-        "chess_id": "AA12345"
     }
 ]

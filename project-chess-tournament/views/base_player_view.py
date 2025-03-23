@@ -16,7 +16,7 @@ class BasePlayerView(BaseView):
                 print("Identifiant invalide. Le format doit être composé de deux lettres suivies de cinq chiffres.")
         last_name = self.input("Entrez le nom de famille :")
         first_name = self.input("Entrez le prénom :")
-        birth_date = self.input("Entrez la date de naissance :")
+        birth_date = self.input_date("Entrez la date de naissance :")
         return {
             "last_name": last_name,
             "first_name": first_name,
