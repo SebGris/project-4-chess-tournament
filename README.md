@@ -18,10 +18,17 @@ Caractéristiques du programme :
 3. Tapez la texte ci-dessous dans l'__invite de commandes__.
 
 ```bash
-  python "Scripts Python\Virtual Environment\project-4-chess-tournament-main\project-chess-tournament\main.py"
+  python "Scripts Python\Virtual Environment\project-4-chess-tournament-main\project-chess-tournament\chess_tournament.py"
 ```
+Menu de l'application au lancement.
+
+![Screenshot menu au lancement ](<docs/Use/2025-03-23 20_15_01-C__Windows_System32_cmd.exe - python.png>)
+
+
+
 # Générer un nouveau fichier flake8-html
 
+# Installation
 ## Installation avec l'environnement virtuel
 ### 1e étape : Comment créer l'environnement virtuel ?
 1. Dans l'__Explorateur de fichiers__, ouvrir votre dossier Windows "__Documents__"
