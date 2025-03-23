@@ -20,22 +20,10 @@ class Tournament:
         self.description = None
 
     def get_all_matches(self):
-        matches = []
-        for round in self.rounds:
-            matches.extend(round.matches)
-        return matches
-
-    def add_player(self, player: Player):
-        self.players.append(player)
+        return [match for round in self.rounds for match in round.matches]
 
     def add_players(self, players: list[Player]):
         self.players.extend(players)
-
-    def add_round(self, round: Round):
-        self.rounds.append(round)
-
-    def add_rounds(self, rounds: list[Round]):
-        self.rounds.extend(rounds)
 
     def set_description(self, description):
         self.description = description

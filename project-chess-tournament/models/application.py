@@ -98,7 +98,7 @@ class Application:
 
     def __add_report_menu(self):
         self.__add_menu_group(
-            "Menu Rapports",
+            "Menu Rapport",
             [
                 {"label": "Liste de tous les joueurs", "command": self.player_controller.report_players},
                 {"label": "Liste de tous les tournois", "command": self.tournament_controller.report_tournaments},

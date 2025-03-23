@@ -14,16 +14,31 @@ class MenuView(BaseView):
         print("Option invalide, veuillez réessayer.")
 
     def display_menu(self, menu):
-        """Display a menu with a title and items."""
-        def create_separator_line(header):
-            print("=" * len(header))
+        """Affiche un menu encadré par une fenêtre de signes '='."""
+        # Calcul de la largeur de la fenêtre
+        max_length = max(
+            len(f"{index}. {item['label']}")
+            for group in menu.get_groups()
+            for index, item in enumerate(group['items'], start=1)
+        ) if menu.get_groups() else 0
+        window_width = max(max_length + 4, 10)  # Largeur minimale de 20
+
+        # Ligne horizontale supérieure
+        print("=" * window_width)
+
+        # Affichage des groupes et des items
         index = 1
         for group in menu.get_groups():
-            menu_group_header = f"=== {group['title']} ==="
-            if group['items'] == []:
-                create_separator_line(menu_group_header)
-            print(menu_group_header)
+            # Affichage du titre du groupe
+            print(f"| {group['title'].center(window_width - 4)} |")
+            if group['items'] != []:
+                print("=" * window_width)
+
+            # Affichage des items du groupe
             for item in group['items']:
-                print(f"{index}. {item['label']}")
+                item_text = f"{index}. {item['label']}"
+                print(f"| {item_text.ljust(window_width - 4)} |")
                 index += 1
-            create_separator_line(menu_group_header)
+
+            # Ligne de séparation entre les groupes
+            print("=" * window_width)

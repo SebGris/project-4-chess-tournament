@@ -8,6 +8,7 @@ from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
+from typing import Optional
 
 
 class TournamentController:
@@ -26,7 +27,7 @@ class TournamentController:
         self.match_repository = match_repository
         self.view = view
         self.tournaments = self.get_tournaments()
-        self.active_tournament = None
+        self.active_tournament: Optional[Tournament] = None
 
     def get_tournaments(self):
         return self.tournament_repository.get_all()
@@ -67,7 +68,7 @@ class TournamentController:
         self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
-        self.tournament_repository.save_all(self.tournaments)
+        self.tournament_repository.save(self.tournaments)
 
     def add_players(self):
         players_data = iter(self.view.get_player_data, None)
@@ -81,7 +82,7 @@ class TournamentController:
             self.add_round()
             active_round = self.get_active_round()
             self.round_repository.save(active_round)
-            self.match_repository.save_all(active_round.matches)
+            self.match_repository.save(active_round.matches)
             self.save_tournaments()
 
     def __check_if_start(self):

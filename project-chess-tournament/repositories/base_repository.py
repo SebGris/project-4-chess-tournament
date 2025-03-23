@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import Type, TypeVar
 from services.file_service import FileService
 
@@ -30,14 +31,9 @@ class BaseRepository:
     def get_by_ids(self, ids: list[str]) -> list[T]:
         return [obj for obj in self.get_all() if obj.id in ids]
 
-    def save(self, updated_object: T):
-        objects = [
-            obj for obj in self.get_all() if obj.id != updated_object.id
-        ]
-        objects.append(updated_object)
-        self.write_all(objects)
-
-    def save_all(self, updated_objects: list[T]):
+    def save(self, updated_objects: list[T]):
+        if not isinstance(updated_objects, Iterable):
+            updated_objects = [updated_objects]
         ids_to_update = {obj.id for obj in updated_objects}
         objects = [
             obj for obj in self.get_all() if obj.id not in ids_to_update
