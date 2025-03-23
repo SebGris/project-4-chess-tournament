@@ -37,11 +37,14 @@ class Application:
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
         file_menu = self.__get_file_menu_options()
-        if len(self.tournament_controller.get_tournaments()) > 0:
+        tournament_count = len(self.tournament_controller.get_tournaments())
+        if tournament_count > 0:
             file_menu.extend(self.__get_tournament_menu_options())
         file_menu.extend(self.__get_quit_menu_option())
+        plural_suffix = "s" if tournament_count > 1 else ""
         self.application_menu.add_group(
-            "Menu Fichier", file_menu
+            f"Menu Fichier ({tournament_count} tournoi{plural_suffix})",
+            file_menu
         )
         self.application_menu.add_group(
             "Menu Rapport", self.__get_report_menu_options()
