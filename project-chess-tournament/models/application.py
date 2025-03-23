@@ -63,7 +63,7 @@ class Application:
                 },
                 {
                     "label": "Modifier le nombre de tours",
-                    "command": self.tournament_controller.update_total_of_rounds,
+                    "command": self.tournament_controller.update_total_rounds,
                 },
                 {
                     "label": "Ajouter des joueurs",
