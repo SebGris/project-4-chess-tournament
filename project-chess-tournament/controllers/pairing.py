@@ -32,8 +32,8 @@ class Pairing:
                 if player2 in used_players:
                     continue
 
-                if ((player1, player2) not in previous_matches and
-                   (player2, player1) not in previous_matches):
+                if ((player1, player2) not in previous_matches
+                        and (player2, player1) not in previous_matches):
                     pairs.append((player1, player2))
                     used_players.update({player1, player2})
                     break

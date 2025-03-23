@@ -42,7 +42,8 @@ class TournamentView(BasePlayerView):
         """Asks the user to enter the result of a match."""
         while True:
             result = self.input(
-                "Entrez 1 si le joueur 1 gagne, 2 si le joueur 2 gagne ou 0 si match nul :"
+                "Entrez 1 si le joueur 1 gagne, "
+                "2 si le joueur 2 gagne ou 0 si match nul :"
             )
             if result in {"1", "2", "0"}:
                 return result
@@ -53,7 +54,8 @@ class TournamentView(BasePlayerView):
         print("Sélectionnez un tournoi :")
         for index, tournament in enumerate(tournaments):
             print(
-                f"{index + 1}. {tournament.name} à {tournament.location} du {tournament.start_date} au {tournament.end_date}"
+                f"{index + 1}. {tournament.name} à {tournament.location} "
+                f"du {tournament.start_date} au {tournament.end_date}"
             )
         while True:
             try:
@@ -76,7 +78,8 @@ class TournamentView(BasePlayerView):
         print(f"Tournoi : {tournament.name} | Lieu : {tournament.location}")
         print(f"Date : du {tournament.start_date} au {tournament.end_date}")
         print(
-            f"Description : {tournament.description if tournament.description else 'Aucune'}"
+            f"Description : "
+            f"{tournament.description if tournament.description else 'Aucune'}"
         )
         print(f"Nombre de tours : {tournament.total_rounds}")
 
@@ -179,7 +182,8 @@ class TournamentView(BasePlayerView):
                 if len(pair) == 2:
                     print(f"{index}. {pair[0]} vs {pair[1]}")
                 else:
-                    print(f"{index}. {pair[0]} score {pair[2]} vs {pair[1]} score {pair[3]}")
+                    print(f"{index}. {pair[0]} score {pair[2]} vs "
+                          f"{pair[1]} score {pair[3]}")
 
     def report_tournaments(self, tournament_dict):
         report_generator = ReportGenerator()

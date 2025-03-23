@@ -69,7 +69,10 @@ class ReportGenerator:
     def generate_tournaments_report(self, tournaments):
         html_template = self.__create_html_template(
             "Liste de tous les tournois",
-            ["N° du Tournoi", "Nom", "Emplacement", "Date de début", "Date de fin", "Nombre de round"],
+            [
+                "N° du Tournoi", "Nom", "Emplacement",
+                "Date de début", "Date de fin", "Nombre de round"
+            ],
             ["id", "name", "location", "start_date", "end_date", "total_rounds"]
         )
         self.generate_html_report(html_template, tournaments)

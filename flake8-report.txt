@@ -1,0 +1,24 @@
+[1m.\project-chess-tournament\controllers\pairing.py[m[36m:[m35[36m:[m64[36m:[m [1m[31mW504[m line break after binary operator
+[1m.\project-chess-tournament\models\application.py[m[36m:[m56[36m:[m89[36m:[m [1m[31mE501[m line too long (105 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m57[36m:[m89[36m:[m [1m[31mE501[m line too long (111 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m58[36m:[m89[36m:[m [1m[31mE501[m line too long (116 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m59[36m:[m89[36m:[m [1m[31mE501[m line too long (100 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m60[36m:[m89[36m:[m [1m[31mE501[m line too long (98 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m61[36m:[m89[36m:[m [1m[31mE501[m line too long (99 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m76[36m:[m89[36m:[m [1m[31mE501[m line too long (110 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m77[36m:[m89[36m:[m [1m[31mE501[m line too long (112 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m78[36m:[m89[36m:[m [1m[31mE501[m line too long (155 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m86[36m:[m89[36m:[m [1m[31mE501[m line too long (95 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m87[36m:[m89[36m:[m [1m[31mE501[m line too long (106 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m88[36m:[m89[36m:[m [1m[31mE501[m line too long (110 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m89[36m:[m89[36m:[m [1m[31mE501[m line too long (127 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m103[36m:[m89[36m:[m [1m[31mE501[m line too long (105 > 88 characters)
+[1m.\project-chess-tournament\models\application.py[m[36m:[m104[36m:[m89[36m:[m [1m[31mE501[m line too long (114 > 88 characters)
+[1m.\project-chess-tournament\reports\report_generator.py[m[36m:[m72[36m:[m89[36m:[m [1m[31mE501[m line too long (103 > 88 characters)
+[1m.\project-chess-tournament\views\base_player_view.py[m[36m:[m12[36m:[m17[36m:[m [1m[31mE123[m closing bracket does not match indentation of opening bracket's line
+[1m.\project-chess-tournament\views\base_player_view.py[m[36m:[m15[36m:[m17[36m:[m [1m[31mE123[m closing bracket does not match indentation of opening bracket's line
+[1m.\project-chess-tournament\views\base_view.py[m[36m:[m33[36m:[m21[36m:[m [1m[31mE123[m closing bracket does not match indentation of opening bracket's line
+[1m.\project-chess-tournament\views\tournament_view.py[m[36m:[m45[36m:[m89[36m:[m [1m[31mE501[m line too long (91 > 88 characters)
+[1m.\project-chess-tournament\views\tournament_view.py[m[36m:[m56[36m:[m89[36m:[m [1m[31mE501[m line too long (125 > 88 characters)
+[1m.\project-chess-tournament\views\tournament_view.py[m[36m:[m79[36m:[m89[36m:[m [1m[31mE501[m line too long (93 > 88 characters)
+[1m.\project-chess-tournament\views\tournament_view.py[m[36m:[m182[36m:[m89[36m:[m [1m[31mE501[m line too long (93 > 88 characters)

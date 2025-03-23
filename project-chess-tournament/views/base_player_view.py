@@ -9,10 +9,10 @@ class BasePlayerView(BaseView):
             self.write_line(
                 "Entrez l'ID échecs "
                 "(format: deux lettres suivies de cinq chiffres),"
-                )
+            )
             chess_id = self.input(
                 "ou appuyer sur Entrée pour arrêter l'ajout des joueurs :"
-                )
+            )
             if not chess_id:
                 return None
             if re.match(r'^[A-Z]{2}\d{5}$', chess_id):
