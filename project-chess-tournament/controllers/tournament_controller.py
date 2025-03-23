@@ -1,3 +1,4 @@
+from typing import Optional
 from controllers.pairing import Pairing
 from models.match import Match
 from models.player import Player
@@ -8,7 +9,6 @@ from repositories.player_repository import PlayerRepository
 from repositories.round_repository import RoundRepository
 from repositories.tournament_repository import TournamentRepository
 from views.tournament_view import TournamentView
-from typing import Optional
 
 
 class TournamentController:

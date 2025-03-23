@@ -1,7 +1,7 @@
-from jinja2 import Template
-import webbrowser
 import http.server
 import socketserver
+import webbrowser
+from jinja2 import Template
 
 
 class ReportGenerator:

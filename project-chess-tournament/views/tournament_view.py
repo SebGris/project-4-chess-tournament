@@ -1,8 +1,8 @@
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
-from views.base_player_view import BasePlayerView
 from reports.report_generator import ReportGenerator
+from views.base_player_view import BasePlayerView
 
 
 class TournamentView(BasePlayerView):
