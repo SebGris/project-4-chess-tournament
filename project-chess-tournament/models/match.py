@@ -51,8 +51,8 @@ class Match:
     @staticmethod
     def from_dict(match_data):
         player_repo = PlayerRepository()
-        player1 = player_repo.get_player_by_id(match_data["player1"])
-        player2 = player_repo.get_player_by_id(match_data["player2"])
+        player1 = player_repo.get_by_id(match_data["player1"])
+        player2 = player_repo.get_by_id(match_data["player2"])
         match = Match(
             player1,
             player2,

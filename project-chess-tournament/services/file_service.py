@@ -1,9 +1,20 @@
 import json
+import os
 
 
 class FileService:
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self, folder, file_path):
+        """
+        Creates the storage file if it doesn't already exist.
+        """
+        self.folder = folder
+        self.data_folder = os.path.join(os.getcwd(), self.folder)
+        os.makedirs(self.data_folder, exist_ok=True)
+        self.file_path = os.path.join(self.data_folder, file_path)
+        if not os.path.exists(self.file_path):
+            # Create an empty file if it doesn't exist
+            with open(self.file_path, "w") as file:
+                json.dump([], file)
 
     def read_from_file(self):
         try:

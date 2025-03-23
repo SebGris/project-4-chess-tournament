@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import List
 from models.match import Match
 from repositories.match_repository import MatchRepository
 
@@ -13,7 +12,7 @@ class Round:
         self.start_datetime = datetime.now()
         self.end_datetime = None
         self._id = round_id or uuid.uuid4()
-        self.matches: List[Match] = []
+        self.matches: list[Match] = []
 
     def add_match(self, player1, player2):
         match = Match(player1, player2)
@@ -53,7 +52,7 @@ class Round:
     def from_dict(round_data):
         match_repo = MatchRepository()
         round = Round(round_data["name"], round_data["id"])
-        matches = match_repo.get_matches_by_ids(round_data["match_ids"])
+        matches = match_repo.get_by_ids(round_data["match_ids"])
         round.matches.extend(matches)
         round.set_start_date(round_data["start_datetime"])
         round.set_end_date(round_data["end_datetime"])

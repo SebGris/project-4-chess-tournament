@@ -1,4 +1,3 @@
-from typing import List
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
@@ -50,7 +49,7 @@ class TournamentView(BasePlayerView):
             else:
                 print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
 
-    def get_tournament_selection(self, tournaments: List[Tournament]) -> int:
+    def get_tournament_selection(self, tournaments: list[Tournament]) -> int:
         print("Sélectionnez un tournoi :")
         for index, tournament in enumerate(tournaments):
             print(
@@ -66,7 +65,7 @@ class TournamentView(BasePlayerView):
             except ValueError:
                 print("Entrée invalide, veuillez entrer un numéro.")
 
-    def display_tournaments_details(self, tournaments: List[Tournament]):
+    def display_tournaments_details(self, tournaments: list[Tournament]):
         """Display the details of a list of tournaments."""
         for tournament in tournaments:
             self.display_tournament_details(tournament)
@@ -81,7 +80,7 @@ class TournamentView(BasePlayerView):
         )
         print(f"Nombre de tours : {tournament.total_rounds}")
 
-    def display_tournaments(self, tournaments: List[Tournament]):
+    def display_tournaments(self, tournaments: list[Tournament]):
         for tournament in tournaments:
             self.display_tournament_details(tournament)
 
@@ -127,7 +126,7 @@ class TournamentView(BasePlayerView):
     def display_successful_description_message(self):
         self.write_line("Description ajoutée avec succès.")
 
-    def display_players_name(self, players: List[Player]):
+    def display_players_name(self, players: list[Player]):
         """Display the players of a tournament."""
         print("--- Joueurs du tournoi ---")
         if not players:
@@ -136,7 +135,7 @@ class TournamentView(BasePlayerView):
             print(f"Joueurs : {', '.join(player.full_name for player in players)}")
             self.display_number_of_players(players)
 
-    def display_players_details(self, players: List[Player]):
+    def display_players_details(self, players: list[Player]):
         """Display a list of players."""
         print("--- Joueurs du tournoi ---")
         if not players:
@@ -152,7 +151,7 @@ class TournamentView(BasePlayerView):
             self.display_number_of_players(players)
             print(f"Score total des joueurs : {total_score}")
 
-    def display_number_of_players(self, players: List[Player]):
+    def display_number_of_players(self, players: list[Player]):
         """Display the number of players."""
         print(f"Nombre de joueurs : {len(players)}")
 

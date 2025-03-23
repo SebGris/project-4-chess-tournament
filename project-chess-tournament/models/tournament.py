@@ -1,5 +1,4 @@
 import uuid
-from typing import List
 from models.player import Player
 from models.round import Round
 from repositories.player_repository import PlayerRepository
@@ -16,8 +15,8 @@ class Tournament:
         self.end_date = end_date
         self.total_rounds = total_rounds
         self._id = tournament_id or uuid.uuid4()
-        self.players: List[Player] = []
-        self.rounds: List[Round] = []
+        self.players: list[Player] = []
+        self.rounds: list[Round] = []
         self.description = None
 
     def get_all_matches(self):
@@ -29,13 +28,13 @@ class Tournament:
     def add_player(self, player: Player):
         self.players.append(player)
 
-    def add_players(self, players: List[Player]):
+    def add_players(self, players: list[Player]):
         self.players.extend(players)
 
     def add_round(self, round: Round):
         self.rounds.append(round)
 
-    def add_rounds(self, rounds: List[Round]):
+    def add_rounds(self, rounds: list[Round]):
         self.rounds.extend(rounds)
 
     def set_description(self, description):
@@ -61,9 +60,9 @@ class Tournament:
         player_repo = PlayerRepository()
         round_repo = RoundRepository()
         tournament.set_description(tournament_data["description"])
-        players = player_repo.get_players_by_ids(tournament_data["player_ids"])
+        players = player_repo.get_by_ids(tournament_data["player_ids"])
         tournament.players.extend(players)
-        rounds = round_repo.get_rounds_by_ids(tournament_data["round_ids"])
+        rounds = round_repo.get_by_ids(tournament_data["round_ids"])
         tournament.rounds.extend(rounds)
         return tournament
 

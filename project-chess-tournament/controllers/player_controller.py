@@ -25,7 +25,7 @@ class PlayerController:
         self.player_repository.save(self.added_players)
 
     def report_players(self):
-        players = self.player_repository.get_players()
+        players: list[Player] = self.player_repository.get_all()
         players.sort(key=lambda player: player.last_name)
         # Convert the list of players to a list of dictionaries
         players = [player.to_dict() for player in players]

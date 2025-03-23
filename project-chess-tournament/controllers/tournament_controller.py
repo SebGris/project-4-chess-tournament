@@ -1,4 +1,3 @@
-from typing import List
 from controllers.pairing import Pairing
 from models.match import Match
 from models.player import Player
@@ -30,10 +29,7 @@ class TournamentController:
         self.active_tournament = None
 
     def get_tournaments(self):
-        return [
-            tournament
-            for tournament in self.tournament_repository.get_tournaments()
-        ]
+        return self.tournament_repository.get_all()
 
     def get_active_tournament(self):
         return self.active_tournament
@@ -71,7 +67,7 @@ class TournamentController:
         self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
-        self.tournament_repository.write_tournaments_to_file(self.tournaments)
+        self.tournament_repository.save_all(self.tournaments)
 
     def add_players(self):
         players_data = iter(self.view.get_player_data, None)
@@ -85,7 +81,7 @@ class TournamentController:
             self.add_round()
             active_round = self.get_active_round()
             self.round_repository.save(active_round)
-            self.match_repository.save_a_list(active_round.matches)
+            self.match_repository.save_all(active_round.matches)
             self.save_tournaments()
 
     def __check_if_start(self):
@@ -170,7 +166,7 @@ class TournamentController:
             self.round_repository.save(round)
             self.update_scores(round.matches)
 
-    def update_scores(self, matches: List[Match]):
+    def update_scores(self, matches: list[Match]):
         for match in matches:
             player1_id, player1_score = match.get_player1()
             player2_id, player2_score = match.get_player2()
@@ -202,7 +198,7 @@ class TournamentController:
         self.view.display_players_details(self.active_tournament.players)
 
     def report_tournaments(self):
-        tournaments = self.tournament_repository.get_tournaments()
+        tournaments: list[Tournament] = self.tournament_repository.get_all()
         tournaments = [tournament.to_dict() for tournament in tournaments]
         self.view.report_tournaments(tournaments)
 
