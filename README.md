@@ -11,7 +11,7 @@ Caractéristiques du programme :
 
 ## Utilisation du programme
 
-### Comment exécuter le script Python sous Windows ?
+### 1. Comment exécuter le script Python sous Windows ?
 
 1. Dans l'__Explorateur de fichiers__, ouvrez votre dossier Windows "__Documents__".
 2. Dans la barre d'adresse de la fenêtre __Explorateur de fichiers__, tapez `cmd` à la place de l'adresse `C:\Users\votre_nom\Documents`, puis validez par "__Entrée__".
@@ -21,26 +21,28 @@ Caractéristiques du programme :
 python "Scripts Python\Virtual Environment\project-4-chess-tournament-main\project-chess-tournament\chess_tournament.py"
 ```
 
-**Menu au premier lancement de l'application**
-
-Exemple dans le cas où le fichier JSON des tournois est vide.
+### 2. Menu au premier lancement de l'application
 
 Aide rapide sur les éléments des menus :
 - Le choix "__Saisir des joueurs__" permet d'ajouter des joueurs sans les rattacher à un tournoi.
 - Le choix "__Nouveau tournoi__" permet de créer un tournoi.
 - Le menu "__Rapport__" affiche chaque rapport dans un nouvel onglet de votre navigateur web.
 
+_Exemple du menu dans le cas où le fichier JSON des tournois est vide :_
+
 ![Capture d'écran du menu au lancement sans tournoi](<docs/Use/2025-03-23 21_46_37-C__Windows_System32_cmd.exe - python  _Scripts Python_Virtual Environment_projec.png>)
 
-Exemple dans le cas où des tournois existent déjà.
+_Exemple du menu dans le cas où des tournois existent déjà :_
 
 ![Capture d'écran du menu au lancement avec tournoi](<docs/Use/2025-03-23 21_56_37-C__Windows_System32_cmd.exe - python  _Scripts Python_Virtual Environment_projec.png>)
+
+### 3. Comment sélectionner un tournoi ?
 
 Comme son nom l'indique, le choix "__Sélectionner un tournoi__" permet de sélectionner le tournoi sur lequel des saisies seront effectuées.
 
 ![Capture d'écran du menu pour sélectionner un tournoi](<docs/Use/2025-03-23 22_06_34-C__Windows_System32_cmd.exe - python  _Scripts Python_Virtual Environment_projec.png>)
 
-Exemple du menu après la sélection d'un tournoi.
+_Exemple du menu après la sélection d'un tournoi :_
 
 ![Capture d'écran du menu après avoir sélectionné un tournoi](<docs/Use/2025-03-23 22_10_45-C__Windows_System32_cmd.exe - python  _Scripts Python_Virtual Environment_projec.png>)
 
