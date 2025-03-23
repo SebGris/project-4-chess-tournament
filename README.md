@@ -13,9 +13,9 @@ Caractéristiques du programme :
 
 ## Comment exécuter le script Python sous Windows ?
 
-1. Dans l'__Explorateur de fichiers__, ouvrir votre dossier Windows "__Documents__"
-2. Dans la barre d'adresse de la fenêtre __Explorateur de fichiers__ tapez `cmd` à la place de l'adresse `C:\Users\votre_nom\Documents` puis validez par "__Entrée__"
-3. Tapez la texte ci-dessous dans l'__invite de commandes__.
+1. Dans l'__Explorateur de fichiers__, ouvrez votre dossier Windows "__Documents__".
+2. Dans la barre d'adresse de la fenêtre __Explorateur de fichiers__, tapez `cmd` à la place de l'adresse `C:\Users\votre_nom\Documents`, puis validez par "__Entrée__".
+3. Tapez le texte ci-dessous dans l'__invite de commandes__.
 
 ```bash
   python "Scripts Python\Virtual Environment\project-4-chess-tournament-main\project-chess-tournament\chess_tournament.py"
@@ -24,6 +24,10 @@ Menu de l'application au lancement.
 
 ![Screenshot menu au lancement ](<docs/Use/2025-03-23 21_20_49-C__Windows_System32_cmd.exe - python  _Scripts Python_Virtual Environment_projec.png>)
 
+Aide rapide sur les items des menus :
+- Le choix "Saisir des joueurs" permet de saisir des joueurs sans les rattacher à un tournoi.
+- Le choix "Nouveau tournoi" permet de créer un tournoi.
+- Le menu rapport affiche chaque rapport dans un nouvel onglet de votre navigateur web.
 
 
 # Générer un nouveau fichier flake8-html
@@ -44,9 +48,9 @@ Cela générera un fichier HTML dans le dossier "flake8-html-report". Vous pouve
 
 # Installation de l'application
 ## Installation avec l'environnement virtuel
-### 1e étape : Comment créer l'environnement virtuel ?
-1. Dans l'__Explorateur de fichiers__, ouvrir votre dossier Windows "__Documents__"
-2. Dans la barre d'adresse de la fenêtre __Explorateur de fichiers__ tapez `cmd` à la place de l'adresse `C:\Users\votre_nom\Documents` puis validez par "__Entrée__"
+### 1re étape : Comment créer l'environnement virtuel ?
+1. Dans l'__Explorateur de fichiers__, ouvrez votre dossier Windows "__Documents__".
+2. Dans la barre d'adresse de la fenêtre __Explorateur de fichiers__, tapez `cmd` à la place de l'adresse `C:\Users\votre_nom\Documents`, puis validez par "__Entrée__".
 3. Tapez le texte ci-dessous dans l'__invite de commandes__.
 
 ```bash
@@ -60,9 +64,9 @@ Cela générera un fichier HTML dans le dossier "flake8-html-report". Vous pouve
 ```
 ### 3e étape : Cloner le repository à partir de GitHub
 
-1. Cliquez sur le bouton en vert nommé "__Code__"
-2. Dans le menu déroulant, cliquez sur "__Download ZIP__"
-4. Extraire le fichier "__project-4-chess-tournament-main.zip__" qui vient d'être téléchargé dans le dossier "__Virtual Environment__"
+1. Cliquez sur le bouton vert nommé "__Code__".
+2. Dans le menu déroulant, cliquez sur "__Download ZIP__".
+3. Extrayez le fichier "__project-4-chess-tournament-main.zip__" qui vient d'être téléchargé dans le dossier "__Virtual Environment__".
 
 ### 4e étape : Installer les paquets Python
 
