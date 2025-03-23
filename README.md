@@ -28,6 +28,20 @@ Menu de l'application au lancement.
 
 # Générer un nouveau fichier flake8-html
 
+Pour générer un nouveau fichier flake8-html dans le dossier "flake8-html-report", il faut utiliser l'outil `flake8-html`. Voici les étapes à suivre :
+
+1. **Installer flake8-html** : Le package `flake8-html` devrait déjà être installé, car il est inclus dans le fichier requirements.txt.
+
+2. **Créer un dossier pour le rapport** : Si le dossier "flake8-html-report" n'existe pas, créez-le dans votre projet.
+
+3. **Exécuter flake8 avec flake8-html** : Utilisez la commande suivante pour générer un rapport HTML :
+   ```bash
+   flake8 --format=html --htmldir=flake8-html-report
+   ```
+
+Cela générera un fichier HTML dans le dossier "flake8-html-report". Vous pouvez ensuite ouvrir ce fichier dans un navigateur pour consulter le rapport.
+
+
 # Installation
 ## Installation avec l'environnement virtuel
 ### 1e étape : Comment créer l'environnement virtuel ?
