@@ -12,4 +12,4 @@ class ApplicationMenu:
         return self.groups
 
     def clear_menu(self):
-        self.groups = []
+        self.groups.clear()

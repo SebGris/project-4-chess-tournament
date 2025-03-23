@@ -20,8 +20,7 @@ class Pairing:
          avoiding matches that have already been played.
         """
         players.sort(key=lambda p: p.score, reverse=True)
-        pairs = []
-        used_players = set()
+        pairs, used_players = [], set()
         num_pairs_needed = len(previous_matches)
 
         for index, player1 in enumerate(players):
