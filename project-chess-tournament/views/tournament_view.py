@@ -166,7 +166,8 @@ class TournamentView(BasePlayerView):
                     end_date = round.end_datetime or "round en cours"
                     print(f"Date de fin : {end_date}")
             print(
-                f"Round actuel : {len(tournament.rounds)}/" f"{tournament.total_rounds}"
+                f"Round actuel : {len(tournament.rounds)}/"
+                f"{tournament.total_rounds}"
             )
         else:
             print("Aucun round n'a été créé pour ce tournoi.")
@@ -190,7 +191,9 @@ class TournamentView(BasePlayerView):
 
     def report_name_and_dates(self, tournament_dict):
         report_generator = ReportGenerator()
-        report_generator.generate_tournament_name_and_dates_report(tournament_dict)
+        report_generator.generate_tournament_name_and_dates_report(
+            tournament_dict
+        )
 
     def report_players(self, players_dict, tournament: Tournament):
         report_generator = ReportGenerator()
