@@ -36,32 +36,32 @@ class Application:
     def get_refresh_menu(self):
         self.application_menu.clear_menu()
         self.application_menu.add_title("Application tournois d'échecs")
-        file_menu = self.__get_file_menu_options()
+        file_menu = self._get_file_menu_options()
         tournament_count = len(self.tournament_controller.get_tournaments())
         if tournament_count > 0:
-            file_menu.extend(self.__get_tournament_menu_options())
-        file_menu.extend(self.__get_quit_menu_option())
+            file_menu.extend(self._get_tournament_menu_options())
+        file_menu.extend(self._get_quit_menu_option())
         plural_suffix = "s" if tournament_count > 1 else ""
         self.application_menu.add_group(
             f"Menu Fichier ({tournament_count} tournoi{plural_suffix})",
             file_menu
         )
         self.application_menu.add_group(
-            "Menu Rapport", self.__get_report_menu_options()
+            "Menu Rapport", self._get_report_menu_options()
         )
         active_tournament = self.tournament_controller.get_active_tournament()
         if active_tournament:
             self.application_menu.add_group(
                 f"Menu Tournoi : {active_tournament.name}",
-                self.__get_tournament_active_menu_options()
+                self._get_tournament_active_menu_options()
             )
             self.application_menu.add_group(
                 f"Menu Rapport : {active_tournament.name}",
-                self.__get_report_tournament_menu_options()
+                self._get_report_tournament_menu_options()
             )
         return self.application_menu
 
-    def __get_tournament_active_menu_options(self):
+    def _get_tournament_active_menu_options(self):
         return [
             {
                 "label": "Afficher le tournoi",
@@ -100,7 +100,7 @@ class Application:
         self.tournament_controller.display_current_round_info()
         self.tournament_controller.display_player_pairs()
 
-    def __get_report_tournament_menu_options(self):
+    def _get_report_tournament_menu_options(self):
         return [
             {
                 "label": "Nom et dates du tournoi",
@@ -116,7 +116,7 @@ class Application:
             },
         ]
 
-    def __get_file_menu_options(self):
+    def _get_file_menu_options(self):
         return [
             {
                 "label": "Saisir des joueurs",
@@ -128,7 +128,7 @@ class Application:
             },
         ]
 
-    def __get_tournament_menu_options(self):
+    def _get_tournament_menu_options(self):
         return [
             {
                 "label": "Sélectionner un tournoi",
@@ -141,20 +141,20 @@ class Application:
             },
         ]
 
-    def __get_quit_menu_option(self):
+    def _get_quit_menu_option(self):
         return [
             {
                 "label": "Quitter",
-                "command": self.__quit
+                "command": self._quit
             }
         ]
 
-    def __quit(self):
+    def _quit(self):
         """Quitte l'application."""
         print("Au revoir !")
         exit()
 
-    def __get_report_menu_options(self):
+    def _get_report_menu_options(self):
         return [
             {
                 "label": "Liste de tous les joueurs",

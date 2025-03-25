@@ -82,32 +82,32 @@ class TournamentController:
         self.save_tournaments()
 
     def start_round(self):
-        if self.__check_if_start():
+        if self._check_if_start():
             self.add_round()
             active_round = self.get_active_round()
             self.round_repository.save(active_round)
             self.match_repository.save(active_round.matches)
             self.save_tournaments()
 
-    def __check_if_start(self):
-        if not self.__has_players():
+    def _check_if_start(self):
+        if not self._has_players():
             self.view.display_start_error_without_players()
             return False
-        if self.__has_odd_number_of_players():
+        if self._has_odd_number_of_players():
             self.view.display_start_error_even_players()
             return False
-        if self.__has_unfinished_matches():
+        if self._has_unfinished_matches():
             self.view.display_start_error_unfinished_match()
             return False
         return True
 
-    def __has_players(self):
+    def _has_players(self):
         return bool(self.active_tournament.players)
 
-    def __has_odd_number_of_players(self):
+    def _has_odd_number_of_players(self):
         return len(self.active_tournament.players) % 2 != 0
 
-    def __has_unfinished_matches(self):
+    def _has_unfinished_matches(self):
         for round in self.active_tournament.rounds:
             for match in round.matches:
                 if not match.is_finished():
