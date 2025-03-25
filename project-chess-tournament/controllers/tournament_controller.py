@@ -55,12 +55,8 @@ class TournamentController:
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(
-        self, name, location, start_date, end_date, total_rounds
-    ):
-        tournament = Tournament(
-            name, location, start_date, end_date, total_rounds
-        )
+    def create_tournament(self, name, location, start_date, end_date, total_rounds):
+        tournament = Tournament(name, location, start_date, end_date, total_rounds)
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
@@ -118,9 +114,7 @@ class TournamentController:
         number_rounds = len(self.active_tournament.rounds)
         new_round = Round(f"Round {number_rounds + 1}")
         if number_rounds == 0:
-            pairs = Pairing.generate_first_round_pairs(
-                self.active_tournament.players
-            )
+            pairs = Pairing.generate_first_round_pairs(self.active_tournament.players)
         else:
             previous_matches = {
                 (match.player1.id, match.player2.id)
@@ -187,9 +181,6 @@ class TournamentController:
     def display_tournaments_details(self):
         self.view.display_tournaments_details(self.tournaments)
 
-    def display_all_tournaments(self):
-        self.view.display_tournaments(self.tournaments)
-
     def display_current_round_info(self):
         self.view.display_current_round_info(self.active_tournament)
 
@@ -212,9 +203,7 @@ class TournamentController:
         self.view.report_name_and_dates(tournament)
 
     def report_players(self):
-        players = [
-            player.to_dict() for player in self.active_tournament.players
-        ]
+        players = [player.to_dict() for player in self.active_tournament.players]
         self.view.report_players(players, self.active_tournament)
 
     def report_rounds_matches(self):

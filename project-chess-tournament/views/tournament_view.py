@@ -83,10 +83,6 @@ class TournamentView(BasePlayerView):
         )
         print(f"Nombre de tours : {tournament.total_rounds}")
 
-    def display_tournaments(self, tournaments: list[Tournament]):
-        for tournament in tournaments:
-            self.display_tournament_details(tournament)
-
     def display_match_summary(self, match):
         """Returns a summary of a match."""
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
@@ -116,9 +112,11 @@ class TournamentView(BasePlayerView):
         print("Le nombre de joueurs doit être pair pour commencer le tournoi.")
 
     def display_start_error_unfinished_match(self):
-        print("Un nouveau round ne peut pas commencer "
-              "tant que tous les matchs du round précédent "
-              "ne sont pas terminés.")
+        print(
+            "Un nouveau round ne peut pas commencer "
+            "tant que tous les matchs du round précédent "
+            "ne sont pas terminés."
+        )
 
     def display_invalid_result_message(self):
         print("Score invalide. Veuillez entrer 1, 2 ou 0.")
@@ -132,7 +130,7 @@ class TournamentView(BasePlayerView):
         if not players:
             print("Aucun joueur enregistré.")
         else:
-            players_names = ', '.join(player.full_name for player in players)
+            players_names = ", ".join(player.full_name for player in players)
             print(f"Joueurs : {players_names}")
             self.display_number_of_players(players)
 
@@ -165,11 +163,10 @@ class TournamentView(BasePlayerView):
                 print(f"--- {round_name} ---")
                 if round.start_datetime:
                     print(f"Date de début : {round.start_datetime}")
-                    end_date = round.end_datetime or 'round en cours'
+                    end_date = round.end_datetime or "round en cours"
                     print(f"Date de fin : {end_date}")
             print(
-                f"Round actuel : {len(tournament.rounds)}/"
-                f"{tournament.total_rounds}"
+                f"Round actuel : {len(tournament.rounds)}/" f"{tournament.total_rounds}"
             )
         else:
             print("Aucun round n'a été créé pour ce tournoi.")
@@ -182,8 +179,10 @@ class TournamentView(BasePlayerView):
                 if len(pair) == 2:
                     print(f"{index}. {pair[0]} vs {pair[1]}")
                 else:
-                    print(f"{index}. {pair[0]} score {pair[2]} vs "
-                          f"{pair[1]} score {pair[3]}")
+                    print(
+                        f"{index}. {pair[0]} score {pair[2]} vs "
+                        f"{pair[1]} score {pair[3]}"
+                    )
 
     def report_tournaments(self, tournament_dict):
         report_generator = ReportGenerator()
@@ -191,9 +190,7 @@ class TournamentView(BasePlayerView):
 
     def report_name_and_dates(self, tournament_dict):
         report_generator = ReportGenerator()
-        report_generator.generate_tournament_name_and_dates_report(
-            tournament_dict
-        )
+        report_generator.generate_tournament_name_and_dates_report(tournament_dict)
 
     def report_players(self, players_dict, tournament: Tournament):
         report_generator = ReportGenerator()
