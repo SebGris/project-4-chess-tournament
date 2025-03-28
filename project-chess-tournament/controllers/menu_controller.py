@@ -15,6 +15,7 @@ class MenuController:
             command = self._get_command_from_choice(menu, choice)
             if command:
                 command()
+                input("Appuyez sur une touche pour afficher le menu...")
 
     def _get_command_from_choice(self, menu, choice):
         """Récupère la commande associée au choix de l'utilisateur."""
