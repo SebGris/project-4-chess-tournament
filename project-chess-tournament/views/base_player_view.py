@@ -29,5 +29,5 @@ class BasePlayerView(BaseView):
             "chess_id": chess_id
         }
 
-    def display_add_player_message(self, player: Player):
+    def display_player_success_message(self, player: Player):
         print(f"Joueur {player.full_name} ajouté.")

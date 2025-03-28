@@ -75,6 +75,7 @@ class TournamentController:
         self.tournament_repository.save(self.tournaments)
 
     def add_players(self):
+        self.view.display_add_player_message()
         players_data = iter(self.view.get_player_data, None)
         players = [Player(**data) for data in players_data]
         self.active_tournament.add_players(players)

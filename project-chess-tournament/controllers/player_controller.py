@@ -11,12 +11,13 @@ class PlayerController:
     def add_players(self):
         # iter : l'itération s'arrête lorsque la fonction retourne la valeur
         # de sentinelle
+        self.view.display_add_player_message()
         added_players = [
             Player(**player_data)
             for player_data in iter(self.view.get_player_data, None)
         ]
         for player in added_players:
-            self.view.display_add_player_message(player)
+            self.view.display_player_success_message(player)
         self.player_repository.save(added_players)
 
     def report_players(self):

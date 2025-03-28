@@ -124,6 +124,9 @@ class TournamentView(BasePlayerView):
     def display_successful_description_message(self):
         print("Description ajoutée avec succès.")
 
+    def display_add_player_message(self):
+        print("Ajout de joueurs dans le tournoi sélectionné.")
+
     def display_players_name(self, players: list[Player]):
         """Display the players of a tournament."""
         print("--- Joueurs du tournoi ---")
