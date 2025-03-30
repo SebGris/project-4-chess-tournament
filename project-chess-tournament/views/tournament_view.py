@@ -14,10 +14,10 @@ class TournamentView(BasePlayerView):
         return self.input("Entrez le lieu du tournoi :")
 
     def get_start_date(self) -> str:
-        return self.input("Entrez la date de début du tournoi :")
+        return self.input_date("Entrez la date de début du tournoi :")
 
     def get_end_date(self) -> str:
-        return self.input("Entrez la date de fin du tournoi :")
+        return self.input_date("Entrez la date de fin du tournoi :")
 
     def get_tournament_description(self) -> str:
         return self.input("Entrez la description du tournoi :")
