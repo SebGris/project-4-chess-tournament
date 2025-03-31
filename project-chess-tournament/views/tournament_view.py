@@ -43,12 +43,13 @@ class TournamentView(BasePlayerView):
         while True:
             result = self.input(
                 "Entrez 1 si le joueur 1 gagne, "
-                "2 si le joueur 2 gagne ou 0 si match nul :"
+                "2 si le joueur 2 gagne ou 0 si match nul "
+                "ou entrez 'p' pour passer au match suivant :"
             )
-            if result in {"1", "2", "0"}:
+            if result in {"p", "1", "2", "0"}:
                 return result
             else:
-                print("Entrée invalide. Veuillez entrer 1, 2 ou 0.")
+                print("Entrée invalide. Veuillez entrer p, 1, 2 ou 0.")
 
     def get_tournament_selection(self, tournaments: list[Tournament]) -> int:
         print("Sélectionnez un tournoi :")
