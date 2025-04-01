@@ -159,16 +159,19 @@ class TournamentController:
                 if not match.is_finished():
                     self.view.display_match_summary(match.get_player_names())
                     result = self.view.get_match_result()
-                    if result != "p":
-                        if result == "1":
-                            match.set_score(1, 0)
-                        elif result == "2":
-                            match.set_score(0, 1)
-                        elif result == "0":
-                            match.set_score(0.5, 0.5)
-                        else:
-                            self.view.display_invalid_result_message()
-                        self.match_repository.save(match)
+                    # if result != "p":
+                    if result == "1":
+                        match.set_score(1, 0)
+                    elif result == "2":
+                        match.set_score(0, 1)
+                    elif result == "0":
+                        match.set_score(0.5, 0.5)
+                    else:
+                        self.view.display_invalid_result_message()
+                    self.match_repository.save(match)
+            # round_finished = sum([m.is_finished() for m in round.matches])
+            # if round_finished == len(round.matches):
+                # round.end_round()
             round.end_round()
             self.round_repository.save(round)
             self.update_scores(round.matches)
