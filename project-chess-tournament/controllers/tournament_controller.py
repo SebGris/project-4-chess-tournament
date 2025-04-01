@@ -107,6 +107,9 @@ class TournamentController:
         if self._has_unfinished_matches():
             self.view.display_start_error_unfinished_match()
             return False
+        if self._tournament_is_finished():
+            self.view.display_start_error_tournament_finished()
+            return False
         return True
 
     def _has_players(self):
@@ -124,6 +127,10 @@ class TournamentController:
                 if not match.is_finished():
                     return True
         return False
+
+    def _tournament_is_finished(self):
+        """Checks if the tournament is finished."""
+        return self.active_tournament.is_finished()
 
     def add_round(self):
         """Adds a new round to the active tournament."""

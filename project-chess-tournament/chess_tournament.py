@@ -9,7 +9,3 @@ if __name__ == "__main__":
     menu_view = MenuView()
     menu_controller = MenuController(application, menu_view)
     menu_controller.show_menu()
-
-# 1 commentaire par fonction
-# 119
-# corriger le bug fin de tour

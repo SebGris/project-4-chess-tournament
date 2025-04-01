@@ -35,6 +35,14 @@ class Tournament:
         """Sets the total number of rounds."""
         self.total_rounds = total_rounds
 
+    def is_finished(self):
+        """Checks if the tournament is finished."""
+        # if the number of rounds is equal to the total number of rounds
+        # and all rounds are finished, the tournament is finished
+        if len(self.rounds) == self.total_rounds:
+            return all(round.is_finished() for round in self.rounds)
+        return False
+
     @property
     def id(self):
         return str(self._id)

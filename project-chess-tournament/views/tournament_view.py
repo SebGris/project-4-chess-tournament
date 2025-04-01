@@ -134,6 +134,10 @@ class TournamentView(BasePlayerView):
             "ne sont pas terminés."
         )
 
+    def display_start_error_tournament_finished(self):
+        """Display an error message if the tournament is finished."""
+        print("Le tournoi est déjà terminé.")
+
     def display_invalid_result_message(self):
         """Display an error message if the result is invalid."""
         print("Score invalide. Veuillez entrer 1, 2 ou 0.")
