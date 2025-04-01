@@ -4,11 +4,14 @@ from views.player_view import PlayerView
 
 
 class PlayerController:
+    """Controller for managing players in the chess tournament application."""
     def __init__(self, player_repository: PlayerRepository, view: PlayerView):
+        """Initializes the PlayerController with the player repository and view."""
         self.player_repository = player_repository
         self.view = view
 
     def add_players(self):
+        """Adds players to the tournament."""
         # iter : l'itération s'arrête lorsque la fonction retourne la valeur
         # de sentinelle
         self.view.display_add_player_message()
@@ -21,6 +24,7 @@ class PlayerController:
         self.player_repository.save(added_players)
 
     def report_players(self):
+        """Reports the list of players."""
         players: list[Player] = sorted(
             self.player_repository.get_all(),
             key=lambda player: player.last_name

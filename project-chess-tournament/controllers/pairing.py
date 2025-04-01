@@ -15,10 +15,8 @@ class Pairing:
 
     @staticmethod
     def generate_next_round_pairs(players, previous_matches):
-        """
-        Generates pairs based on the score,
-         avoiding matches that have already been played.
-        """
+        """Generates pairs based on the score, avoiding matches that have already been played."""
+        # Sort players by score in descending order
         players.sort(key=lambda p: p.score, reverse=True)
         pairs, used_players = [], set()
         num_pairs_needed = len(previous_matches)

@@ -12,7 +12,7 @@ from views.tournament_view import TournamentView
 
 
 class TournamentController:
-
+    """Controller for managing tournaments in the chess tournament application."""
     def __init__(
         self,
         tournament_repository: TournamentRepository,
@@ -21,6 +21,7 @@ class TournamentController:
         match_repository: MatchRepository,
         view: TournamentView,
     ):
+        """Initializes the TournamentController with the repositories and view."""
         self.tournament_repository = tournament_repository
         self.player_repository = player_repository
         self.round_repository = round_repository
@@ -30,17 +31,21 @@ class TournamentController:
         self.active_tournament: Optional[Tournament] = None
 
     def get_tournaments(self):
+        """Fetches all tournaments from the repository."""
         return self.tournament_repository.get_all()
 
     def get_active_tournament(self):
+        """Returns the active tournament."""
         return self.active_tournament
 
     def get_active_round(self):
+        """Returns the active round of the active tournament."""
         if self.active_tournament.rounds:
             return self.active_tournament.rounds[-1]
         return None
 
     def collect_tournament_info(self):
+        """Collects tournament information from the user."""
         return {
             "name": self.view.get_name(),
             "location": self.view.get_location(),
@@ -50,31 +55,31 @@ class TournamentController:
         }
 
     def create_new_tournament(self):
-        """Create a new tournament."""
+        """Creates a new tournament."""
         tournament_info = self.collect_tournament_info()
         self.create_tournament(**tournament_info)
         self.view.display_tournament_created(tournament_info["name"])
 
-    def create_tournament(
-        self, name, location, start_date, end_date, total_rounds
-    ):
-        tournament = Tournament(
-            name, location, start_date, end_date, total_rounds
-        )
+    def create_tournament(self, name, location, start_date, end_date, total_rounds):
+        """Creates a new tournament and adds it to the list."""
+        tournament = Tournament(name, location, start_date, end_date, total_rounds)
         self.tournaments.append(tournament)
         # Set the newly created tournament as the active tournament
         self.active_tournament = self.tournaments[-1]
         self.save_tournaments()
 
     def select_tournament(self):
+        """Selects a tournament from the list."""
         index = self.view.get_tournament_selection(self.tournaments)
         self.active_tournament = self.tournaments[index]
         self.update_scores(self.active_tournament.get_all_matches())
 
     def save_tournaments(self):
+        """Saves the tournaments to the repository."""
         self.tournament_repository.save(self.tournaments)
 
     def add_players(self):
+        """Adds players to the active tournament."""
         self.view.display_add_player_message()
         players_data = iter(self.view.get_player_data, None)
         players = [Player(**data) for data in players_data]
@@ -83,6 +88,7 @@ class TournamentController:
         self.save_tournaments()
 
     def start_round(self):
+        """Starts a new round in the active tournament."""
         if self._check_if_start():
             self.add_round()
             active_round = self.get_active_round()
@@ -91,6 +97,7 @@ class TournamentController:
             self.save_tournaments()
 
     def _check_if_start(self):
+        """Checks if the tournament can be started."""
         if not self._has_players():
             self.view.display_start_error_without_players()
             return False
@@ -103,12 +110,15 @@ class TournamentController:
         return True
 
     def _has_players(self):
+        """Checks if the tournament has players."""
         return bool(self.active_tournament.players)
 
     def _has_odd_number_of_players(self):
+        """Checks if the tournament has an odd number of players."""
         return len(self.active_tournament.players) % 2 != 0
 
     def _has_unfinished_matches(self):
+        """Checks if there are unfinished matches in the tournament."""
         for round in self.active_tournament.rounds:
             for match in round.matches:
                 if not match.is_finished():
@@ -116,6 +126,7 @@ class TournamentController:
         return False
 
     def add_round(self):
+        """Adds a new round to the active tournament."""
         number_rounds = len(self.active_tournament.rounds)
         new_round = Round(f"Round {number_rounds + 1}")
         if number_rounds == 0:
@@ -138,16 +149,19 @@ class TournamentController:
         self.display_player_pairs()
 
     def update_total_rounds(self):
+        """Updates the total number of rounds in the active tournament."""
         new_number = self.view.get_total_of_rounds()
         self.active_tournament.set_total_of_rounds(new_number)
         self.view.display_updated_number_rounds_message(new_number)
 
     def update_description(self):
+        """Updates the description of the active tournament."""
         description = self.view.get_tournament_description()
         self.active_tournament.set_description(description)
         self.view.display_successful_description_message()
 
     def enter_scores(self):
+        """Enters the scores for the matches in the current round."""
         round = self.get_active_round()
         if round is None:
             self.view.display_no_round_error()
@@ -159,7 +173,6 @@ class TournamentController:
                 if not match.is_finished():
                     self.view.display_match_summary(match.get_player_names())
                     result = self.view.get_match_result()
-                    # if result != "p":
                     if result == "1":
                         match.set_score(1, 0)
                     elif result == "2":
@@ -169,14 +182,12 @@ class TournamentController:
                     else:
                         self.view.display_invalid_result_message()
                     self.match_repository.save(match)
-            # round_finished = sum([m.is_finished() for m in round.matches])
-            # if round_finished == len(round.matches):
-                # round.end_round()
             round.end_round()
             self.round_repository.save(round)
             self.update_scores(round.matches)
 
     def update_scores(self, matches: list[Match]):
+        """Updates the scores of players based on the matches."""
         for match in matches:
             player1_id, player1_score = match.get_player1()
             player2_id, player2_score = match.get_player2()
@@ -187,33 +198,42 @@ class TournamentController:
                     player.score += player2_score
 
     def display_active_tournament_details(self):
+        """Displays the details of the active tournament."""
         self.view.display_tournament_details(self.active_tournament)
 
     def display_tournaments_details(self):
+        """Displays the details of all tournaments."""
         self.view.display_tournaments_details(self.tournaments)
 
     def display_current_round_info(self):
+        """Displays information about the current round."""
         self.view.display_current_round_info(self.active_tournament)
 
     def display_player_names(self):
+        """Displays the names of players in the active tournament."""
         self.view.display_players_name(self.active_tournament.players)
 
     def display_player_pairs(self):
+        """Displays the pairs of players in the current round."""
         self.view.display_player_pairs(self.get_active_round())
 
     def display_players(self):
+        """Displays the players in the active tournament."""
         self.view.display_players_details(self.active_tournament.players)
 
     def report_tournaments(self):
+        """Reports the list of tournaments."""
         tournaments: list[Tournament] = self.tournament_repository.get_all()
         tournaments = [tournament.to_dict() for tournament in tournaments]
         self.view.report_tournaments(tournaments)
 
     def report_name_dates(self):
+        """Reports the name and dates of the active tournament."""
         tournament = self.active_tournament.to_dict()
         self.view.report_name_and_dates(tournament)
 
     def report_players(self):
+        """Reports the players in the active tournament."""
         players = [
             player.to_dict()
             for player in self.active_tournament.players
@@ -221,6 +241,7 @@ class TournamentController:
         self.view.report_players(players, self.active_tournament)
 
     def report_rounds_matches(self):
+        """Reports the rounds and matches of the active tournament."""
         rounds_dict = []
         for round in self.active_tournament.rounds:
             round_dict = round.to_dict()

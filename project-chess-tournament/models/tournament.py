@@ -6,7 +6,7 @@ from repositories.round_repository import RoundRepository
 
 
 class Tournament:
-
+    """Represents a chess tournament."""
     def __init__(self, name, location, start_date, end_date, total_rounds,
                  tournament_id=None):
         self.name = name
@@ -20,15 +20,19 @@ class Tournament:
         self.description = None
 
     def get_all_matches(self):
+        """Returns all matches from all rounds."""
         return [match for round in self.rounds for match in round.matches]
 
     def add_players(self, players: list[Player]):
+        """Adds players to the tournament."""
         self.players.extend(players)
 
     def set_description(self, description):
+        """Sets the description of the tournament."""
         self.description = description
 
     def set_total_of_rounds(self, total_rounds):
+        """Sets the total number of rounds."""
         self.total_rounds = total_rounds
 
     @property
@@ -37,6 +41,7 @@ class Tournament:
 
     @staticmethod
     def from_dict(tournament_data):
+        """Creates a Tournament instance from a dictionary."""
         tournament = Tournament(
             tournament_data["name"],
             tournament_data["location"],
@@ -55,6 +60,7 @@ class Tournament:
         return tournament
 
     def to_dict(self):
+        """Converts the tournament instance to a dictionary."""
         return {
             "id": self.id,
             "name": self.name,

@@ -8,21 +8,27 @@ from views.base_player_view import BasePlayerView
 class TournamentView(BasePlayerView):
 
     def get_name(self) -> str:
+        """Asks the user to enter the name of the tournament."""
         return self.input("Entrez le nom du tournoi :")
 
     def get_location(self) -> str:
+        """Asks the user to enter the location of the tournament."""
         return self.input("Entrez le lieu du tournoi :")
 
     def get_start_date(self) -> str:
+        """Asks the user to enter the start date of the tournament."""
         return self.input_date("Entrez la date de début du tournoi :")
 
     def get_end_date(self) -> str:
+        """Asks the user to enter the end date of the tournament."""
         return self.input_date("Entrez la date de fin du tournoi :")
 
     def get_tournament_description(self) -> str:
+        """Asks the user to enter the description of the tournament."""
         return self.input("Entrez la description du tournoi :")
 
     def get_total_of_rounds(self) -> int:
+        """Asks the user to enter the number of rounds in the tournament."""
         while True:
             try:
                 rounds = self.input(
@@ -51,6 +57,7 @@ class TournamentView(BasePlayerView):
                 print("Entrée invalide. Veuillez entrer p, 1, 2 ou 0.")
 
     def get_tournament_selection(self, tournaments: list[Tournament]) -> int:
+        """Asks the user to select a tournament from a list."""
         print("Sélectionnez un tournoi :")
         for index, tournament in enumerate(tournaments):
             print(
@@ -88,30 +95,39 @@ class TournamentView(BasePlayerView):
         print(f"Match (joueur 1 vs joueur 2) : {' vs '.join(match)}")
 
     def display_record_results_message(self, round: Round):
+        """Display a message indicating that results are being recorded."""
         print(f"Enregistrement des résultats du {round.name}:")
 
     def display_no_round_error(self):
+        """Display an error message if there is no round."""
         print("Aucun round en cours. Créer un round pour saisir les scores.")
 
     def display_round_finished_message(self):
+        """Display a message indicating that the round is finished."""
         print("Le round est terminé (scores déjà saisis).")
 
     def display_updated_number_rounds_message(self, number):
+        """Display a message indicating that the number of rounds has been updated."""
         print(f"Le nombre de tours a été mis à jour à {number}.")
 
     def display_added_round_message(self, round: Round):
+        """Display a message indicating that a round has been added."""
         print(f"Nom du round ajouté : {round.name}")
 
     def display_tournament_created(self, name):
+        """Display a message indicating that a tournament has been created."""
         print(f"Nouveau tournoi {name} créé.")
 
     def display_start_error_without_players(self):
+        """Display an error message if there are no players."""
         print("Le tournoi ne peut pas commencer sans joueurs.")
 
     def display_start_error_even_players(self):
+        """Display an error message if the number of players is odd."""
         print("Le nombre de joueurs doit être pair pour commencer le tournoi.")
 
     def display_start_error_unfinished_match(self):
+        """Display an error message if there are unfinished matches."""
         print(
             "Un nouveau round ne peut pas commencer "
             "tant que tous les matchs du round précédent "
@@ -119,12 +135,15 @@ class TournamentView(BasePlayerView):
         )
 
     def display_invalid_result_message(self):
+        """Display an error message if the result is invalid."""
         print("Score invalide. Veuillez entrer 1, 2 ou 0.")
 
     def display_successful_description_message(self):
+        """Display a message indicating that the description has been added."""
         print("Description ajoutée avec succès.")
 
     def display_add_player_message(self):
+        """Display a message indicating that players are being added."""
         print("Ajout de joueurs dans le tournoi sélectionné.")
 
     def display_players_name(self, players: list[Player]):
@@ -189,21 +208,25 @@ class TournamentView(BasePlayerView):
                     )
 
     def report_tournaments(self, tournament_dict):
+        """Generate a report of tournaments."""
         report_generator = ReportGenerator()
         report_generator.generate_tournaments_report(tournament_dict)
 
     def report_name_and_dates(self, tournament_dict):
+        """Generate a report of tournament names and dates."""
         report_generator = ReportGenerator()
         report_generator.generate_tournament_name_and_dates_report(
             tournament_dict
         )
 
     def report_players(self, players_dict, tournament: Tournament):
+        """Generate a report of players in a tournament."""
         report_generator = ReportGenerator()
         report_generator.generate_tournament_players_report(
             players_dict, tournament.name
         )
 
     def report_rounds_matches(self, rounds_dict):
+        """Generate a report of rounds and matches."""
         report_generator = ReportGenerator()
         report_generator.generate_rounds_matches_report(rounds_dict)

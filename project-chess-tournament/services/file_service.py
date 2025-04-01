@@ -6,9 +6,7 @@ class FileService:
     FOLDER = "app_chess_tournament/data/tournaments"
 
     def __init__(self, file_path):
-        """
-        Creates the storage file if it doesn't already exist.
-        """
+        """Creates the storage file if it doesn't already exist."""
         self.data_folder = os.path.join(os.getcwd(), self.FOLDER)
         os.makedirs(self.data_folder, exist_ok=True)
         self.file_path = os.path.join(self.data_folder, file_path)
@@ -18,6 +16,7 @@ class FileService:
                 json.dump([], file)
 
     def read_from_file(self):
+        """Reads data from the file and returns it as a list."""
         try:
             with open(self.file_path, "r") as file:
                 return json.load(file)
@@ -27,6 +26,7 @@ class FileService:
             raise ValueError("Erreur de décodage JSON")
 
     def write_to_file(self, data):
+        """Writes data to the file."""
         try:
             with open(self.file_path, "w") as file:
                 json.dump(data, file, indent=4)

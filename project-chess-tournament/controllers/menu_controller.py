@@ -3,11 +3,14 @@ from views.menu_view import MenuView
 
 
 class MenuController:
+    """Controller for managing the menu in the chess tournament application."""
     def __init__(self, application: Application, menu_view: MenuView):
+        """Initializes the MenuController with the application and menu view."""
         self.application = application
         self.menu_view = menu_view
 
     def show_menu(self):
+        """Displays the menu and handles user input."""
         while True:
             menu = self.application.get_refresh_menu()
             self.menu_view.display_menu(menu)
@@ -18,7 +21,7 @@ class MenuController:
                 input("Appuyez sur une touche pour afficher le menu...")
 
     def _get_command_from_choice(self, menu, choice):
-        """Récupère la commande associée au choix de l'utilisateur."""
+        """Returns the command associated with the user's choice."""
         try:
             choice_index = int(choice) - 1
             flat_menu = [

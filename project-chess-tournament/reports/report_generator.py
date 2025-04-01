@@ -9,11 +9,13 @@ class ReportGenerator:
         self.html_content = ""
 
     def generate_html_report(self, html_template, data):
+        """Generate an HTML report using a template and data."""
         template = Template(html_template)
         self.html_content = template.render(data=data)
         self.serve_report()
 
     def _create_html_template(self, title_h1, headers, fields, title_h2=""):
+        """Create an HTML template for the report."""
         row_template = ''.join(
             f"<td>{{{{ item.{field} }}}}</td>" for field in fields
         )
@@ -39,6 +41,7 @@ class ReportGenerator:
         """
 
     def _create_head_html(self, title):
+        """Create the head section of the HTML document."""
         return f"""
         <head>
             <meta charset="UTF-8">
@@ -59,6 +62,7 @@ class ReportGenerator:
         """
 
     def generate_players_report(self, players):
+        """Generate a report of all players (for alphabetical order)."""
         html_template = self._create_html_template(
             "Liste de tous les joueurs par ordre alphabétique",
             [
@@ -70,6 +74,7 @@ class ReportGenerator:
         self.generate_html_report(html_template, players)
 
     def generate_tournaments_report(self, tournaments):
+        """Generate a report of all tournaments."""
         html_template = self._create_html_template(
             "Liste de tous les tournois",
             [
@@ -84,6 +89,7 @@ class ReportGenerator:
         self.generate_html_report(html_template, tournaments)
 
     def generate_tournament_name_and_dates_report(self, tournament):
+        """Generate a report of the tournament name and dates."""
         html_template = self._create_html_template(
             "Nom et dates du tournoi",
             ["Nom", "Date de début", "Date de fin"],
@@ -92,6 +98,7 @@ class ReportGenerator:
         self.generate_html_report(html_template, [tournament])
 
     def generate_tournament_players_report(self, players, title):
+        """Generate a report of the tournament players."""
         html_template = self._create_html_template(
             "Liste des joueurs du tournoi",
             [
@@ -104,6 +111,7 @@ class ReportGenerator:
         self.generate_html_report(html_template, players)
 
     def generate_rounds_matches_report(self, rounds):
+        """Generate a report of the rounds and matches."""
         title = "Liste des tours du tournoi et de tous les matchs"
         html_template = f"""
         <!DOCTYPE html>
@@ -139,6 +147,7 @@ class ReportGenerator:
         self.generate_html_report(html_template, rounds)
 
     def serve_report(self):
+        """Serve the generated HTML report using a temporary HTTP server."""
         # Serveur HTTP temporaire pour afficher le rapport
         def create_request_handler(report_content):
             class CustomRequestHandler(http.server.SimpleHTTPRequestHandler):

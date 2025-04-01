@@ -2,8 +2,10 @@ import uuid
 
 
 class Player:
+    """Class representing a chess player."""
     def __init__(self, last_name, first_name, birth_date, chess_id,
                  player_id=None):
+        """Initialize a Player instance."""
         self.last_name = last_name
         self.first_name = first_name
         self.birth_date = birth_date
@@ -18,6 +20,7 @@ class Player:
 
     @classmethod
     def from_dict(cls, player_data):
+        """Create a Player instance from a dictionary."""
         return cls(
             player_data["last_name"],
             player_data["first_name"],
@@ -27,6 +30,7 @@ class Player:
         )
 
     def to_dict(self):
+        """Convert the Player instance to a dictionary."""
         return {
             "id": self.id,
             "last_name": self.last_name,

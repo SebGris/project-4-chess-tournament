@@ -17,10 +17,7 @@ class BaseView:
 
     @staticmethod
     def input_date(prompt):
-        """
-        Requests and validates a date in DD/MM/YYYY format.
-        Returns a date formatted as text.
-        """
+        """Requests and validates a date in DD/MM/YYYY format. Returns a date formatted as text."""
         while True:
             date_input = BaseView.input(prompt)
             try:

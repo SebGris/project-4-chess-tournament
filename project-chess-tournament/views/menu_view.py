@@ -2,19 +2,23 @@ from views.base_view import BaseView
 
 
 class MenuView(BaseView):
+    """"Class to manage the menu view in the chess tournament application."""
     def __init__(self):
+        """Initialize the MenuView."""
         super().__init__()
         # affiche une ligne vide
         print()
 
     def get_user_choice(self):
+        """Prompt the user for a choice and return the input."""
         return self.input("Choisissez une option :")
 
     def display_invalid_option_message(self):
+        """Display a message indicating that the option is invalid."""
         print("Option invalide, veuillez réessayer.")
 
     def display_menu(self, menu):
-        """Affiche un menu encadré par une fenêtre de signes '='."""
+        """Display the menu with groups and items. Displays a menu framed by a window of '=' signs."""
         def create_separator_line():
             print(" " + "=" * window_width)
         # Calcul de la largeur de la fenêtre

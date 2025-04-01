@@ -14,6 +14,7 @@ class Match:
         player2_score=0.0,
         match_id=None,
     ):
+        """Initializes a match with two players and their scores."""
         self.player1 = player1
         self.player2 = player2
         self.player1_score = player1_score
@@ -21,11 +22,12 @@ class Match:
         self._id = match_id or uuid.uuid4()
 
     def set_score(self, player1_score, player2_score):
+        """Sets the scores for player1 and player2."""
         self.player1_score = player1_score
         self.player2_score = player2_score
 
     def is_finished(self):
-        """If the sum of the two scores is not zero."""
+        """Checks if the match is finished based on the scores."""
         return self.player1_score + self.player2_score != 0
 
     def get_player_names(self):
@@ -39,9 +41,11 @@ class Match:
         return names + scores
 
     def get_player1(self):
+        """Returns the ID and score of player1."""
         return self.player1.id, self.player1_score
 
     def get_player2(self):
+        """Returns the ID and score of player2."""
         return self.player2.id, self.player2_score
 
     @property
@@ -50,6 +54,7 @@ class Match:
 
     @staticmethod
     def from_dict(match_data):
+        """Creates a Match object from a dictionary representation."""
         player_repo = PlayerRepository()
         player1 = player_repo.get_by_id(match_data["player1"])
         player2 = player_repo.get_by_id(match_data["player2"])
@@ -63,6 +68,7 @@ class Match:
         return match
 
     def to_dict(self):
+        """Returns a dictionary representation of the Match object."""
         return {
             "id": self.id,
             "player1": self.player1.id,

@@ -6,28 +6,31 @@ T = TypeVar("T")  # Generic type for models
 
 
 class BaseRepository:
+    """Base repository class for managing data storage and retrieval."""
     FILE_PATH = ""
 
     def __init__(self, model_class: Type[T]):
-        """
-        Initializes the repository with a model class
-        """
+        """Initializes the repository with a model class and file path."""
         self.model_class = model_class
         self.file_service = FileService(self.FILE_PATH)
 
     def _write_all(self, objects: list[T]):
+        """Writes all objects to the file."""
         self.file_service.write_to_file([obj.to_dict() for obj in objects])
 
     def get_all(self) -> list[T]:
+        """Retrieves all objects from the file and converts them to model instances."""
         return [
             self.model_class.from_dict(obj)
             for obj in self.file_service.read_from_file()
         ]
 
     def get_by_id(self, id: str) -> T:
+        """Retrieves a single object by its ID."""
         return next((obj for obj in self.get_all() if obj.id == id), None)
 
     def get_by_ids(self, ids: list[str]) -> list[T]:
+        """Retrieves multiple objects by their IDs."""
         return [obj for obj in self.get_all() if obj.id in ids]
 
     def save(self, updated_objects: list[T]):
